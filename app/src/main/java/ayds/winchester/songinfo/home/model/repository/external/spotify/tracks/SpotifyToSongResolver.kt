@@ -1,5 +1,6 @@
 package ayds.winchester.songinfo.home.model.repository.external.spotify.tracks
 
+import PrecisionDate
 import com.google.gson.Gson
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
 import com.google.gson.JsonObject
@@ -16,6 +17,7 @@ private const val ARTISTS = "artists"
 private const val ALBUM = "album"
 private const val IMAGES = "images"
 private const val RELEASE_DATE = "release_date"
+private const val RELEASE_DATE_PRECISION = "release_date_precision"
 private const val URL = "url"
 private const val EXTERNAL_URL = "external_urls"
 private const val SPOTIFY = "spotify"
@@ -26,8 +28,8 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
         try {
             serviceData?.getFirstItem()?.let { item ->
                 SpotifySong(
-                  item.getId(), item.getSongName(), item.getArtistName(), item.getAlbumName(),
-                  item.getReleaseDate(), item.getSpotifyUrl(), item.getImageUrl()
+                    item.getId(), item.getSongName(), item.getArtistName(), item.getAlbumName(),
+                    item.getReleaseDate(), item.getSpotifyUrl(), item.getImageUrl(), releasedPrecisionDate=item.getPrecisionDate()
                 )
             }
         } catch (e: Exception) {
@@ -58,6 +60,17 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
     private fun JsonObject.getReleaseDate(): String {
         val album = this[ALBUM].asJsonObject
         return album[RELEASE_DATE].asString
+    }
+
+    private fun JsonObject.getPrecisionDate(): PrecisionDate {
+        val album = this[ALBUM].asJsonObject
+
+        when(album[RELEASE_DATE].asString){
+            "day" -> return PrecisionDate.Day
+            "month" -> return PrecisionDate.Month
+            "year" -> return PrecisionDate.Year
+            else -> return  PrecisionDate.Empty
+        }
     }
 
     private fun JsonObject.getImageUrl(): String {
