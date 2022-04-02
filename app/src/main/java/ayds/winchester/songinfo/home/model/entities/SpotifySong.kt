@@ -1,5 +1,7 @@
 package ayds.winchester.songinfo.home.model.entities
 
+import PrecisionDate
+
 interface Song {
     val id: String
     val songName: String
@@ -9,6 +11,7 @@ interface Song {
     val spotifyUrl: String
     val imageUrl: String
     var isLocallyStored: Boolean
+    val releasedPrecisionDate: PrecisionDate
 }
 
 data class SpotifySong(
@@ -19,11 +22,10 @@ data class SpotifySong(
   override val releaseDate: String,
   override val spotifyUrl: String,
   override val imageUrl: String,
-  override var isLocallyStored: Boolean = false
-) : Song {
+  override var isLocallyStored: Boolean = false,
+  override val releasedPrecisionDate: PrecisionDate
+) : Song
 
-    val year: String = releaseDate.split("-").first()
-}
 
 object EmptySong : Song {
     override val id: String = ""
@@ -34,4 +36,5 @@ object EmptySong : Song {
     override val spotifyUrl: String = ""
     override val imageUrl: String = ""
     override var isLocallyStored: Boolean = false
+    override val releasedPrecisionDate: PrecisionDate = PrecisionDate.Empty
 }
