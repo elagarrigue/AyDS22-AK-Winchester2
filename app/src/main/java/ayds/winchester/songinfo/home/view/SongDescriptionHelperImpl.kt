@@ -5,10 +5,14 @@ import ayds.winchester.songinfo.home.model.entities.Song
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
 
 interface SongDescriptionHelper {
+    var dateConverter: DateText
     fun getSongDescriptionText(song: Song = EmptySong): String
 }
 
 internal class SongDescriptionHelperImpl : SongDescriptionHelper {
+
+    override var dateConverter: DateText = DateTextImpl
+
     override fun getSongDescriptionText(song: Song): String {
         return when (song) {
             is SpotifySong ->
@@ -18,7 +22,7 @@ internal class SongDescriptionHelperImpl : SongDescriptionHelper {
                 }\n" +
                         "Artist: ${song.artistName}\n" +
                         "Album: ${song.albumName}\n" +
-                        "Year: ${song.year}"
+                        "Release date: ${dateConverter.getTextDate(song.releaseDate,song.releasedPrecisionDate)}"
             else -> "Song not found"
         }
     }
