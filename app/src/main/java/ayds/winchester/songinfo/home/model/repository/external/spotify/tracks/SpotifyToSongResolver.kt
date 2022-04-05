@@ -62,15 +62,9 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
         return album[RELEASE_DATE].asString
     }
 
-    private fun JsonObject.getPrecisionDate(): PrecisionDate {
+    private fun JsonObject.getPrecisionDate(): String {
         val album = this[ALBUM].asJsonObject
-
-        when(album[RELEASE_DATE].asString){
-            "day" -> return PrecisionDate.Day
-            "month" -> return PrecisionDate.Month
-            "year" -> return PrecisionDate.Year
-            else -> return  PrecisionDate.Empty
-        }
+        return album[RELEASE_DATE_PRECISION].asString
     }
 
     private fun JsonObject.getImageUrl(): String {

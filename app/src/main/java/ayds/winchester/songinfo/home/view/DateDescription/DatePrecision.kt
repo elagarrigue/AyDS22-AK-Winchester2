@@ -1,21 +1,20 @@
-package ayds.winchester.songinfo.home.view
 
 import PrecisionDate
 
 
 interface DateText{
-    fun getTextDate(date: String, precision: PrecisionDate): String
+    fun getTextDate(date: String, precision: String): String
 }
 
 object DateTextImpl : DateText{
-    override fun getTextDate(date: String, precision: PrecisionDate): String{
+    override fun getTextDate(date: String, precision: String): String {
         var resp="-"
 
         when (precision) {
-            PrecisionDate.Day -> resp=getYearMonthDay(date)
-            PrecisionDate.Month -> resp=getYearMonth(date)
-            PrecisionDate.Year -> resp=getYear(date)
-            PrecisionDate.Empty -> {}
+            "day" -> resp = getYearMonthDay(date)
+            "month" -> resp = getYearMonth(date)
+            "year" -> resp = getYear(date)
+            "" -> {}
         }
 
         return resp
@@ -23,15 +22,16 @@ object DateTextImpl : DateText{
 
 
     fun getYearMonthDay(date: String):String{
-        return "-"
+        return date
     }
 
     fun getYearMonth(date: String):String{
-        return "-"
+        val year: String = date.substringBeforeLast("-")
+        return year
     }
 
     fun getYear(date: String):String{
-        return "-"
+        return "3"
     }
 
 }

@@ -23,4 +23,4 @@ const val createSongsTableQuery: String =
             "$IMAGE_URL_COLUMN string)"
 
 const val addReleaseDataQuery: String =
-    "ALTER TABLE $SONGS_TABLE ADD COLUMN $PRECISION_DATE_COLUMN string"
+    "ALTER TABLE $SONGS_TABLE ADD COLUMN $PRECISION_DATE_COLUMN string DEFAULT('year')"

@@ -11,7 +11,7 @@ interface Song {
     val spotifyUrl: String
     val imageUrl: String
     var isLocallyStored: Boolean
-    val releasedPrecisionDate: PrecisionDate
+    var releasedPrecisionDate: String
 }
 
 data class SpotifySong(
@@ -23,7 +23,7 @@ data class SpotifySong(
   override val spotifyUrl: String,
   override val imageUrl: String,
   override var isLocallyStored: Boolean = false,
-  override val releasedPrecisionDate: PrecisionDate
+  override var releasedPrecisionDate: String
 ) : Song
 
 
@@ -36,5 +36,5 @@ object EmptySong : Song {
     override val spotifyUrl: String = ""
     override val imageUrl: String = ""
     override var isLocallyStored: Boolean = false
-    override val releasedPrecisionDate: PrecisionDate = PrecisionDate.Empty
+    override var releasedPrecisionDate: String = ""
 }
