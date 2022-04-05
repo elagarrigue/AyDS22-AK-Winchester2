@@ -34,8 +34,14 @@ internal class SpotifyLocalStorageImpl(
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         when (newVersion){
+            1 -> resetDataBase(db)
             2 -> db.execSQL(addReleaseDataQuery)
         }
+    }
+
+    fun resetDataBase(db: SQLiteDatabase){
+        db.execSQL(removeDeleteSongsTableQuery)
+        onCreate(db)
     }
 
     override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

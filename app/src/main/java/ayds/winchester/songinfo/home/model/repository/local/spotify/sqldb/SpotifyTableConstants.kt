@@ -24,3 +24,6 @@ const val createSongsTableQuery: String =
 
 const val addReleaseDataQuery: String =
     "ALTER TABLE $SONGS_TABLE ADD COLUMN $PRECISION_DATE_COLUMN string DEFAULT('year')"
+
+const val removeDeleteSongsTableQuery: String =
+    "DROP TABLE $SONGS_TABLE"
