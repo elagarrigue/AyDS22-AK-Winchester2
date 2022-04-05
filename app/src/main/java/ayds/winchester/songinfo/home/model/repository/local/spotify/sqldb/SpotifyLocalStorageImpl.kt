@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
 import ayds.winchester.songinfo.home.model.repository.local.spotify.SpotifyLocalStorage
 
-private const val DATABASE_VERSION = 1
+private const val DATABASE_VERSION = 2
 private const val DATABASE_NAME = "songs.db"
 
 internal class SpotifyLocalStorageImpl(
@@ -31,7 +31,11 @@ internal class SpotifyLocalStorageImpl(
         db.execSQL(createSongsTableQuery)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        when (newVersion){
+            2 -> db.execSQL(addReleaseDataQuery)
+        }
+    }
 
     override fun onDowngrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         onUpgrade(db, oldVersion, newVersion)
