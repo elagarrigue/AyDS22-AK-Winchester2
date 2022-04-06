@@ -1,4 +1,7 @@
 
+import PrecisionDate
+
+
 interface DateText{
     fun getTextDate(date: String, precision: String): String
 }
@@ -8,27 +11,27 @@ object DateTextImpl : DateText{
         var resp="-"
 
         when (precision) {
-            "day" -> resp = date
-            "month" -> resp = date
+            "day" -> resp = getYearMonthDay(date)
+            "month" -> resp = getYearMonth(date)
             "year" -> resp = getYear(date)
-            else -> resp = date
+            "" -> {}
         }
 
         return resp
     }
 
 
-    fun getYear(date: String):String{
-        var  resp = date
-
-        if(!esBisiesto((date.substringBeforeLast("-")).toInt()))
-            resp += " (not a leap year)"
-
-        return resp
+    fun getYearMonthDay(date: String):String{
+        return date
     }
 
-    fun esBisiesto(year : Int) : Boolean{
-        return false
+    fun getYearMonth(date: String):String{
+        val year: String = date.substringBeforeLast("-")
+        return year
+    }
+
+    fun getYear(date: String):String{
+        return "3"
     }
 
 }
