@@ -20,10 +20,5 @@ const val createSongsTableQuery: String =
             "$ALBUM_COLUMN string, " +
             "$RELEASE_DATE_COLUMN string, " +
             "$SPOTIFY_URL_COLUMN string, " +
-            "$IMAGE_URL_COLUMN string)"
-
-const val addReleaseDataQuery: String =
-    "ALTER TABLE $SONGS_TABLE ADD COLUMN $PRECISION_DATE_COLUMN string DEFAULT('year')"
-
-const val removeDeleteSongsTableQuery: String =
-    "DROP TABLE $SONGS_TABLE"
+            "$IMAGE_URL_COLUMN string, "+
+            "$PRECISION_DATE_COLUMN string)"
