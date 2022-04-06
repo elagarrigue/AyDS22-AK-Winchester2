@@ -1,7 +1,4 @@
 
-import PrecisionDate
-
-
 interface DateText{
     fun getTextDate(date: String, precision: String): String
 }

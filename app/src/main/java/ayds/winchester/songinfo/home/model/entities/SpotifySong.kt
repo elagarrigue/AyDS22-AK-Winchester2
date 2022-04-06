@@ -1,7 +1,5 @@
 package ayds.winchester.songinfo.home.model.entities
 
-import PrecisionDate
-
 interface Song {
     val id: String
     val songName: String
