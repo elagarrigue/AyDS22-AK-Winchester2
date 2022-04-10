@@ -31,7 +31,7 @@ object DateTextImpl : DateText{
 
     fun getYear(date: String):String{
         var new_year = date.substringBeforeLast("-")
-        return (new_year + esBisiesto(new_year.toInt()))
+        return (new_year +" "+ esBisiesto(new_year.toInt()))
     }
 
     fun getMonthName (month:Int):String{
