@@ -30,7 +30,8 @@ object DateTextImpl : DateText{
     }
 
     fun getYear(date: String):String{
-        return date.substringBeforeLast("-")
+        var new_year = date.substringBeforeLast("-")
+        return (new_year + esBisiesto(new_year.toInt()))
     }
 
     fun getMonthName (month:Int):String{
@@ -50,5 +51,12 @@ object DateTextImpl : DateText{
             else -> {""}
         }
         return month_name;
+    }
+
+    fun esBisiesto(year: Int) : String{
+        var result = "(not a leap year)"
+        if ((year % 4 == 0) && (year % 100 != 0 || year % 400 == 0))
+            result = "(it's a leap year)"
+        return result
     }
 }
