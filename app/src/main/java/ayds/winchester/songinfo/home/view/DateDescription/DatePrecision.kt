@@ -4,31 +4,51 @@ interface DateText{
 }
 
 object DateTextImpl : DateText{
+    private const val year_month_day : String = "day"
+    private const val year_month : String = "month"
+    private const val year : String = "year"
+
     override fun getTextDate(date: String, precision: String): String {
-        var resp="-"
-
+        var value_answer = ""
         when (precision) {
-            "day" -> resp = getYearMonthDay(date)
-            "month" -> resp = getYearMonth(date)
-            "year" -> resp = getYear(date)
-            "" -> {}
+            year_month_day -> value_answer = getYearMonthDay(date)
+            year_month -> value_answer = getYearMonth(date)
+            year -> value_answer = getYear(date)
         }
-
-        return resp
+        return value_answer
     }
 
-
     fun getYearMonthDay(date: String):String{
-        return date
+        return date.replace("-", "/")
     }
 
     fun getYearMonth(date: String):String{
-        val year: String = date.substringBeforeLast("-")
-        return year
+        var new_year = date.substringBeforeLast("-")
+        var new_month = date.substringAfterLast("-")
+
+        return (getMonthName(new_month.toInt()) + ", " + new_year)
     }
 
     fun getYear(date: String):String{
-        return "3"
+        return date.substringBeforeLast("-")
     }
 
+    fun getMonthName (month:Int):String{
+        val month_name = when (month) {
+            1 -> "January"
+            2 -> "February"
+            3 -> "March"
+            4 -> "April"
+            5 -> "May"
+            6 -> "June"
+            7 -> "July"
+            8 -> "August"
+            9 -> "September"
+            10 -> "October"
+            11 -> "November"
+            12 -> "December"
+            else -> {""}
+        }
+        return month_name;
+    }
 }
