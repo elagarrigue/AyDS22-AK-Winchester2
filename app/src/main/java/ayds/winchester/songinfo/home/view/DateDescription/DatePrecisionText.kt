@@ -1,24 +1,22 @@
+import ayds.winchester.songinfo.home.model.entities.DatePrecision
 
 interface DateText{
-    fun getTextDate(date: String, precision: String): String
+    fun getTextDate(date: String, precision: DatePrecision): String
 }
 
 object DateTextImpl : DateText{
-    private const val year_month_day : String = "day"
-    private const val year_month : String = "month"
-    private const val year : String = "year"
 
-    override fun getTextDate(date: String, precision: String): String {
+    override fun getTextDate(date: String, precision: DatePrecision): String {
         var value_answer = ""
         when (precision) {
-            year_month_day -> value_answer = getYearMonthDay(date)
-            year_month -> value_answer = getYearMonth(date)
-            year -> value_answer = getYear(date)
+            DatePrecision.DAY -> value_answer = getYearMonthDay(date)
+            DatePrecision.MONTH -> value_answer = getYearMonth(date)
+            DatePrecision.YEAR -> value_answer = getYear(date)
         }
         return value_answer
     }
 
-    fun getYearMonthDay(date: String):String{
+    private fun getYearMonthDay(date: String):String{
         return date.replace("-", "/")
     }
 
