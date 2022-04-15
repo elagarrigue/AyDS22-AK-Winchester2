@@ -13,7 +13,7 @@ interface SongDescriptionHelper {
 
 internal class SongDescriptionHelperImpl : SongDescriptionHelper {
 
-    override var dateConverter: DateText = DateTextImpl
+    override var dateConverter: DateText = DateTextImpl()
 
     override fun getSongDescriptionText(song: Song): String {
         return when (song) {
