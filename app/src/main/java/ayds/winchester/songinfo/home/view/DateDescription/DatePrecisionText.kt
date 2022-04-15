@@ -4,7 +4,7 @@ interface DateText{
     fun getTextDate(date: String, precision: DatePrecision): String
 }
 
-object DateTextImpl : DateText{
+internal class DateTextImpl : DateText{
 
     override fun getTextDate(date: String, precision: DatePrecision) =
         when (precision) {
