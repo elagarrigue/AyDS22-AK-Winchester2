@@ -6,15 +6,12 @@ interface DateText{
 
 object DateTextImpl : DateText{
 
-    override fun getTextDate(date: String, precision: DatePrecision): String {
-        var value_answer = ""
+    override fun getTextDate(date: String, precision: DatePrecision) =
         when (precision) {
-            DatePrecision.DAY -> value_answer = getYearMonthDay(date)
-            DatePrecision.MONTH -> value_answer = getYearMonth(date)
-            DatePrecision.YEAR -> value_answer = getYear(date)
+            DatePrecision.DAY -> getYearMonthDay(date)
+            DatePrecision.MONTH -> getYearMonth(date)
+            DatePrecision.YEAR -> getYear(date)
         }
-        return value_answer
-    }
 
     private fun getYearMonthDay(date: String):String{
         return date.replace("-", "/")
