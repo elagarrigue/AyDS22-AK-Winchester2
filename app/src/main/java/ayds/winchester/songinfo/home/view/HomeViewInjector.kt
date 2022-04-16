@@ -1,14 +1,16 @@
 package ayds.winchester.songinfo.home.view
 
+import DateTextImpl
 import ayds.winchester.songinfo.home.controller.HomeControllerInjector
 import ayds.winchester.songinfo.home.model.HomeModelInjector
 
 object HomeViewInjector {
 
-    val songDescriptionHelper: SongDescriptionHelper = SongDescriptionHelperImpl()
+    val songDescriptionHelper: SongDescriptionHelper = SongDescriptionHelperImpl(DateTextImpl())
 
     fun init(homeView: HomeView) {
         HomeModelInjector.initHomeModel(homeView)
         HomeControllerInjector.onViewStarted(homeView)
     }
 }
+

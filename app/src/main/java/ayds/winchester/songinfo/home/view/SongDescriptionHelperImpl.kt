@@ -7,13 +7,10 @@ import ayds.winchester.songinfo.home.model.entities.Song
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
 
 interface SongDescriptionHelper {
-    var dateConverter: DateText
     fun getSongDescriptionText(song: Song = EmptySong): String
 }
 
-internal class SongDescriptionHelperImpl : SongDescriptionHelper {
-
-    override var dateConverter: DateText = DateTextImpl()
+internal class SongDescriptionHelperImpl(private val dateConverter: DateText) : SongDescriptionHelper{
 
     override fun getSongDescriptionText(song: Song): String {
         return when (song) {
