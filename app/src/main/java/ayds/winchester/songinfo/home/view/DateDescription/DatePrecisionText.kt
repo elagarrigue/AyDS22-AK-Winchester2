@@ -17,20 +17,20 @@ internal class DateTextImpl : DateText{
         return date.replace("-", "/")
     }
 
-    fun getYearMonth(date: String):String{
-        var new_year = date.substringBeforeLast("-")
-        var new_month = date.substringAfterLast("-")
+    private fun getYearMonth(date: String):String{
+        val newYear = date.substringBeforeLast("-")
+        val newMonth = date.substringAfterLast("-")
 
-        return (getMonthName(new_month.toInt()) + ", " + new_year)
+        return (getMonthName(newMonth.toInt()) + ", " + newYear)
     }
 
-    fun getYear(date: String):String{
-        var new_year = date.substringBeforeLast("-")
-        return (new_year +" "+ esBisiesto(new_year.toInt()))
+    private fun getYear(date: String):String{
+        val newYear = date.substringBeforeLast("-")
+        return (newYear +" "+ itsLeap(newYear.toInt()))
     }
 
-    fun getMonthName (month:Int):String{
-        val month_name = when (month) {
+    private fun getMonthName (month:Int):String{
+        val monthName = when (month) {
             1 -> "January"
             2 -> "February"
             3 -> "March"
@@ -45,13 +45,10 @@ internal class DateTextImpl : DateText{
             12 -> "December"
             else -> {""}
         }
-        return month_name;
+        return monthName
     }
 
-    fun esBisiesto(year: Int) : String{
-        var result = "(not a leap year)"
-        if ((year % 4 == 0) && (year % 100 != 0 || year % 400 == 0))
-            result = "(it's a leap year)"
-        return result
+    private fun itsLeap(year: Int) : String {
+        return (if ((year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)) "(it's a leap year)" else "(not a leap year)")
     }
 }

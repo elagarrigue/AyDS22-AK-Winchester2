@@ -21,4 +21,4 @@ const val createSongsTableQuery: String =
             "$RELEASE_DATE_COLUMN string, " +
             "$SPOTIFY_URL_COLUMN string, " +
             "$IMAGE_URL_COLUMN string, "+
-            "$PRECISION_DATE_COLUMN string)"
+            "$PRECISION_DATE_COLUMN integer)"

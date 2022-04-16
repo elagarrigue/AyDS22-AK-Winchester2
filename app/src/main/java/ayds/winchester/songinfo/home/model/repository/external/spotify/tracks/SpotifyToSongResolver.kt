@@ -32,7 +32,7 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
             serviceData?.getFirstItem()?.let { item ->
                 SpotifySong(
                     item.getId(), item.getSongName(), item.getArtistName(), item.getAlbumName(),
-                    item.getReleaseDate(), item.getSpotifyUrl(), item.getImageUrl(), releasedPrecisionDate=item.getPrecisionDate()
+                    item.getReleaseDate(), item.getSpotifyUrl(), item.getImageUrl(), item.getPrecisionDate()
                 )
             }
         } catch (e: Exception) {
@@ -68,12 +68,11 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
     private fun JsonObject.getPrecisionDate(): DatePrecision {
         val album = this[ALBUM].asJsonObject
         return when (album[RELEASE_DATE_PRECISION].asString){
-            DAY -> DatePrecision.valueOf("day")
-            MONTH -> DatePrecision.valueOf("month")
-            YEAR -> DatePrecision.valueOf("year")
-            else -> {DatePrecision.valueOf("day")}
+            DAY -> DatePrecision.valueOf("DAY")
+            MONTH -> DatePrecision.valueOf("MONTH")
+            YEAR -> DatePrecision.valueOf("YEAR")
+            else -> {DatePrecision.valueOf("DAY")}
         }
-
     }
 
     private fun JsonObject.getImageUrl(): String {
