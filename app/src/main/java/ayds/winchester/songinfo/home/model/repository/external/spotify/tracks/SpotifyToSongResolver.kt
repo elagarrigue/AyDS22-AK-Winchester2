@@ -1,5 +1,6 @@
 package ayds.winchester.songinfo.home.model.repository.external.spotify.tracks
 
+import android.util.Log
 import ayds.winchester.songinfo.home.model.entities.DatePrecision
 import com.google.gson.Gson
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
@@ -21,9 +22,9 @@ private const val RELEASE_DATE_PRECISION = "release_date_precision"
 private const val URL = "url"
 private const val EXTERNAL_URL = "external_urls"
 private const val SPOTIFY = "spotify"
-private const val DAY = "DAY"
-private const val MONTH = "MONTH"
-private const val YEAR = "YEAR"
+private const val DAY = "day"
+private const val MONTH = "month"
+private const val YEAR = "year"
 
 internal class JsonToSongResolver : SpotifyToSongResolver {
 
@@ -36,6 +37,7 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
                 )
             }
         } catch (e: Exception) {
+            Log.i("JSON","Error " +e.message)
             null
         }
 
@@ -71,7 +73,7 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
             DAY -> DatePrecision.valueOf("DAY")
             MONTH -> DatePrecision.valueOf("MONTH")
             YEAR -> DatePrecision.valueOf("YEAR")
-            else -> {DatePrecision.valueOf("DAY")}
+            else -> {throw Exception("unidentified date precision")}
         }
     }
 
