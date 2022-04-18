@@ -67,14 +67,9 @@ class OtherInfoWindow : AppCompatActivity() {
                     e1.printStackTrace()
                 }
             }
-            val imageUrl =
-                "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
-            Log.e("TAG", "Get Image from $imageUrl")
-            val finalText = artistDescription
-            runOnUiThread {
-                Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
-                textPane2!!.text = Html.fromHtml(finalText)
-            }
+
+            showUI(artistDescription!!)
+
         }.start()
     }
 
@@ -83,6 +78,23 @@ class OtherInfoWindow : AppCompatActivity() {
             .baseUrl("https://en.wikipedia.org/w/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
+    }
+
+    private fun showUI(text: String){
+
+        runOnUiThread {
+            showImage()
+            showDescription(text)
+        }
+    }
+
+    private fun showImage(){
+        val imageUrl = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
+        Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
+    }
+
+    private fun showDescription(text: String){
+        textPane2!!.text = Html.fromHtml(text)
     }
 
     private fun open(artist: String?) {
