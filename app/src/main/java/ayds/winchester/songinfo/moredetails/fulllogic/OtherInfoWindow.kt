@@ -31,21 +31,17 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     fun getArtistInfo(artistName: String?) {
-        val retrofit = createRetrofit()
-        val wikipediaAPI = retrofit.create(WikipediaAPI::class.java)
+
         Log.e("TAG", "artistName $artistName")
         Thread {
             var artistDescription = DataBase.getInfo(dataBase!!, artistName!!)
             if (artistDescription != null) {
                 artistDescription = "[*]$artistDescription"
             } else { // get from service
-                val callResponse: Response<String>
+
                 try {
-                    callResponse = wikipediaAPI.getArtistInfo(artistName).execute()
-                    println("JSON " + callResponse.body())
-                    val gson = Gson()
-                    val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
-                    val query = jobj["query"].asJsonObject
+
+                    val query = wikipediaSearch(artistName)
                     val snippet = query["search"].asJsonArray[0].asJsonObject["snippet"]
                     val pageid = query["search"].asJsonArray[0].asJsonObject["pageid"]
                     if (snippet == null) {
@@ -73,6 +69,15 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
+    private fun wikipediaSearch(artistName: String) : JsonObject{
+        val wikipediaAPI = createRetrofit().create(WikipediaAPI::class.java)
+        val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
+        val gson = Gson()
+        val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
+
+        return jobj["query"].asJsonObject
+    }
+
     private fun createRetrofit () : Retrofit{
         return Retrofit.Builder()
             .baseUrl("https://en.wikipedia.org/w/")
@@ -81,7 +86,6 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun showUI(text: String){
-
         runOnUiThread {
             showImage()
             showDescription(text)
