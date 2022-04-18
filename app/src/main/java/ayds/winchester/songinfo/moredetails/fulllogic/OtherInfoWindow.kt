@@ -15,6 +15,7 @@ import android.text.Html
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import com.google.gson.JsonElement
 import retrofit2.Response
 import java.io.IOException
 import java.lang.StringBuilder
@@ -42,8 +43,8 @@ class OtherInfoWindow : AppCompatActivity() {
                 try {
 
                     val query = wikipediaSearch(artistName)
-                    val snippet = query["search"].asJsonArray[0].asJsonObject["snippet"]
-                    val pageid = query["search"].asJsonArray[0].asJsonObject["pageid"]
+                    val snippet = getSnippet(query)
+                    val pageid = getPageId(query)
                     if (snippet == null) {
                         artistDescription = "No Results"
                     } else {
@@ -76,6 +77,14 @@ class OtherInfoWindow : AppCompatActivity() {
         val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
 
         return jobj["query"].asJsonObject
+    }
+
+    private fun getSnippet(json: JsonObject) : JsonElement{
+        return json["search"].asJsonArray[0].asJsonObject["snippet"]
+    }
+
+    private fun getPageId(json: JsonObject) : JsonElement{
+        return json["search"].asJsonArray[0].asJsonObject["pageid"]
     }
 
     private fun createRetrofit () : Retrofit{
