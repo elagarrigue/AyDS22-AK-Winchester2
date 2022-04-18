@@ -45,14 +45,14 @@ class OtherInfoWindow : AppCompatActivity() {
                     val query = wikipediaSearch(artistName)
                     val snippet = getSnippet(query)
                     val pageid = getPageId(query)
-                    if (snippet == null) {
-                        artistDescription = "No Results"
-                    } else {
-                        artistDescription = snippet.asString.replace("\\n", "\n")
-                        artistDescription = textToHtml(artistDescription, artistName)
-                        // save to DB  <o/
-                        DataBase.saveArtist(dataBase!!, artistName, artistDescription)
+
+                    artistDescription = "No Results"
+
+                    if (snippet != null) {
+                        artistDescription=getArtistDescription(snippet,artistName)
+                        saveDescriptionInDataBase(artistName,artistDescription)
                     }
+
                     val urlString = "https://en.wikipedia.org/?curid=$pageid"
                     findViewById<View>(R.id.openUrlButton).setOnClickListener {
                         val intent = Intent(Intent.ACTION_VIEW)
@@ -68,6 +68,17 @@ class OtherInfoWindow : AppCompatActivity() {
             showUI(artistDescription!!)
 
         }.start()
+    }
+
+    private fun getArtistDescription(snippet: JsonElement, artistName: String) : String{
+        var artistDescription = snippet.asString.replace("\\n", "\n")
+        artistDescription = textToHtml(artistDescription, artistName)
+
+        return artistDescription
+    }
+
+    private fun saveDescriptionInDataBase(artistName: String,artistDescription: String){
+        DataBase.saveArtist(dataBase!!, artistName, artistDescription)
     }
 
     private fun wikipediaSearch(artistName: String) : JsonObject{
