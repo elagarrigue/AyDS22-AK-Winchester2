@@ -43,15 +43,10 @@ class OtherInfoWindow : AppCompatActivity() {
                 try {
 
                     val query = wikipediaSearch(artistName)
-                    val snippet = getSnippet(query)
                     val pageid = getPageId(query)
 
-                    artistDescription = "No Results"
+                    artistDescription=makeDescription(query,artistName)
 
-                    if (snippet != null) {
-                        artistDescription=getArtistDescription(snippet,artistName)
-                        saveDescriptionInDataBase(artistName,artistDescription)
-                    }
 
                     val urlString = "https://en.wikipedia.org/?curid=$pageid"
                     findViewById<View>(R.id.openUrlButton).setOnClickListener {
@@ -68,6 +63,18 @@ class OtherInfoWindow : AppCompatActivity() {
             showUI(artistDescription!!)
 
         }.start()
+    }
+
+    private fun makeDescription(query: JsonObject, artistName: String): String {
+        val snippet = getSnippet(query)
+        var artistDescription = "No Results"
+
+        if (snippet != null) {
+            artistDescription=getArtistDescription(snippet,artistName)
+            saveDescriptionInDataBase(artistName,artistDescription)
+        }
+
+        return artistDescription
     }
 
     private fun getArtistDescription(snippet: JsonElement, artistName: String) : String{
