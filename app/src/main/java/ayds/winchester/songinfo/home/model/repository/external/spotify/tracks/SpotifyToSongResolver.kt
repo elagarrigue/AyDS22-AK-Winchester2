@@ -1,6 +1,5 @@
 package ayds.winchester.songinfo.home.model.repository.external.spotify.tracks
 
-import android.util.Log
 import ayds.winchester.songinfo.home.model.entities.DatePrecision
 import com.google.gson.Gson
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
@@ -34,7 +33,6 @@ internal class JsonToSongResolver(private val songPrecisionDateHelper: SongPreci
                 )
             }
         } catch (e: Exception) {
-            Log.i("JSON","Error " +e.message)
             null
         }
 
