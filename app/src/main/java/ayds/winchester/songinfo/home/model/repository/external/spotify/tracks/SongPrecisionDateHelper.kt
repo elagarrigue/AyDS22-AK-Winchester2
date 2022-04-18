@@ -14,9 +14,9 @@ internal class SongPrecisionDateHelperImpl : SongPrecisionDateHelper{
 
     override fun getPrecisionDate(precision: String): DatePrecision {
         return when (precision){
-            DAY -> DatePrecision.valueOf(DAY)
-            MONTH -> DatePrecision.valueOf(MONTH)
-            YEAR -> DatePrecision.valueOf(YEAR)
+            DAY -> DatePrecision.DAY
+            MONTH -> DatePrecision.MONTH
+            YEAR -> DatePrecision.YEAR
             else -> {throw Exception("unidentified date precision")}
         }
     }
