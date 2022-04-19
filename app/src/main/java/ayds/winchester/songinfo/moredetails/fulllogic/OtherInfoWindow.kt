@@ -35,29 +35,41 @@ class OtherInfoWindow : AppCompatActivity() {
 
         Log.e("TAG", "artistName $artistName")
         Thread {
-            var artistDescription = DataBase.getInfo(dataBase!!, artistName!!)
-            if (artistDescription != null) {
-                artistDescription = "[*]$artistDescription"
-            } else { // get from service
 
-                try {
+            var artistDescription = getArtistDescriptionFromInternalDataBase(artistName!!)
 
-                    val query = wikipediaSearch(artistName)
-                    val pageid = getPageId(query)
-
-                    artistDescription=makeDescription(query,artistName)
-
-                    manageViewFullArticleButton(pageid)
-
-                } catch (e1: IOException) {
-                    Log.e("TAG", "Error $e1")
-                    e1.printStackTrace()
-                }
-            }
+            if (artistDescription == null)
+                artistDescription=getArtistDescriptionFromService(artistName)
 
             showUI(artistDescription!!)
 
         }.start()
+    }
+
+    private fun getArtistDescriptionFromInternalDataBase(artistName: String?): String?{
+        var artistDescription = DataBase.getInfo(dataBase!!, artistName!!)
+        if (artistDescription != null)
+            artistDescription = "[*]$artistDescription"
+
+         return artistDescription
+    }
+
+    private fun getArtistDescriptionFromService(artistName: String): String{
+        var artistDescription="No Results"
+        try {
+
+            val query = wikipediaSearch(artistName)
+            val pageid = getPageId(query)
+
+            artistDescription=makeDescription(query,artistName)
+
+            manageViewFullArticleButton(pageid)
+
+        } catch (e1: IOException) {
+            Log.e("TAG", "Error $e1")
+            e1.printStackTrace()
+        }
+        return artistDescription
     }
 
     private fun wikipediaSearch(artistName: String) : JsonObject{
