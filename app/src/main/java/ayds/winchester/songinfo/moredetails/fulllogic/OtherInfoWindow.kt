@@ -47,13 +47,8 @@ class OtherInfoWindow : AppCompatActivity() {
 
                     artistDescription=makeDescription(query,artistName)
 
+                    manageViewFullArticleButton(pageid)
 
-                    val urlString = "https://en.wikipedia.org/?curid=$pageid"
-                    findViewById<View>(R.id.openUrlButton).setOnClickListener {
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.data = Uri.parse(urlString)
-                        startActivity(intent)
-                    }
                 } catch (e1: IOException) {
                     Log.e("TAG", "Error $e1")
                     e1.printStackTrace()
@@ -110,6 +105,19 @@ class OtherInfoWindow : AppCompatActivity() {
             .baseUrl("https://en.wikipedia.org/w/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
+    }
+
+    private fun manageViewFullArticleButton(pageid: JsonElement){
+        try {
+            val urlString = "https://en.wikipedia.org/?curid=$pageid"
+            findViewById<View>(R.id.openUrlButton).setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(urlString)
+                startActivity(intent)
+            }
+        } catch (e1: IOException) {
+            e1.printStackTrace()
+        }
     }
 
     private fun showUI(text: String){
