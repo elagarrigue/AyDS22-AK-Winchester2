@@ -60,6 +60,26 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
+    private fun wikipediaSearch(artistName: String) : JsonObject{
+        val wikipediaAPI = createRetrofit().create(WikipediaAPI::class.java)
+        val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
+        val gson = Gson()
+        val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
+
+        return jobj["query"].asJsonObject
+    }
+
+    private fun createRetrofit () : Retrofit{
+        return Retrofit.Builder()
+            .baseUrl("https://en.wikipedia.org/w/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+    }
+
+    private fun getPageId(json: JsonObject) : JsonElement{
+        return json["search"].asJsonArray[0].asJsonObject["pageid"]
+    }
+
     private fun makeDescription(query: JsonObject, artistName: String): String {
         val snippet = getSnippet(query)
         var artistDescription = "No Results"
@@ -72,6 +92,10 @@ class OtherInfoWindow : AppCompatActivity() {
         return artistDescription
     }
 
+    private fun getSnippet(json: JsonObject) : JsonElement{
+        return json["search"].asJsonArray[0].asJsonObject["snippet"]
+    }
+
     private fun getArtistDescription(snippet: JsonElement, artistName: String) : String{
         var artistDescription = snippet.asString.replace("\\n", "\n")
         artistDescription = textToHtml(artistDescription, artistName)
@@ -81,30 +105,6 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun saveDescriptionInDataBase(artistName: String,artistDescription: String){
         DataBase.saveArtist(dataBase!!, artistName, artistDescription)
-    }
-
-    private fun wikipediaSearch(artistName: String) : JsonObject{
-        val wikipediaAPI = createRetrofit().create(WikipediaAPI::class.java)
-        val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
-        val gson = Gson()
-        val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
-
-        return jobj["query"].asJsonObject
-    }
-
-    private fun getSnippet(json: JsonObject) : JsonElement{
-        return json["search"].asJsonArray[0].asJsonObject["snippet"]
-    }
-
-    private fun getPageId(json: JsonObject) : JsonElement{
-        return json["search"].asJsonArray[0].asJsonObject["pageid"]
-    }
-
-    private fun createRetrofit () : Retrofit{
-        return Retrofit.Builder()
-            .baseUrl("https://en.wikipedia.org/w/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
     }
 
     private fun manageViewFullArticleButton(pageid: JsonElement){
