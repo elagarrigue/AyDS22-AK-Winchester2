@@ -24,20 +24,33 @@ import java.lang.StringBuilder
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
     private var dataBase: DataBase = DataBase(this as Context)
+    private lateinit var artistName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         textPane2 = findViewById(R.id.textPane2)
-        open(intent.getStringExtra("artistName"))
+        initDatabase()
+        //initProperties()
+        //updateImage()
+        getArtistInfo()
+        loadArtistName()
     }
 
-    fun getArtistInfo(artistName: String?) {
+    private fun initDatabase() {
+        dataBase = DataBase(this)
+    }
+
+    private fun loadArtistName() {
+        artistName = intent.getStringExtra(ARTIST_NAME_EXTRA).toString()
+    }
+
+    private fun getArtistInfo() {
 
         Log.e("TAG", "artistName $artistName")
         Thread {
 
-            var artistDescription = getArtistDescriptionFromInternalDataBase(artistName!!)
+            var artistDescription = getArtistDescriptionFromInternalDataBase(artistName)
 
             if (artistDescription == null)
                 artistDescription=getArtistDescriptionFromService(artistName)
@@ -143,13 +156,6 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun showDescription(text: String){
         textPane2!!.text = Html.fromHtml(text)
-    }
-
-    private fun open(artist: String?) {
-        dataBase = DataBase(this)
-        dataBase.saveArtist( "test", "sarasa")
-
-        getArtistInfo(artist)
     }
 
     companion object {
