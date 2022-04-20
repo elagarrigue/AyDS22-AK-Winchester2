@@ -120,15 +120,11 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun manageViewFullArticleButton(pageid: JsonElement){
-        try {
-            val urlString = "https://en.wikipedia.org/?curid=$pageid"
-            findViewById<View>(R.id.openUrlButton).setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(urlString)
-                startActivity(intent)
-            }
-        } catch (e1: IOException) {
-            e1.printStackTrace()
+        val urlString = "https://en.wikipedia.org/?curid=$pageid"
+        findViewById<View>(R.id.openUrlButton).setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(urlString)
+            startActivity(intent)
         }
     }
 
