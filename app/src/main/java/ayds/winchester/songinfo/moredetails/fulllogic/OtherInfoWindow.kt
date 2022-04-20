@@ -1,5 +1,6 @@
 package ayds.winchester.songinfo.moredetails.fulllogic
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import android.os.Bundle
@@ -22,7 +23,7 @@ import java.lang.StringBuilder
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
-    private var dataBase: DataBase? = null
+    private var dataBase: DataBase = DataBase(this as Context)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +48,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getArtistDescriptionFromInternalDataBase(artistName: String?): String?{
-        var artistDescription = DataBase.getInfo(dataBase!!, artistName!!)
+        var artistDescription = dataBase.getInfo(dataBase!!, artistName!!)
         if (artistDescription != null)
             artistDescription = "[*]$artistDescription"
 
@@ -116,7 +117,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun saveDescriptionInDataBase(artistName: String,artistDescription: String){
-        DataBase.saveArtist(dataBase!!, artistName, artistDescription)
+        dataBase.saveArtist(artistName, artistDescription)
     }
 
     private fun manageViewFullArticleButton(pageid: JsonElement){
@@ -146,9 +147,8 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun open(artist: String?) {
         dataBase = DataBase(this)
-        DataBase.saveArtist(dataBase!!, "test", "sarasa")
-        Log.e("TAG", "" + DataBase.getInfo(dataBase!!, "test"))
-        Log.e("TAG", "" + DataBase.getInfo(dataBase!!, "nada"))
+        dataBase.saveArtist( "test", "sarasa")
+
         getArtistInfo(artist)
     }
 
