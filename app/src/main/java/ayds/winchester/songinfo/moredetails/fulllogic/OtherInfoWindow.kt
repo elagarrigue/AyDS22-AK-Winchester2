@@ -13,13 +13,18 @@ import android.content.Intent
 import android.net.Uri
 import com.squareup.picasso.Picasso
 import android.text.Html
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.google.gson.JsonElement
 import retrofit2.Response
 import java.io.IOException
 import java.lang.StringBuilder
+
+private const val NO_RESULTS = "No Results"
+private const val PAGE_ID = "pageid"
+private const val SNIPPET = "snippet"
+private const val SEARCH = "search"
+private const val ARTIST_NAME = "artistName"
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
@@ -29,26 +34,22 @@ class OtherInfoWindow : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         textPane2 = findViewById(R.id.textPane2)
-        open(intent.getStringExtra("artistName"))
+        open(intent.getStringExtra(ARTIST_NAME))
     }
 
-    fun getArtistInfo(artistName: String?) {
-
-        Log.e("TAG", "artistName $artistName")
+    private fun getArtistInfo(artistName: String?) {
         Thread {
-
             var artistDescription = getArtistDescriptionFromInternalDataBase(artistName!!)
-
             if (artistDescription == null)
                 artistDescription=getArtistDescriptionFromService(artistName)
 
-            showUI(artistDescription!!)
+            showUI(artistDescription)
 
         }.start()
     }
 
     private fun getArtistDescriptionFromInternalDataBase(artistName: String?): String?{
-        var artistDescription = dataBase.getInfo(dataBase!!, artistName!!)
+        var artistDescription = dataBase.getInfo(dataBase, artistName!!)
         if (artistDescription != null)
             artistDescription = "[*]$artistDescription"
 
@@ -56,18 +57,16 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getArtistDescriptionFromService(artistName: String): String{
-        var artistDescription="No Results"
+        var artistDescription= NO_RESULTS
         try {
-
             val query = wikipediaSearch(artistName)
-            val pageid = getPageId(query)
+            val pageId = getPageId(query)
 
             artistDescription=makeDescription(query,artistName)
 
-            manageViewFullArticleButton(pageid)
+            manageViewFullArticleButton(pageId)
 
         } catch (e1: IOException) {
-            Log.e("TAG", "Error $e1")
             e1.printStackTrace()
         }
         return artistDescription
@@ -77,9 +76,9 @@ class OtherInfoWindow : AppCompatActivity() {
         val wikipediaAPI = createRetrofit().create(WikipediaAPI::class.java)
         val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
         val gson = Gson()
-        val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
+        val jObj = gson.fromJson(callResponse.body(), JsonObject::class.java)
 
-        return jobj["query"].asJsonObject
+        return jObj["query"].asJsonObject
     }
 
     private fun createRetrofit () : Retrofit{
@@ -90,23 +89,20 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getPageId(json: JsonObject) : JsonElement{
-        return json["search"].asJsonArray[0].asJsonObject["pageid"]
+        return json[SEARCH].asJsonArray[0].asJsonObject[PAGE_ID]
     }
 
     private fun makeDescription(query: JsonObject, artistName: String): String {
         val snippet = getSnippet(query)
-        var artistDescription = "No Results"
+        val artistDescription = getArtistDescription(snippet,artistName)
 
-        if (snippet != null) {
-            artistDescription=getArtistDescription(snippet,artistName)
-            saveDescriptionInDataBase(artistName,artistDescription)
-        }
+        saveDescriptionInDataBase(artistName,artistDescription)
 
         return artistDescription
     }
 
     private fun getSnippet(json: JsonObject) : JsonElement{
-        return json["search"].asJsonArray[0].asJsonObject["snippet"]
+        return json[SEARCH].asJsonArray[0].asJsonObject[SNIPPET]
     }
 
     private fun getArtistDescription(snippet: JsonElement, artistName: String) : String{
@@ -120,8 +116,8 @@ class OtherInfoWindow : AppCompatActivity() {
         dataBase.saveArtist(artistName, artistDescription)
     }
 
-    private fun manageViewFullArticleButton(pageid: JsonElement){
-        val urlString = "https://en.wikipedia.org/?curid=$pageid"
+    private fun manageViewFullArticleButton(pageId: JsonElement){
+        val urlString = "https://en.wikipedia.org/?curid=$pageId"
         findViewById<View>(R.id.openUrlButton).setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(urlString)
@@ -147,13 +143,11 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun open(artist: String?) {
         dataBase = DataBase(this)
-        dataBase.saveArtist( "test", "sarasa")
-
         getArtistInfo(artist)
     }
 
     companion object {
-        const val ARTIST_NAME_EXTRA = "artistName"
+        const val ARTIST_NAME_EXTRA = ARTIST_NAME
     }
 
     private fun textToHtml(text: String, term: String?): String {
