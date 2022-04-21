@@ -16,6 +16,7 @@ private const val SELECTION = "artist  = ?"
 private const val SORT_ORDER = "artist DESC"
 private const val DICTIONARY_DB = "dictionary.db"
 private const val DATABASE_VERSION = 1
+private const val CREATE_QUERY = "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null, DATABASE_VERSION) {
     private val dataBaseColumns = arrayOf(
@@ -25,9 +26,7 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
     )
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(
-            "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
-        )
+        db.execSQL(CREATE_QUERY)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
@@ -46,11 +45,11 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
         return values
     }
 
-    fun getInfo(dbHelper: DataBase, artist: String): String{
+    fun getInfo(dbHelper: DataBase, artist: String): String?{
         val cursor = createCursor(dbHelper,artist)
         val items = createItemsList(cursor)
         cursor.close()
-        return items[0]
+        return if (items.isEmpty()) null else items[0]
     }
 
     private fun createCursor (dbHelper: DataBase, artist: String) : Cursor{
