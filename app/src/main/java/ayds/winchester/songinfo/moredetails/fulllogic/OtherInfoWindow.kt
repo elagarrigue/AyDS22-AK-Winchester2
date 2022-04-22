@@ -19,12 +19,17 @@ import com.google.gson.JsonElement
 import retrofit2.Response
 import java.io.IOException
 import java.lang.StringBuilder
+import java.util.*
 
 private const val NO_RESULTS = "No Results"
 private const val PAGE_ID = "pageid"
 private const val SNIPPET = "snippet"
 private const val SEARCH = "search"
 private const val ARTIST_NAME = "artistName"
+private const val QUERY = "query"
+private const val URL_RETROFIT = "https://en.wikipedia.org/w/"
+private const val URL_ARTICLE = "https://en.wikipedia.org/?curid="
+private const val URL_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
@@ -48,8 +53,8 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
-    private fun getArtistDescriptionFromInternalDataBase(artistName: String?): String?{
-        var artistDescription = dataBase.getInfo(dataBase, artistName!!)
+    private fun getArtistDescriptionFromInternalDataBase(artistName: String): String?{
+        var artistDescription = dataBase.getInfo(dataBase, artistName)
         if (artistDescription != null)
             artistDescription = "[*]$artistDescription"
 
@@ -62,8 +67,7 @@ class OtherInfoWindow : AppCompatActivity() {
             val query = wikipediaSearch(artistName)
             val pageId = getPageId(query)
 
-            artistDescription=makeDescription(query,artistName)
-
+            artistDescription = makeDescription(query,artistName)
             manageViewFullArticleButton(pageId)
 
         } catch (e1: IOException) {
@@ -78,12 +82,12 @@ class OtherInfoWindow : AppCompatActivity() {
         val gson = Gson()
         val jObj = gson.fromJson(callResponse.body(), JsonObject::class.java)
 
-        return jObj["query"].asJsonObject
+        return jObj[QUERY].asJsonObject
     }
 
     private fun createRetrofit () : Retrofit{
         return Retrofit.Builder()
-            .baseUrl("https://en.wikipedia.org/w/")
+            .baseUrl(URL_RETROFIT)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
     }
@@ -117,7 +121,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun manageViewFullArticleButton(pageId: JsonElement){
-        val urlString = "https://en.wikipedia.org/?curid=$pageId"
+        val urlString = URL_ARTICLE+"$pageId"
         findViewById<View>(R.id.openUrlButton).setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(urlString)
@@ -133,7 +137,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun showImage(){
-        val imageUrl = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
+        val imageUrl = URL_IMAGE
         Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
     }
 
@@ -150,14 +154,14 @@ class OtherInfoWindow : AppCompatActivity() {
         const val ARTIST_NAME_EXTRA = ARTIST_NAME
     }
 
-    private fun textToHtml(text: String, term: String?): String {
+    private fun textToHtml(text: String, term: String): String {
         val builder = StringBuilder()
         builder.append("<html><div width=400>")
         builder.append("<font face=\"arial\">")
         val textWithBold = text
             .replace("'", " ")
             .replace("\n", "<br>")
-            .replace("(?i)" + term!!.toRegex(), "<b>" + term.toUpperCase() + "</b>")
+            .replace("(?i)" + term.toRegex(), "<b>" + term.uppercase(Locale.getDefault()) + "</b>")
         builder.append(textWithBold)
         builder.append("</font></div></html>")
         return builder.toString()
