@@ -32,13 +32,13 @@ private const val URL_ARTICLE = "https://en.wikipedia.org/?curid="
 private const val URL_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
 
 class OtherInfoWindow : AppCompatActivity() {
-    private var textPane2: TextView? = null
+    private lateinit var descriptionPane: TextView
     private var dataBase: DataBase = DataBase(this as Context)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-        textPane2 = findViewById(R.id.textPane2)
+        descriptionPane = findViewById(R.id.textPane2)
         open(intent.getStringExtra(ARTIST_NAME))
     }
 
@@ -49,7 +49,6 @@ class OtherInfoWindow : AppCompatActivity() {
                 artistDescription=getArtistDescriptionFromService(artistName)
 
             showUI(artistDescription)
-
         }.start()
     }
 
@@ -142,7 +141,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun showDescription(text: String){
-        textPane2!!.text = Html.fromHtml(text)
+        descriptionPane.text = Html.fromHtml(text)
     }
 
     private fun open(artist: String?) {
