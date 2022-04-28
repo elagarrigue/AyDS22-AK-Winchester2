@@ -38,18 +38,31 @@ class OtherInfoWindow : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-        descriptionPane = findViewById(R.id.textPane2)
+        initProperties()
         open(intent.getStringExtra(ARTIST_NAME))
     }
 
-    private fun getArtistInfo(artistName: String?) {
-        Thread {
-            var artistDescription = getArtistDescriptionFromInternalDataBase(artistName!!)
-            if (artistDescription == null)
-                artistDescription=getArtistDescriptionFromService(artistName)
+    private fun initProperties(){
+        descriptionPane = findViewById(R.id.textPaneArtistDescription)
+    }
 
-            showUI(artistDescription)
+    private fun getArtistInfo() {
+        Thread {
+            getArtistInfoFromDataBaseOrService()
         }.start()
+    }
+
+    private fun getArtistInfoFromDataBaseOrService(){
+        val artistName = getArtistName()
+        var artistDescription = getArtistDescriptionFromInternalDataBase(artistName!!)
+        if (artistDescription == null)
+            artistDescription=getArtistDescriptionFromService(artistName)
+
+        showUI(artistDescription)
+    }
+
+    private fun getArtistName():String?{
+        return intent.getStringExtra(ARTIST_NAME)
     }
 
     private fun getArtistDescriptionFromInternalDataBase(artistName: String): String?{
@@ -146,7 +159,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun open(artist: String?) {
         dataBase = DataBase(this)
-        getArtistInfo(artist)
+        getArtistInfo()
     }
 
     companion object {
