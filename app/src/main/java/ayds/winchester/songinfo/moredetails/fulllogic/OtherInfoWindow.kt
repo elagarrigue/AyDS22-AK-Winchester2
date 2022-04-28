@@ -30,20 +30,23 @@ private const val QUERY = "query"
 private const val URL_RETROFIT = "https://en.wikipedia.org/w/"
 private const val URL_ARTICLE = "https://en.wikipedia.org/?curid="
 private const val URL_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
+private const val PREFIX = "[*]"
 
 class OtherInfoWindow : AppCompatActivity() {
     private lateinit var descriptionPane: TextView
+    private lateinit var wikipediaImage: ImageView
     private var dataBase: DataBase = DataBase(this as Context)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         initProperties()
-        open(intent.getStringExtra(ARTIST_NAME))
+        open()
     }
 
     private fun initProperties(){
         descriptionPane = findViewById(R.id.textPaneArtistDescription)
+        wikipediaImage = findViewById<View>(R.id.imageView) as ImageView
     }
 
     private fun getArtistInfo() {
@@ -68,7 +71,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun getArtistDescriptionFromInternalDataBase(artistName: String): String?{
         var artistDescription = dataBase.getInfo(dataBase, artistName)
         if (artistDescription != null)
-            artistDescription = "[*]$artistDescription"
+            artistDescription = PREFIX+"$artistDescription"
 
          return artistDescription
     }
@@ -124,7 +127,6 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun getArtistDescription(snippet: JsonElement, artistName: String) : String{
         var artistDescription = snippet.asString.replace("\\n", "\n")
         artistDescription = textToHtml(artistDescription, artistName)
-
         return artistDescription
     }
 
@@ -150,14 +152,14 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun showImage(){
         val imageUrl = URL_IMAGE
-        Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
+        Picasso.get().load(imageUrl).into(wikipediaImage)
     }
 
     private fun showDescription(text: String){
         descriptionPane.text = Html.fromHtml(text)
     }
 
-    private fun open(artist: String?) {
+    private fun open() {
         dataBase = DataBase(this)
         getArtistInfo()
     }
