@@ -14,6 +14,7 @@ import android.net.Uri
 import com.squareup.picasso.Picasso
 import android.text.Html
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import com.google.gson.JsonElement
 import retrofit2.Response
@@ -30,32 +31,50 @@ private const val QUERY = "query"
 private const val URL_RETROFIT = "https://en.wikipedia.org/w/"
 private const val URL_ARTICLE = "https://en.wikipedia.org/?curid="
 private const val URL_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
+private const val PREFIX = "[*]"
 
 class OtherInfoWindow : AppCompatActivity() {
     private lateinit var descriptionPane: TextView
+    private lateinit var wikipediaImage: ImageView
+    private lateinit var viewFullArticleButton : Button
     private var dataBase: DataBase = DataBase(this as Context)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-        descriptionPane = findViewById(R.id.textPane2)
-        open(intent.getStringExtra(ARTIST_NAME))
+        initProperties()
+        open()
     }
 
-    private fun getArtistInfo(artistName: String?) {
-        Thread {
-            var artistDescription = getArtistDescriptionFromInternalDataBase(artistName!!)
-            if (artistDescription == null)
-                artistDescription=getArtistDescriptionFromService(artistName)
+    private fun initProperties(){
+        descriptionPane = findViewById(R.id.textPaneArtistDescription)
+        wikipediaImage = findViewById<View>(R.id.imageView) as ImageView
+        viewFullArticleButton = findViewById(R.id.openUrlButton)
+    }
 
-            showUI(artistDescription)
+    private fun getArtistInfo() {
+        Thread {
+            getArtistInfoFromDataBaseOrService()
         }.start()
+    }
+
+    private fun getArtistInfoFromDataBaseOrService(){
+        val artistName = getArtistName()
+        var artistDescription = getArtistDescriptionFromInternalDataBase(artistName!!)
+        if (artistDescription == null)
+            artistDescription=getArtistDescriptionFromService(artistName)
+
+        showUI(artistDescription)
+    }
+
+    private fun getArtistName():String?{
+        return intent.getStringExtra(ARTIST_NAME)
     }
 
     private fun getArtistDescriptionFromInternalDataBase(artistName: String): String?{
         var artistDescription = dataBase.getInfo(dataBase, artistName)
         if (artistDescription != null)
-            artistDescription = "[*]$artistDescription"
+            artistDescription = PREFIX+"$artistDescription"
 
          return artistDescription
     }
@@ -111,7 +130,6 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun getArtistDescription(snippet: JsonElement, artistName: String) : String{
         var artistDescription = snippet.asString.replace("\\n", "\n")
         artistDescription = textToHtml(artistDescription, artistName)
-
         return artistDescription
     }
 
@@ -121,11 +139,15 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun manageViewFullArticleButton(pageId: JsonElement){
         val urlString = URL_ARTICLE+"$pageId"
-        findViewById<View>(R.id.openUrlButton).setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(urlString)
-            startActivity(intent)
+        viewFullArticleButton.setOnClickListener {
+            startViewFullArticleButton(urlString)
         }
+    }
+
+    private fun startViewFullArticleButton(urlString : String){
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(urlString)
+        startActivity(intent)
     }
 
     private fun showUI(text: String){
@@ -137,16 +159,16 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun showImage(){
         val imageUrl = URL_IMAGE
-        Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
+        Picasso.get().load(imageUrl).into(wikipediaImage)
     }
 
     private fun showDescription(text: String){
         descriptionPane.text = Html.fromHtml(text)
     }
 
-    private fun open(artist: String?) {
+    private fun open() {
         dataBase = DataBase(this)
-        getArtistInfo(artist)
+        getArtistInfo()
     }
 
     companion object {
