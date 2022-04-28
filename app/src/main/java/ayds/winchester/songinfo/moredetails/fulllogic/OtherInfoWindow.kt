@@ -14,6 +14,7 @@ import android.net.Uri
 import com.squareup.picasso.Picasso
 import android.text.Html
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import com.google.gson.JsonElement
 import retrofit2.Response
@@ -35,6 +36,7 @@ private const val PREFIX = "[*]"
 class OtherInfoWindow : AppCompatActivity() {
     private lateinit var descriptionPane: TextView
     private lateinit var wikipediaImage: ImageView
+    private lateinit var viewFullArticleButton : Button
     private var dataBase: DataBase = DataBase(this as Context)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +49,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun initProperties(){
         descriptionPane = findViewById(R.id.textPaneArtistDescription)
         wikipediaImage = findViewById<View>(R.id.imageView) as ImageView
+        viewFullArticleButton = findViewById(R.id.openUrlButton)
     }
 
     private fun getArtistInfo() {
@@ -136,11 +139,15 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun manageViewFullArticleButton(pageId: JsonElement){
         val urlString = URL_ARTICLE+"$pageId"
-        findViewById<View>(R.id.openUrlButton).setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(urlString)
-            startActivity(intent)
+        viewFullArticleButton.setOnClickListener {
+            startViewFullArticleButton(urlString)
         }
+    }
+
+    private fun startViewFullArticleButton(urlString : String){
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(urlString)
+        startActivity(intent)
     }
 
     private fun showUI(text: String){
