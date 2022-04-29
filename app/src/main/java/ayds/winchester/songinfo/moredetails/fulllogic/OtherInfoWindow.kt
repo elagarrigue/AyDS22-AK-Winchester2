@@ -39,6 +39,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var viewFullArticleButton : Button
     private var dataBase: DataBase = DataBase(this as Context)
     private lateinit var artistName: String
+    private lateinit var queryWikipediaSearch : JsonObject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,12 +87,8 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun getArtistDescriptionFromService(): String{
         var artistDescription= NO_RESULTS
         try {
-            val query = wikipediaSearch()
-            val pageId = getPageId(query)
-
-            artistDescription = makeDescription(query)
-            manageViewFullArticleButton(pageId)
-
+            queryWikipediaSearch = wikipediaSearch()
+            artistDescription = makeDescription()
         } catch (e1: IOException) {
             e1.printStackTrace()
         }
@@ -118,8 +115,8 @@ class OtherInfoWindow : AppCompatActivity() {
         return json[SEARCH].asJsonArray[0].asJsonObject[PAGE_ID]
     }
 
-    private fun makeDescription(query: JsonObject): String {
-        val snippet = getSnippet(query)
+    private fun makeDescription(): String {
+        val snippet = getSnippet(queryWikipediaSearch)
         return getArtistDescription(snippet)
     }
 
@@ -154,12 +151,18 @@ class OtherInfoWindow : AppCompatActivity() {
         runOnUiThread {
             showImage()
             showDescription(text)
+            showButton()
         }
     }
 
     private fun showImage(){
         val imageUrl = URL_IMAGE
         Picasso.get().load(imageUrl).into(wikipediaImage)
+    }
+
+    private fun showButton(){
+        val pageId = getPageId(queryWikipediaSearch)
+        manageViewFullArticleButton(pageId)
     }
 
     private fun showDescription(text: String){
