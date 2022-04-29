@@ -38,18 +38,21 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var wikipediaImage: ImageView
     private lateinit var viewFullArticleButton : Button
     private var dataBase: DataBase = DataBase(this as Context)
+    private lateinit var artistName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         initProperties()
-        open()
+        getArtistInfo()
     }
 
     private fun initProperties(){
         descriptionPane = findViewById(R.id.textPaneArtistDescription)
         wikipediaImage = findViewById<View>(R.id.imageView) as ImageView
         viewFullArticleButton = findViewById(R.id.openUrlButton)
+        artistName = getArtistName()!!;
+        dataBase = DataBase(this)
     }
 
     private fun getArtistInfo() {
@@ -164,11 +167,6 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun showDescription(text: String){
         descriptionPane.text = Html.fromHtml(text)
-    }
-
-    private fun open() {
-        dataBase = DataBase(this)
-        getArtistInfo()
     }
 
     companion object {
