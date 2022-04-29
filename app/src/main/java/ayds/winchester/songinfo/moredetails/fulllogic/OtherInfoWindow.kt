@@ -45,15 +45,19 @@ class OtherInfoWindow : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         initProperties()
+        initViewProperties()
         getArtistInfo()
     }
 
     private fun initProperties(){
+        artistName = getArtistName()!!;
+        dataBase = DataBase(this)
+    }
+
+    private fun initViewProperties(){
         descriptionPane = findViewById(R.id.textPaneArtistDescription)
         wikipediaImage = findViewById<View>(R.id.imageView) as ImageView
         viewFullArticleButton = findViewById(R.id.openUrlButton)
-        artistName = getArtistName()!!;
-        dataBase = DataBase(this)
     }
 
     private fun getArtistInfo() {
