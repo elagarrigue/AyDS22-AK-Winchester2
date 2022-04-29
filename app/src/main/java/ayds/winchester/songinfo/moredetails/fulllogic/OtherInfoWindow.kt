@@ -63,9 +63,9 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun getArtistInfoFromDataBaseOrService(){
         val artistName = getArtistName()
-        var artistDescription = getArtistDescriptionFromInternalDataBase(artistName!!)
+        var artistDescription = getArtistDescriptionFromInternalDataBase()
         if (artistDescription == null)
-            artistDescription=getArtistDescriptionFromService(artistName)
+            artistDescription=getArtistDescriptionFromService()
 
         showUI(artistDescription)
     }
@@ -74,7 +74,7 @@ class OtherInfoWindow : AppCompatActivity() {
         return intent.getStringExtra(ARTIST_NAME)
     }
 
-    private fun getArtistDescriptionFromInternalDataBase(artistName: String): String?{
+    private fun getArtistDescriptionFromInternalDataBase(): String?{
         var artistDescription = dataBase.getInfo(dataBase, artistName)
         if (artistDescription != null)
             artistDescription = PREFIX+"$artistDescription"
@@ -82,13 +82,13 @@ class OtherInfoWindow : AppCompatActivity() {
          return artistDescription
     }
 
-    private fun getArtistDescriptionFromService(artistName: String): String{
+    private fun getArtistDescriptionFromService(): String{
         var artistDescription= NO_RESULTS
         try {
-            val query = wikipediaSearch(artistName)
+            val query = wikipediaSearch()
             val pageId = getPageId(query)
 
-            artistDescription = makeDescription(query,artistName)
+            artistDescription = makeDescription(query)
             manageViewFullArticleButton(pageId)
 
         } catch (e1: IOException) {
@@ -97,7 +97,7 @@ class OtherInfoWindow : AppCompatActivity() {
         return artistDescription
     }
 
-    private fun wikipediaSearch(artistName: String) : JsonObject{
+    private fun wikipediaSearch() : JsonObject{
         val wikipediaAPI = createRetrofit().create(WikipediaAPI::class.java)
         val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
         val gson = Gson()
@@ -117,11 +117,11 @@ class OtherInfoWindow : AppCompatActivity() {
         return json[SEARCH].asJsonArray[0].asJsonObject[PAGE_ID]
     }
 
-    private fun makeDescription(query: JsonObject, artistName: String): String {
+    private fun makeDescription(query: JsonObject): String {
         val snippet = getSnippet(query)
-        val artistDescription = getArtistDescription(snippet,artistName)
+        val artistDescription = getArtistDescription(snippet)
 
-        saveDescriptionInDataBase(artistName,artistDescription)
+        saveDescriptionInDataBase(artistDescription)
 
         return artistDescription
     }
@@ -130,13 +130,13 @@ class OtherInfoWindow : AppCompatActivity() {
         return json[SEARCH].asJsonArray[0].asJsonObject[SNIPPET]
     }
 
-    private fun getArtistDescription(snippet: JsonElement, artistName: String) : String{
+    private fun getArtistDescription(snippet: JsonElement) : String{
         var artistDescription = snippet.asString.replace("\\n", "\n")
         artistDescription = textToHtml(artistDescription, artistName)
         return artistDescription
     }
 
-    private fun saveDescriptionInDataBase(artistName: String,artistDescription: String){
+    private fun saveDescriptionInDataBase(artistDescription: String){
         dataBase.saveArtist(artistName, artistDescription)
     }
 
