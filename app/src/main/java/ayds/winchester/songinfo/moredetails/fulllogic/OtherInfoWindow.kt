@@ -62,11 +62,12 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getArtistInfoFromDataBaseOrService(){
-        val artistName = getArtistName()
         var artistDescription = getArtistDescriptionFromInternalDataBase()
-        if (artistDescription == null)
-            artistDescription=getArtistDescriptionFromService()
-
+        if (artistDescription == null) {
+            artistDescription = getArtistDescriptionFromService()
+            if (artistDescription != NO_RESULTS)
+                saveDescriptionInDataBase(artistDescription)
+        }
         showUI(artistDescription)
     }
 
@@ -119,11 +120,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun makeDescription(query: JsonObject): String {
         val snippet = getSnippet(query)
-        val artistDescription = getArtistDescription(snippet)
-
-        saveDescriptionInDataBase(artistDescription)
-
-        return artistDescription
+        return getArtistDescription(snippet)
     }
 
     private fun getSnippet(json: JsonObject) : JsonElement{
