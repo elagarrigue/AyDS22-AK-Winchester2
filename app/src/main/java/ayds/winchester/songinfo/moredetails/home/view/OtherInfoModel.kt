@@ -1,21 +1,15 @@
-package ayds.winchester.songinfo.moredetails.fulllogic
+package ayds.winchester.songinfo.moredetails.home.view
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.TextView
-import android.os.Bundle
-import ayds.winchester.songinfo.R
+
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import android.content.Intent
-import android.net.Uri
-import com.squareup.picasso.Picasso
-import android.text.Html
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
+
+import ayds.winchester.songinfo.moredetails.home.model.DataBase
+import ayds.winchester.songinfo.moredetails.home.model.OtherInfoWindow
+import ayds.winchester.songinfo.moredetails.home.model.WikipediaAPI
 import com.google.gson.JsonElement
 import retrofit2.Response
 import java.io.IOException
@@ -29,41 +23,35 @@ private const val SEARCH = "search"
 private const val ARTIST_NAME = "artistName"
 private const val QUERY = "query"
 private const val URL_RETROFIT = "https://en.wikipedia.org/w/"
-private const val URL_ARTICLE = "https://en.wikipedia.org/?curid="
-private const val URL_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
 private const val PREFIX = "[*]"
 
-class OtherInfoWindow : AppCompatActivity() {
-    private lateinit var descriptionPane: TextView
-    private lateinit var wikipediaImage: ImageView
-    private lateinit var viewFullArticleButton : Button
-    private var dataBase: DataBase = DataBase(this as Context)
-    private lateinit var artistName: String
+class OtherInfoModel(otherInfoWindow: OtherInfoWindow,artistName: String){
+    private lateinit var dataBase: DataBase
+    private var artistName: String = artistName
     private lateinit var queryWikipediaSearch : JsonObject
+    private var otherInfoView : OtherInfoWindow = otherInfoWindow
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_other_info)
+    init{
         initProperties()
-        initViewProperties()
-        getArtistInfo()
     }
 
     private fun initProperties(){
-        artistName = getArtistName()!!;
-        dataBase = DataBase(this)
-    }
+        //artistName = getArtistName()!!;
+        dataBase = DataBase(otherInfoView as Context)
 
-    private fun initViewProperties(){
-        descriptionPane = findViewById(R.id.textPaneArtistDescription)
-        wikipediaImage = findViewById<View>(R.id.imageView) as ImageView
-        viewFullArticleButton = findViewById(R.id.openUrlButton)
+
+
+        getArtistInfo()//----------------------Mover
     }
 
     private fun getArtistInfo() {
         Thread {
             getArtistInfoFromDataBaseOrService()
         }.start()
+    }
+
+    fun setNameArtist(name: String){
+        artistName=name
     }
 
     private fun getArtistInfoFromDataBaseOrService(){
@@ -73,19 +61,15 @@ class OtherInfoWindow : AppCompatActivity() {
             if (artistDescription != NO_RESULTS)
                 saveDescriptionInDataBase(artistDescription)
         }
-        showUI(artistDescription)
-    }
-
-    private fun getArtistName():String?{
-        return intent.getStringExtra(ARTIST_NAME)
+            otherInfoView.showUI(artistDescription)
     }
 
     private fun getArtistDescriptionFromInternalDataBase(): String?{
         var artistDescription = dataBase.getInfo(dataBase, artistName)
         if (artistDescription != null)
-            artistDescription = PREFIX+"$artistDescription"
+            artistDescription = PREFIX +"$artistDescription"
 
-         return artistDescription
+        return artistDescription
     }
 
     private fun getArtistDescriptionFromService(): String{
@@ -108,14 +92,14 @@ class OtherInfoWindow : AppCompatActivity() {
         return jObj[QUERY].asJsonObject
     }
 
-    private fun createRetrofit () : Retrofit{
+    private fun createRetrofit () : Retrofit {
         return Retrofit.Builder()
             .baseUrl(URL_RETROFIT)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
     }
 
-    private fun getPageId(json: JsonObject) : JsonElement{
+    private fun getPageId(json: JsonObject) : JsonElement {
         return json[SEARCH].asJsonArray[0].asJsonObject[PAGE_ID]
     }
 
@@ -124,7 +108,7 @@ class OtherInfoWindow : AppCompatActivity() {
         return getArtistDescription(snippet)
     }
 
-    private fun getSnippet(json: JsonObject) : JsonElement{
+    private fun getSnippet(json: JsonObject) : JsonElement {
         return json[SEARCH].asJsonArray[0].asJsonObject[SNIPPET]
     }
 
@@ -136,45 +120,6 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun saveDescriptionInDataBase(artistDescription: String){
         dataBase.saveArtist(artistName, artistDescription)
-    }
-
-    private fun manageViewFullArticleButton(pageId: JsonElement){
-        val urlString = URL_ARTICLE+"$pageId"
-        viewFullArticleButton.setOnClickListener {
-            startViewFullArticleButton(urlString)
-        }
-    }
-
-    private fun startViewFullArticleButton(urlString : String){
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(urlString)
-        startActivity(intent)
-    }
-
-    private fun showUI(text: String){
-        runOnUiThread {
-            showImage()
-            showDescription(text)
-            showButton()
-        }
-    }
-
-    private fun showImage(){
-        val imageUrl = URL_IMAGE
-        Picasso.get().load(imageUrl).into(wikipediaImage)
-    }
-
-    private fun showButton(){
-        val pageId = getPageId(queryWikipediaSearch)
-        manageViewFullArticleButton(pageId)
-    }
-
-    private fun showDescription(text: String){
-        descriptionPane.text = Html.fromHtml(text)
-    }
-
-    companion object {
-        const val ARTIST_NAME_EXTRA = ARTIST_NAME
     }
 
     private fun textToHtml(text: String, term: String): String {
@@ -189,4 +134,5 @@ class OtherInfoWindow : AppCompatActivity() {
         builder.append("</font></div></html>")
         return builder.toString()
     }
+
 }
