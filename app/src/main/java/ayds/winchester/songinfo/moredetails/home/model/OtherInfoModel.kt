@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.home.view
+package ayds.winchester.songinfo.moredetails.home.model
 
 import android.content.Context
 
@@ -7,9 +7,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 
-import ayds.winchester.songinfo.moredetails.home.model.DataBase
-import ayds.winchester.songinfo.moredetails.home.model.OtherInfoWindow
-import ayds.winchester.songinfo.moredetails.home.model.WikipediaAPI
+import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 import com.google.gson.JsonElement
 import retrofit2.Response
 import java.io.IOException
@@ -25,9 +23,9 @@ private const val QUERY = "query"
 private const val URL_RETROFIT = "https://en.wikipedia.org/w/"
 private const val PREFIX = "[*]"
 
-class OtherInfoModel(otherInfoWindow: OtherInfoWindow,artistName: String){
+class OtherInfoModel(otherInfoWindow: OtherInfoWindow){
     private lateinit var dataBase: DataBase
-    private var artistName: String = artistName
+    private lateinit var artistName: String
     private lateinit var queryWikipediaSearch : JsonObject
     private var otherInfoView : OtherInfoWindow = otherInfoWindow
 
@@ -36,12 +34,7 @@ class OtherInfoModel(otherInfoWindow: OtherInfoWindow,artistName: String){
     }
 
     private fun initProperties(){
-        //artistName = getArtistName()!!;
         dataBase = DataBase(otherInfoView as Context)
-
-
-
-        getArtistInfo()//----------------------Mover
     }
 
     private fun getArtistInfo() {
@@ -52,6 +45,7 @@ class OtherInfoModel(otherInfoWindow: OtherInfoWindow,artistName: String){
 
     fun setNameArtist(name: String){
         artistName=name
+        getArtistInfo()//----------------------Mover
     }
 
     private fun getArtistInfoFromDataBaseOrService(){
