@@ -1,7 +1,5 @@
 package ayds.winchester.songinfo.moredetails.home.model
 
-import com.google.gson.JsonElement
-
 interface Description {
     val id: String
     val description: String
