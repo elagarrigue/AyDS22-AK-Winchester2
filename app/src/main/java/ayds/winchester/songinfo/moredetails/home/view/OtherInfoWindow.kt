@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.home.model
+package ayds.winchester.songinfo.moredetails.home.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
@@ -11,7 +11,7 @@ import android.text.Html
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import ayds.winchester.songinfo.moredetails.home.view.OtherInfoModel
+import ayds.winchester.songinfo.moredetails.home.controller.OtherInfoControllerImpl
 import com.google.gson.JsonElement
 
 private const val ARTIST_NAME = "artistName"
@@ -19,18 +19,17 @@ private const val URL_ARTICLE = "https://en.wikipedia.org/?curid="
 private const val URL_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
 
 class OtherInfoWindow : AppCompatActivity() {
-    private lateinit var otherInfoModel : OtherInfoModel
     private lateinit var descriptionPane: TextView
     private lateinit var wikipediaImage: ImageView
     private lateinit var viewFullArticleButton : Button
+    private var controller = OtherInfoControllerImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-
+        controller.setVista(this)
+        controller.searchArtistDescription(getArtistName())
         initViewProperties()
-
-        otherInfoModel=OtherInfoModel(this,getArtistName())
     }
 
     private fun getArtistName(): String {
