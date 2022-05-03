@@ -11,6 +11,8 @@ import android.text.Html
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import ayds.observer.Observable
+import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.home.controller.OtherInfoControllerImpl
 import com.google.gson.JsonElement
 
@@ -23,17 +25,23 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var wikipediaImage: ImageView
     private lateinit var viewFullArticleButton : Button
     private var controller = OtherInfoControllerImpl()
+    private val onActionSubject = Subject<MoreDetailsUiEvent>()
+    val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-        controller.setVista(this)
-        controller.searchArtistDescription(getArtistName())
+        controller.setView(this)
         initViewProperties()
+        notifySearchDescriptionAction()
     }
 
     private fun getArtistName(): String {
         return intent.getStringExtra(ARTIST_NAME)!!
+    }
+
+    private fun notifySearchDescriptionAction() {
+       onActionSubject.notify(MoreDetailsUiEventImpl(getArtistName()))
     }
 
     private fun initViewProperties(){
