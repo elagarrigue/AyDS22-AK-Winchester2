@@ -18,9 +18,9 @@ class OtherInfoControllerImpl {
 
    }
 
-   fun searchArtistDescription(name : String){
+   private fun searchArtistDescription(name : String){
         otherInfoModel.setNameArtist(name)
-    }
+   }
 
     fun setView(view : OtherInfoWindow){
         otherInfoWindow = view
@@ -28,9 +28,11 @@ class OtherInfoControllerImpl {
         otherInfoWindow.uiEventObservable.subscribe(observer)
     }
 
-
-
     private val observer: Observer<MoreDetailsUiEvent> =
         Observer { artistName -> searchArtistDescription(artistName.name)    }
+
+    fun getModel():OtherInfoModel{
+        return otherInfoModel
+    }
 
 }

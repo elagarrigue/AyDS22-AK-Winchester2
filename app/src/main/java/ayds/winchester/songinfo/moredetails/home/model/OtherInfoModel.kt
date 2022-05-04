@@ -1,6 +1,10 @@
 package ayds.winchester.songinfo.moredetails.home.model
 
 import android.content.Context
+import ayds.observer.Observable
+import ayds.observer.Subject
+import ayds.winchester.songinfo.moredetails.home.view.MoreDetailsUiEvent
+import ayds.winchester.songinfo.moredetails.home.view.MoreDetailsUiEventImpl
 
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -28,6 +32,8 @@ class OtherInfoModel(otherInfoWindow: OtherInfoWindow){
     private lateinit var artistName: String
     private lateinit var queryWikipediaSearch : JsonObject
     private var otherInfoView : OtherInfoWindow = otherInfoWindow
+    private val onActionSubject = Subject<Description>()
+    val uiEventObservable: Observable<Description> = onActionSubject
 
     init{
         initProperties()
@@ -36,6 +42,10 @@ class OtherInfoModel(otherInfoWindow: OtherInfoWindow){
     private fun initProperties(){
         dataBase = DataBase(otherInfoView as Context)
     }
+
+   // private fun notifySearchDescriptionAction() {
+        //onActionSubject.notify(Description)
+   // }
 
     private fun getArtistInfo() {
         Thread {
@@ -48,14 +58,15 @@ class OtherInfoModel(otherInfoWindow: OtherInfoWindow){
         getArtistInfo()//----------------------Mover
     }
 
-    private fun getArtistInfoFromDataBaseOrService(){
+    private fun getArtistInfoFromDataBaseOrService():String{
         var artistDescription = getArtistDescriptionFromInternalDataBase()
         if (artistDescription == null) {
             artistDescription = getArtistDescriptionFromService()
             if (artistDescription != NO_RESULTS)
                 saveDescriptionInDataBase(artistDescription)
         }
-            otherInfoView.showUI(artistDescription)
+        onActionSubject.notify(ArtistDescription("123", artistDescription))
+        return artistDescription
     }
 
     private fun getArtistDescriptionFromInternalDataBase(): String?{

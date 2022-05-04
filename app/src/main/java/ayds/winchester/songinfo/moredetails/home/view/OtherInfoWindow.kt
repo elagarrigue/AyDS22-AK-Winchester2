@@ -14,6 +14,7 @@ import android.widget.ImageView
 import ayds.observer.Observable
 import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.home.controller.OtherInfoControllerImpl
+import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModel
 import com.google.gson.JsonElement
 
 private const val ARTIST_NAME = "artistName"
@@ -27,6 +28,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private var controller = OtherInfoControllerImpl()
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
     val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
+    private lateinit var otherInfoModel : OtherInfoModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,14 @@ class OtherInfoWindow : AppCompatActivity() {
         controller.setView(this)
         initViewProperties()
         notifySearchDescriptionAction()
+        otherInfoModel = controller.getModel()
+        initObservers()
+
+    }
+
+    private fun initObservers() {
+        otherInfoModel.uiEventObservable
+            .subscribe { value -> showUI(value.description) }
     }
 
     private fun getArtistName(): String {
