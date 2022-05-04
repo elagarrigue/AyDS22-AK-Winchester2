@@ -3,8 +3,10 @@ package ayds.winchester.songinfo.moredetails.home.model
 import android.content.Context
 import ayds.observer.Observable
 import ayds.observer.Subject
-import ayds.winchester.songinfo.moredetails.home.view.MoreDetailsUiEvent
-import ayds.winchester.songinfo.moredetails.home.view.MoreDetailsUiEventImpl
+import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescription
+import ayds.winchester.songinfo.moredetails.home.model.entities.Description
+import ayds.winchester.songinfo.moredetails.home.model.repository.external.WikipediaAPI
+import ayds.winchester.songinfo.moredetails.home.model.repository.local.DataBase
 
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory

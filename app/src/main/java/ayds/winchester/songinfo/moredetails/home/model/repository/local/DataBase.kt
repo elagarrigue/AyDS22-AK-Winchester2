@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.home.model
+package ayds.winchester.songinfo.moredetails.home.model.repository.local
 
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
@@ -50,6 +50,19 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
         val items = createItemsList(cursor)
         cursor.close()
         return if (items.isEmpty()) null else items[0]
+    }
+
+    fun getInfoById(dbHelper: DataBase, id: String): String?{
+        val cursor = createCursorById(dbHelper,id)
+        val items = createItemsList(cursor)
+        cursor.close()
+        return if (items.isEmpty()) null else items[0]
+    }
+
+    private fun createCursorById (dbHelper: DataBase, id: String) : Cursor{
+        val dataBase = dbHelper.readableDatabase
+        val selectionArgs = arrayOf(id)
+        return dataBase.query(ID, dataBaseColumns, SELECTION, selectionArgs, null, null, SORT_ORDER)
     }
 
     private fun createCursor (dbHelper: DataBase, artist: String) : Cursor{
