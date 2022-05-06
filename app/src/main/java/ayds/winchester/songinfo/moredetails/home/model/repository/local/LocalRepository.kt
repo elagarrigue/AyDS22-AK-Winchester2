@@ -23,15 +23,15 @@ class LocalRepository(otherInfoView : OtherInfoWindow) {
 
      fun getArtistDescription(artistName:String): Description?{
          this.artistName = artistName
-        var artistDescription = dataBase.getInfo(dataBase, artistName)
+        val artistDescription = dataBase.getInfo(dataBase, artistName)
         if (artistDescription != null) {
-            artistDescription = PREFIX + "$artistDescription"
-            return ArtistDescription("123", artistDescription)
+            artistDescription.description = PREFIX + artistDescription.description
+            return artistDescription
         }
          return null
     }
 
-    fun getArtistDescriptionById(id:String): Description?{
+    fun getArtistDescriptionById(id:String): Description{
         var artistDescription = dataBase.getInfoById(dataBase, id)
         if (artistDescription != null)
             artistDescription = PREFIX +"$artistDescription"

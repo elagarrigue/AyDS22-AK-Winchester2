@@ -1,6 +1,5 @@
 package ayds.winchester.songinfo.moredetails.home.model.repository
 
-import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 import ayds.winchester.songinfo.moredetails.home.model.entities.EmptyDescription
 import ayds.winchester.songinfo.moredetails.home.model.repository.external.ExternalRepository
@@ -8,7 +7,7 @@ import ayds.winchester.songinfo.moredetails.home.model.repository.local.LocalRep
 import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 
 interface DescriptionRepository {
-    fun getDescription(term: String): Description
+    fun getDescription(name: String): Description
 }
 
 internal class DescriptionRepositoryImpl(otherInfoView : OtherInfoWindow): DescriptionRepository {

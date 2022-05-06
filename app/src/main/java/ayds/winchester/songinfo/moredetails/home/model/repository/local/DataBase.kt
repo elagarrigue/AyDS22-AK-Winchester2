@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescription
+import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 import java.util.ArrayList
 
 private const val ID = "id"
@@ -49,12 +51,11 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
         return values
     }
 
-    fun getInfo(dbHelper: DataBase, artist: String): String?{
+    fun getInfo(dbHelper: DataBase, artist: String): Description?{
         val cursor = createCursor(dbHelper,artist)
         val items = createItemsList(cursor)
-        println("ITEMSSSSSSSSSSSSSSSS" + items)
         cursor.close()
-        return if (items.isEmpty()) null else items[0]
+        return if (items.isEmpty()) null else ArtistDescription(items[1],items[0])
     }
 
     fun getInfoById(dbHelper: DataBase, id: String): String?{
@@ -82,7 +83,11 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
             val info = cursor.getString(
                 cursor.getColumnIndexOrThrow(INFO)
             )
+            val pageId = cursor.getString(
+                cursor.getColumnIndexOrThrow(PAGE_ID)
+            )
             items.add(info)
+            items.add(pageId)
         }
         return items
     }
