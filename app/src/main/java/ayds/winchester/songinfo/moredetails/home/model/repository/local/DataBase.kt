@@ -8,6 +8,7 @@ import android.database.Cursor
 import java.util.ArrayList
 
 private const val ID = "id"
+private const val PAGE_ID = "pageid"
 private const val ARTIST = "artist"
 private const val ARTISTS = "artists"
 private const val INFO = "info"
@@ -16,13 +17,15 @@ private const val SELECTION = "artist  = ?"
 private const val SORT_ORDER = "artist DESC"
 private const val DICTIONARY_DB = "dictionary.db"
 private const val DATABASE_VERSION = 1
-private const val CREATE_QUERY = "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
+private const val CREATE_QUERY =
+    "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer, pageId string)"
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null, DATABASE_VERSION) {
     private val dataBaseColumns = arrayOf(
         ID,
         ARTIST,
-        INFO
+        INFO,
+        PAGE_ID
     )
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -31,23 +34,25 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    fun saveArtist(artist: String, info: String) {
+    fun saveArtist(artist: String, info: String, pageId: String) {
         val dataBase = this.writableDatabase
-        val values = createValueMap(artist,info)
+        val values = createValueMap(artist,info,pageId)
         dataBase.insert(ARTISTS, null, values)
     }
 
-    private fun createValueMap (artist: String, info: String): ContentValues {
+    private fun createValueMap (artist: String, info: String, pageId : String): ContentValues {
         val values = ContentValues()
         values.put(ARTIST, artist)
         values.put(INFO, info)
         values.put(SOURCE, 1)
+        values.put(PAGE_ID, pageId)
         return values
     }
 
     fun getInfo(dbHelper: DataBase, artist: String): String?{
         val cursor = createCursor(dbHelper,artist)
         val items = createItemsList(cursor)
+        println("ITEMSSSSSSSSSSSSSSSS" + items)
         cursor.close()
         return if (items.isEmpty()) null else items[0]
     }

@@ -26,9 +26,9 @@ class LocalRepository(otherInfoView : OtherInfoWindow) {
         var artistDescription = dataBase.getInfo(dataBase, artistName)
         if (artistDescription != null) {
             artistDescription = PREFIX + "$artistDescription"
-            return ArtistDescription("123", artistDescription!!)
+            return ArtistDescription("123", artistDescription)
         }
-         return null;
+         return null
     }
 
     fun getArtistDescriptionById(id:String): Description?{
@@ -39,7 +39,7 @@ class LocalRepository(otherInfoView : OtherInfoWindow) {
         return ArtistDescription(id, artistDescription!!)
     }
 
-    fun saveDescriptionInDataBase(artistDescription: String){
-        dataBase.saveArtist(artistName, artistDescription)
+    fun saveDescriptionInDataBase(artistDescription: Description){
+        dataBase.saveArtist(artistName, artistDescription.description,artistDescription.id)
     }
 }

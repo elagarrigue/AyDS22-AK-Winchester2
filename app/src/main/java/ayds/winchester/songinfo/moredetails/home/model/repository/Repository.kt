@@ -25,7 +25,7 @@ internal class DescriptionRepositoryImpl(otherInfoView : OtherInfoWindow): Descr
                 try {
                     artistDescription = externalRepository.getArtistDescription(name)
                     artistDescription.let {
-                        localRepository.saveDescriptionInDataBase(artistDescription!!.description)
+                        localRepository.saveDescriptionInDataBase(artistDescription!!)
                     }
 
                 } catch (e: Exception) {
