@@ -7,7 +7,6 @@ import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 
 private const val PREFIX = "[*]"
 
-
 class LocalRepository(otherInfoView : OtherInfoWindow) {
 
     private lateinit var dataBase: DataBase
@@ -43,5 +42,4 @@ class LocalRepository(otherInfoView : OtherInfoWindow) {
     fun saveDescriptionInDataBase(artistDescription: String){
         dataBase.saveArtist(artistName, artistDescription)
     }
-
 }

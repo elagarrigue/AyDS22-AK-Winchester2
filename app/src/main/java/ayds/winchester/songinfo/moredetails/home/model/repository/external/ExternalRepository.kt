@@ -15,6 +15,7 @@ import java.util.*
 private const val NO_RESULTS = "No Results"
 private const val SNIPPET = "snippet"
 private const val SEARCH = "search"
+private const val PAGE_ID = "pageid"
 private const val QUERY = "query"
 private const val URL_RETROFIT = "https://en.wikipedia.org/w/"
 
@@ -26,13 +27,15 @@ class ExternalRepository {
      fun getArtistDescription(artistName: String): Description{
         var artistDescription= NO_RESULTS
         this.artistName = artistName
+         var pageId = ""
         try {
             queryWikipediaSearch = wikipediaSearch()
             artistDescription = makeDescription()
+            pageId = getPageId(queryWikipediaSearch).asString
         } catch (e1: IOException) {
             e1.printStackTrace()
         }
-        return ArtistDescription("123", artistDescription)
+        return ArtistDescription(pageId, artistDescription)
     }
 
     private fun wikipediaSearch() : JsonObject {
@@ -79,8 +82,8 @@ class ExternalRepository {
         return builder.toString()
     }
 
-
-
-
+    private fun getPageId(json: JsonObject) : JsonElement {
+        return json[SEARCH].asJsonArray[0].asJsonObject[PAGE_ID]
+    }
 
 }

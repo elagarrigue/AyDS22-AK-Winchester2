@@ -15,7 +15,7 @@ import ayds.observer.Observable
 import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.home.controller.OtherInfoControllerImpl
 import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModel
-import com.google.gson.JsonElement
+import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 
 private const val ARTIST_NAME = "artistName"
 private const val URL_ARTICLE = "https://en.wikipedia.org/?curid="
@@ -43,7 +43,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun initObservers() {
         otherInfoModel.uiEventObservable
-            .subscribe { value -> showUI(value.description) }
+            .subscribe { value -> showUI(value) }
     }
 
     private fun getArtistName(): String {
@@ -60,8 +60,8 @@ class OtherInfoWindow : AppCompatActivity() {
         viewFullArticleButton = findViewById(R.id.openUrlButton)
     }
 
-    private fun manageViewFullArticleButton(pageId: JsonElement){
-        val urlString = URL_ARTICLE+"$pageId"
+    private fun showViewFullArticleButton(pageId: String){
+        val urlString = URL_ARTICLE+pageId
         viewFullArticleButton.setOnClickListener {
             startViewFullArticleButton(urlString)
         }
@@ -73,22 +73,17 @@ class OtherInfoWindow : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun showUI(text: String){
+    private fun showUI(description: Description){
         runOnUiThread {
             showImage()
-            showDescription(text)
-            showButton()
+            showDescription(description.description)
+            showViewFullArticleButton(description.id)
         }
     }
 
     private fun showImage(){
         val imageUrl = URL_IMAGE
         Picasso.get().load(imageUrl).into(wikipediaImage)
-    }
-
-    private fun showButton(){
-        //val pageId = getPageId(queryWikipediaSearch)
-        //manageViewFullArticleButton(pageId)
     }
 
     private fun showDescription(text: String){
@@ -98,6 +93,4 @@ class OtherInfoWindow : AppCompatActivity() {
     companion object {
         const val ARTIST_NAME_EXTRA = ARTIST_NAME
     }
-
-
 }
