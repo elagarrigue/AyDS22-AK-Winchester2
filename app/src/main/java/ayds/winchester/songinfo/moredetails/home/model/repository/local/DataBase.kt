@@ -10,7 +10,7 @@ import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 import java.util.ArrayList
 
 private const val ID = "id"
-private const val PAGE_ID = "pageid"
+private const val PAGE_ID = "pageId"
 private const val ARTIST = "artist"
 private const val ARTISTS = "artists"
 private const val INFO = "info"
