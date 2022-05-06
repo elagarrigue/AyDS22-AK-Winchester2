@@ -24,21 +24,16 @@ internal class DescriptionRepositoryImpl(otherInfoView : OtherInfoWindow): Descr
             else -> {
                 try {
                     artistDescription = externalRepository.getArtistDescription(name)
-
                     artistDescription.let {
-                   /*     when {
-                         //   it.isSavedDescription() -> localRepository.updateSongTerm(name, it.id)
-                            else -> localRepository.insertSong(name, it)
-                        }*/
                         localRepository.saveDescriptionInDataBase(artistDescription!!.description)
                     }
 
                 } catch (e: Exception) {
+                    println("EXCEPTION: " + e.message)
                     artistDescription = null
                 }
             }
         }
-
         return artistDescription ?: EmptyDescription
     }
 

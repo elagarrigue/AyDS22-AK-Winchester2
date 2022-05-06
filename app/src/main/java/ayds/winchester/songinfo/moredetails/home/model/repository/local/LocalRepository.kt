@@ -5,13 +5,6 @@ import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescriptio
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 
-private const val NO_RESULTS = "No Results"
-private const val PAGE_ID = "pageid"
-private const val SNIPPET = "snippet"
-private const val SEARCH = "search"
-private const val ARTIST_NAME = "artistName"
-private const val QUERY = "query"
-private const val URL_RETROFIT = "https://en.wikipedia.org/w/"
 private const val PREFIX = "[*]"
 
 
@@ -30,11 +23,13 @@ class LocalRepository(otherInfoView : OtherInfoWindow) {
     }
 
      fun getArtistDescription(artistName:String): Description?{
+         this.artistName = artistName
         var artistDescription = dataBase.getInfo(dataBase, artistName)
-        if (artistDescription != null)
-            artistDescription = PREFIX +"$artistDescription"
-
-         return ArtistDescription("123", artistDescription!!)
+        if (artistDescription != null) {
+            artistDescription = PREFIX + "$artistDescription"
+            return ArtistDescription("123", artistDescription!!)
+        }
+         return null;
     }
 
     fun getArtistDescriptionById(id:String): Description?{

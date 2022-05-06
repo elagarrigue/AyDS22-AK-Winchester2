@@ -32,7 +32,7 @@ class ExternalRepository {
         } catch (e1: IOException) {
             e1.printStackTrace()
         }
-        return ArtistDescription("123", artistName)
+        return ArtistDescription("123", artistDescription)
     }
 
     private fun wikipediaSearch() : JsonObject {
