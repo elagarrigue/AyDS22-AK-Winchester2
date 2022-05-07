@@ -6,7 +6,6 @@ import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 import ayds.winchester.songinfo.moredetails.home.model.repository.DescriptionRepositoryImpl
 import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 
-
 class OtherInfoModel(otherInfoWindow: OtherInfoWindow) {
     private lateinit var artistName: String
     private var otherInfoView: OtherInfoWindow = otherInfoWindow
@@ -18,6 +17,7 @@ class OtherInfoModel(otherInfoWindow: OtherInfoWindow) {
         Thread {
             val description = repository.getDescription(artistName)
             onActionSubject.notify(description)
+            println("@@@@@@@@@@@@@@@@@@@@@@@@")
         }.start()
     }
 

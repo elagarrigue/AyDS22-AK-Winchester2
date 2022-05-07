@@ -10,8 +10,8 @@ interface OtherInfoController {
     fun setOtherInfoWindow()
 }
 
-class OtherInfoControllerImpl {
-   private lateinit var otherInfoModel : OtherInfoModel
+class OtherInfoControllerImpl(otherInfoModel : OtherInfoModel) {
+   private var otherInfoModel = otherInfoModel
    private lateinit var otherInfoWindow: OtherInfoWindow
 
    fun init (){
@@ -24,7 +24,6 @@ class OtherInfoControllerImpl {
 
     fun setView(view : OtherInfoWindow){
         otherInfoWindow = view
-        otherInfoModel = OtherInfoModel(otherInfoWindow)
         otherInfoWindow.uiEventObservable.subscribe(observer)
     }
 
