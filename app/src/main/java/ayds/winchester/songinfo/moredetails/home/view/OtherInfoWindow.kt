@@ -13,7 +13,7 @@ import android.widget.Button
 import android.widget.ImageView
 import ayds.observer.Observable
 import ayds.observer.Subject
-import ayds.winchester.songinfo.moredetails.home.controller.OtherInfoControllerImpl
+import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModelInjector
 import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 
@@ -25,20 +25,24 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var descriptionPane: TextView
     private lateinit var wikipediaImage: ImageView
     private lateinit var viewFullArticleButton : Button
-    private var controller = OtherInfoControllerImpl()
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
     val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     private lateinit var otherInfoModel : OtherInfoModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_other_info)
-        controller.setView(this)
+        initModule()
         initViewProperties()
         notifySearchDescriptionAction()
-        otherInfoModel = controller.getModel()
         initObservers()
 
+    }
+
+    private fun initModule(){
+        OtherInfoWindowInjector.init(this)
+        otherInfoModel = OtherInfoModelInjector.getOtherInfoModel()
     }
 
     private fun initObservers() {
