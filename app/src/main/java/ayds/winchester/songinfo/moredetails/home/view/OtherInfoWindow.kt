@@ -13,11 +13,8 @@ import android.widget.Button
 import android.widget.ImageView
 import ayds.observer.Observable
 import ayds.observer.Subject
-import ayds.winchester.songinfo.home.model.HomeModelInjector
-import ayds.winchester.songinfo.home.view.HomeViewInjector
-import ayds.winchester.songinfo.moredetails.home.controller.OtherInfoControllerImpl
-import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModelInjector
+import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 
 private const val ARTIST_NAME = "artistName"
@@ -34,14 +31,16 @@ class OtherInfoWindow : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_other_info)
+        initModule()
         initViewProperties()
         notifySearchDescriptionAction()
-        initModule()
         initObservers()
+
     }
 
-    private fun initModule() {
+    private fun initModule(){
         OtherInfoWindowInjector.init(this)
         otherInfoModel = OtherInfoModelInjector.getOtherInfoModel()
     }

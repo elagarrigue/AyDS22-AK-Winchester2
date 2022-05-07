@@ -10,6 +10,5 @@ object OtherInfoModelInjector {
 
     fun initOtherInfoModel (otherInfoWindow: OtherInfoWindow){
         otherInfoModel = OtherInfoModel(otherInfoWindow)
-        println("==================")
     }
 }

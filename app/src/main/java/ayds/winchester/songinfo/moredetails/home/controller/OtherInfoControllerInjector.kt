@@ -5,9 +5,10 @@ import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 
 object OtherInfoControllerInjector {
 
-    fun onViewStarted(otherInfoView: OtherInfoWindow) {
+    fun initOtherInfoController(otherInfoView: OtherInfoWindow) {
         OtherInfoControllerImpl(OtherInfoModelInjector.getOtherInfoModel()).apply {
             setView(otherInfoView)
         }
     }
+
 }
