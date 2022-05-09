@@ -4,7 +4,6 @@ import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 import ayds.winchester.songinfo.moredetails.home.model.entities.EmptyDescription
 import ayds.winchester.songinfo.moredetails.home.model.repository.external.ExternalRepository
 import ayds.winchester.songinfo.moredetails.home.model.repository.local.LocalRepository
-import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 
 interface DescriptionRepository {
     fun getDescription(name: String): Description

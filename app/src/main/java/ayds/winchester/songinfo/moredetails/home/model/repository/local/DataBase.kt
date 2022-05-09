@@ -5,12 +5,8 @@ import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import ayds.winchester.songinfo.home.model.entities.SpotifySong
-import ayds.winchester.songinfo.home.model.repository.local.spotify.sqldb.ID_COLUMN
-import ayds.winchester.songinfo.home.model.repository.local.spotify.sqldb.SONGS_TABLE
 import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
-import java.lang.Exception
 import java.util.ArrayList
 
 private const val ID = "id"

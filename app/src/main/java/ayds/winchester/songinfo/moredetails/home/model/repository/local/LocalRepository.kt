@@ -39,7 +39,7 @@ class LocalRepository(otherInfoView : OtherInfoWindow) {
         var artistDescription = dataBase.getInfoById(dataBase, id)
         if (artistDescription != null) {
             artistDescription = PREFIX + "$artistDescription"
-            return ArtistDescription(id, artistDescription!!)
+            return ArtistDescription(id, artistDescription)
         }else
             return null
     }
