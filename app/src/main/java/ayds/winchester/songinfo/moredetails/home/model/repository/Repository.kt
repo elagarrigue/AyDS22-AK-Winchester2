@@ -10,10 +10,10 @@ interface DescriptionRepository {
     fun getDescription(name: String): Description
 }
 
-internal class DescriptionRepositoryImpl(otherInfoView : OtherInfoWindow): DescriptionRepository {
+internal class DescriptionRepositoryImpl(localRepository: LocalRepository, externalRepository: ExternalRepository): DescriptionRepository {
 
-    private val localRepository = LocalRepository(otherInfoView)
-    private val externalRepository = ExternalRepository()
+    private val localRepository = localRepository
+    private val externalRepository = externalRepository
 
     override fun getDescription(name: String): Description {
         var artistDescription = localRepository.getArtistDescription(name)

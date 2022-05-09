@@ -2,7 +2,7 @@ package ayds.winchester.songinfo.home.model.repository.local.spotify
 
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
 
-interface SpotifyLocalStorage {
+interface LocalRepository {
 
     fun updateSongTerm(query: String, songId: String)
 

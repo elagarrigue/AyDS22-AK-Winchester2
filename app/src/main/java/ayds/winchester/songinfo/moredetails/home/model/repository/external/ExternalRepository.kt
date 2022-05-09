@@ -6,8 +6,6 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 import java.lang.StringBuilder
 import java.util.*
@@ -17,12 +15,12 @@ private const val SNIPPET = "snippet"
 private const val SEARCH = "search"
 private const val PAGE_ID = "pageid"
 private const val QUERY = "query"
-private const val URL_RETROFIT = "https://en.wikipedia.org/w/"
 
-class ExternalRepository {
+class ExternalRepository (wikipediaAPI: WikipediaAPI){
 
     private lateinit var queryWikipediaSearch : JsonObject
     private lateinit var artistName : String
+    private var wikipediaAPI = wikipediaAPI
 
      fun getArtistDescription(artistName: String): Description{
         var artistDescription= NO_RESULTS
@@ -39,19 +37,11 @@ class ExternalRepository {
     }
 
     private fun wikipediaSearch() : JsonObject {
-        val wikipediaAPI = createRetrofit().create(WikipediaAPI::class.java)
         val callResponse: Response<String> = wikipediaAPI.getArtistInfo(artistName).execute()
         val gson = Gson()
         val jObj = gson.fromJson(callResponse.body(), JsonObject::class.java)
 
         return jObj[QUERY].asJsonObject
-    }
-
-    private fun createRetrofit () : Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(URL_RETROFIT)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
     }
 
     private fun makeDescription(): String {

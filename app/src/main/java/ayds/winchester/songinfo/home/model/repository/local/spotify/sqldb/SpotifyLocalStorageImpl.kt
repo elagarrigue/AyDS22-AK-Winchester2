@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
-import ayds.winchester.songinfo.home.model.repository.local.spotify.SpotifyLocalStorage
+import ayds.winchester.songinfo.home.model.repository.local.spotify.LocalRepository
 
 private const val DATABASE_VERSION = 1
 private const val DATABASE_NAME = "songs.db"
@@ -14,7 +14,7 @@ internal class SpotifyLocalStorageImpl(
     context: Context,
     private val cursorToSpotifySongMapper: CursorToSpotifySongMapper,
 ) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION),
-    SpotifyLocalStorage {
+    LocalRepository {
 
     private val projection = arrayOf(
         ID_COLUMN,

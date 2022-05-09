@@ -4,7 +4,7 @@ import ayds.winchester.songinfo.home.model.entities.EmptySong
 import ayds.winchester.songinfo.home.model.entities.Song
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
 import ayds.winchester.songinfo.home.model.repository.external.spotify.SpotifyTrackService
-import ayds.winchester.songinfo.home.model.repository.local.spotify.SpotifyLocalStorage
+import ayds.winchester.songinfo.home.model.repository.local.spotify.LocalRepository
 
 interface SongRepository {
     fun getSongByTerm(term: String): Song
@@ -12,7 +12,7 @@ interface SongRepository {
 }
 
 internal class SongRepositoryImpl(
-    private val spotifyLocalStorage: SpotifyLocalStorage,
+    private val spotifyLocalStorage: LocalRepository,
     private val spotifyTrackService: SpotifyTrackService
 ) : SongRepository {
 

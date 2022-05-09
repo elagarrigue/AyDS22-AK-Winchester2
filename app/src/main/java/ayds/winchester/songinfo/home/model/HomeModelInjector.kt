@@ -5,7 +5,7 @@ import ayds.winchester.songinfo.home.model.repository.SongRepository
 import ayds.winchester.songinfo.home.model.repository.SongRepositoryImpl
 import ayds.winchester.songinfo.home.model.repository.external.spotify.SpotifyInjector
 import ayds.winchester.songinfo.home.model.repository.external.spotify.SpotifyTrackService
-import ayds.winchester.songinfo.home.model.repository.local.spotify.SpotifyLocalStorage
+import ayds.winchester.songinfo.home.model.repository.local.spotify.LocalRepository
 import ayds.winchester.songinfo.home.model.repository.local.spotify.sqldb.CursorToSpotifySongMapperImpl
 import ayds.winchester.songinfo.home.model.repository.local.spotify.sqldb.SpotifyLocalStorageImpl
 import ayds.winchester.songinfo.home.view.HomeView
@@ -17,7 +17,7 @@ object HomeModelInjector {
     fun getHomeModel(): HomeModel = homeModel
 
     fun initHomeModel(homeView: HomeView) {
-        val spotifyLocalStorage: SpotifyLocalStorage = SpotifyLocalStorageImpl(
+        val spotifyLocalStorage: LocalRepository = SpotifyLocalStorageImpl(
           homeView as Context, CursorToSpotifySongMapperImpl()
         )
         val spotifyTrackService: SpotifyTrackService = SpotifyInjector.spotifyTrackService
