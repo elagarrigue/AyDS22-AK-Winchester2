@@ -65,6 +65,13 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
         return if (items.isEmpty()) null else items[0]
     }
 
+    fun updateArtistTerm(query : String,pageId : String){
+        val values = ContentValues().apply {
+            put(ARTIST, query)
+        }
+        writableDatabase?.update(ARTISTS, values, "$PAGE_ID LIKE ?", arrayOf(pageId))
+    }
+
     private fun createCursorById (dbHelper: DataBase, id: String) : Cursor{
         val dataBase = dbHelper.readableDatabase
         val selectionArgs = arrayOf(id)

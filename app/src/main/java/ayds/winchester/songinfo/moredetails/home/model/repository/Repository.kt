@@ -20,17 +20,18 @@ internal class DescriptionRepositoryImpl(localRepository: LocalRepository, exter
 
         when {
             artistDescription != null -> markDescriptionAsLocal(artistDescription)
-            else -> {
-                try {
-                    artistDescription = externalRepository.getArtistDescription(name)
-                    artistDescription.let {
-                        localRepository.saveDescriptionInDataBase(artistDescription!!)
+            else -> try {
+                artistDescription = externalRepository.getArtistDescription(name)
+                artistDescription.let {
+                    when{
+                        it.isSavedDescription() -> localRepository.updateArtistTerm(it.id)
+                        else -> localRepository.saveDescriptionInDataBase(artistDescription!!)
                     }
 
-                } catch (e: Exception) {
-                    println("EXCEPTION: " + e.message)
-                    artistDescription = null
                 }
+                } catch (e: Exception) {
+                println("EXCEPTION: " + e.message)
+                artistDescription = null
             }
         }
         return artistDescription ?: EmptyDescription

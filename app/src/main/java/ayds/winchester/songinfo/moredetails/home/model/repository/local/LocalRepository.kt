@@ -21,6 +21,10 @@ class LocalRepository(otherInfoView : OtherInfoWindow) {
         dataBase = DataBase(otherInfoView as Context)
     }
 
+    fun updateArtistTerm(id : String){
+        dataBase.updateArtistTerm(artistName, id)
+    }
+
      fun getArtistDescription(artistName:String): Description?{
          this.artistName = artistName
         val artistDescription = dataBase.getInfo(dataBase, artistName)
