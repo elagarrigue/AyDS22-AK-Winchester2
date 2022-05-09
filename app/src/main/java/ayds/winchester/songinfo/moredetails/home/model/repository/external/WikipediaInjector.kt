@@ -1,5 +1,7 @@
 package ayds.winchester.songinfo.moredetails.home.model.repository.external
 
+import ayds.winchester.songinfo.home.model.repository.external.spotify.tracks.JsonToSongResolver
+import ayds.winchester.songinfo.home.model.repository.external.spotify.tracks.SpotifyToSongResolver
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
@@ -11,8 +13,9 @@ object WikipediaInjector {
         .addConverterFactory(ScalarsConverterFactory.create())
         .build()
     private val wikipediaAPI = wikipediaAPIRetrofit.create(WikipediaAPI::class.java)
+    private val wikipediaToDescriptionResolver: WikipediaToDescriptionResolver = WikipediaToDescriptionResolver()
 
     val wikipediaService: ExternalRepository = ExternalRepository(
-        wikipediaAPI
+        wikipediaAPI, wikipediaToDescriptionResolver
     )
 }
