@@ -5,8 +5,12 @@ import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import ayds.winchester.songinfo.home.model.entities.SpotifySong
+import ayds.winchester.songinfo.home.model.repository.local.spotify.sqldb.ID_COLUMN
+import ayds.winchester.songinfo.home.model.repository.local.spotify.sqldb.SONGS_TABLE
 import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
+import java.lang.Exception
 import java.util.ArrayList
 
 private const val ID = "id"
@@ -16,6 +20,7 @@ private const val ARTISTS = "artists"
 private const val INFO = "info"
 private const val SOURCE = "source"
 private const val SELECTION = "artist  = ?"
+private const val SELECTION_BY_ID = "pageId  = ?"
 private const val SORT_ORDER = "artist DESC"
 private const val DICTIONARY_DB = "dictionary.db"
 private const val DATABASE_VERSION = 1
@@ -75,7 +80,7 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
     private fun createCursorById (dbHelper: DataBase, id: String) : Cursor{
         val dataBase = dbHelper.readableDatabase
         val selectionArgs = arrayOf(id)
-        return dataBase.query(ID, dataBaseColumns, SELECTION, selectionArgs, null, null, SORT_ORDER)
+        return dataBase.query(ARTISTS, dataBaseColumns, SELECTION_BY_ID, selectionArgs, null, null, SORT_ORDER)
     }
 
     private fun createCursor (dbHelper: DataBase, artist: String) : Cursor{
@@ -86,15 +91,17 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
 
     private fun createItemsList(cursor: Cursor): MutableList<String> {
         val items: MutableList<String> = ArrayList()
-        while (cursor.moveToNext()) {
-            val info = cursor.getString(
-                cursor.getColumnIndexOrThrow(INFO)
-            )
-            val pageId = cursor.getString(
-                cursor.getColumnIndexOrThrow(PAGE_ID)
-            )
-            items.add(info)
-            items.add(pageId)
+        with(cursor) {
+            if (moveToNext()) {
+                val info = cursor.getString(
+                    cursor.getColumnIndexOrThrow(INFO)
+                )
+                val pageId = cursor.getString(
+                    cursor.getColumnIndexOrThrow(PAGE_ID)
+                )
+                items.add(info)
+                items.add(pageId)
+            }
         }
         return items
     }
