@@ -7,7 +7,6 @@ import android.content.Context
 import android.database.Cursor
 import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
-import java.util.ArrayList
 
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null, DATABASE_VERSION) {
@@ -41,16 +40,16 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
 
     fun getInfo(dbHelper: DataBase, artist: String): Description?{
         val cursor = createCursor(dbHelper,artist)
-        val items = createItemsList(cursor)
+        val description = createDescription(cursor)
         cursor.close()
-        return if (items.isEmpty()) null else ArtistDescription(items[1],items[0])
+        return description
     }
 
-    fun getInfoById(dbHelper: DataBase, id: String): String?{
+    fun getInfoById(dbHelper: DataBase, id: String): Description?{
         val cursor = createCursorById(dbHelper,id)
-        val items = createItemsList(cursor)
+        val description = createDescription(cursor)
         cursor.close()
-        return if (items.isEmpty()) null else items[0]
+        return description
     }
 
     fun updateArtistTerm(query : String,pageId : String){
@@ -72,20 +71,22 @@ class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null
         return dataBase.query(ARTISTS, dataBaseColumns, SELECTION, selectionArgs, null, null, SORT_ORDER)
     }
 
-    private fun createItemsList(cursor: Cursor): MutableList<String> {
-        val items: MutableList<String> = ArrayList()
+    private fun createDescription(cursor: Cursor): Description? {
+
         with(cursor) {
             if (moveToNext()) {
+
                 val info = cursor.getString(
                     cursor.getColumnIndexOrThrow(INFO)
                 )
                 val pageId = cursor.getString(
                     cursor.getColumnIndexOrThrow(PAGE_ID)
                 )
-                items.add(info)
-                items.add(pageId)
+
+                return ArtistDescription(pageId,info)
+
             }
         }
-        return items
+        return null
     }
 }

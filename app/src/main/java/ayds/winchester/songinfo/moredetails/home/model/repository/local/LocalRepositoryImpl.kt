@@ -1,7 +1,6 @@
 package ayds.winchester.songinfo.moredetails.home.model.repository.local
 
 import android.content.Context
-import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 import ayds.winchester.songinfo.moredetails.home.model.repository.local.sqldb.DataBase
 import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
@@ -41,12 +40,12 @@ internal class LocalRepositoryImpl(private var otherInfoView : OtherInfoWindow) 
     }
 
     override fun getArtistDescriptionById(id:String): Description?{
-        var artistDescription = dataBase.getInfoById(dataBase, id)
-        return if (artistDescription != null) {
-            artistDescription = PREFIX + "$artistDescription"
-            ArtistDescription(id, artistDescription)
-        }else
-            null
+        val artistDescription = dataBase.getInfoById(dataBase, id)
+        if (artistDescription != null) {
+            artistDescription.description = PREFIX + artistDescription.description
+            return artistDescription
+        }
+        return null
     }
 
     override fun saveDescriptionInDataBase(artistDescription: Description){
