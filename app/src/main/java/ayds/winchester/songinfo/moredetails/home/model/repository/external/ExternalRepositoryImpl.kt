@@ -8,14 +8,16 @@ import java.io.IOException
 
 private const val QUERY = "query"
 
-class ExternalRepository (wikipediaAPI: WikipediaAPI, wikipediaToDescriptionResolver: WikipediaToDescriptionResolver){
+interface ExternalRepository{
+    fun getArtistDescription(artistName: String): Description
+}
+
+class ExternalRepositoryImpl (private var wikipediaAPI : WikipediaAPI, private var wikipediaToDescriptionResolver : WikipediaToDescriptionResolver) : ExternalRepository{
 
     private lateinit var queryWikipediaSearch : JsonObject
     private lateinit var artistName : String
-    private var wikipediaAPI = wikipediaAPI
-    private var wikipediaToDescriptionResolver = wikipediaToDescriptionResolver
 
-     fun getArtistDescription(artistName: String): Description{
+     override fun getArtistDescription(artistName: String): Description{
         this.artistName = artistName
         try {
             queryWikipediaSearch = wikipediaSearch()

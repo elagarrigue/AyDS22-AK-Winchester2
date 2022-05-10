@@ -9,10 +9,7 @@ interface DescriptionRepository {
     fun getDescription(name: String): Description
 }
 
-internal class DescriptionRepositoryImpl(localRepository: LocalRepository, externalRepository: ExternalRepository): DescriptionRepository {
-
-    private val localRepository = localRepository
-    private val externalRepository = externalRepository
+internal class DescriptionRepositoryImpl(private val localRepository: LocalRepository, private val externalRepository : ExternalRepository): DescriptionRepository {
 
     override fun getDescription(name: String): Description {
         var artistDescription = localRepository.getArtistDescription(name)
@@ -32,7 +29,6 @@ internal class DescriptionRepositoryImpl(localRepository: LocalRepository, exter
                     }
                 }
                 } catch (e: Exception) {
-                    println("EXCEPTION: " + e.message)
                     artistDescription = null
                 }
         }

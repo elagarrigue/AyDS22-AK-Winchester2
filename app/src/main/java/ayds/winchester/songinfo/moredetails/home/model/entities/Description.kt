@@ -6,7 +6,6 @@ interface Description {
     var isLocallyStored : Boolean
 }
 
-
 data class ArtistDescription(
     override val id: String,
     override var description: String,

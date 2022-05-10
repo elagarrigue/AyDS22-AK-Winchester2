@@ -7,7 +7,7 @@ object OtherInfoControllerInjector {
 
     fun initOtherInfoController(otherInfoView: OtherInfoWindow) {
         OtherInfoControllerImpl(OtherInfoModelInjector.getOtherInfoModel()).apply {
-            setView(otherInfoView)
+            setOtherInfoWindow(otherInfoView)
         }
     }
 

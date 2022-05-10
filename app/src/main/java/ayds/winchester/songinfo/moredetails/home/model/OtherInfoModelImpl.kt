@@ -4,13 +4,16 @@ import ayds.observer.Observable
 import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 import ayds.winchester.songinfo.moredetails.home.model.repository.DescriptionRepository
-import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 
-class OtherInfoModel(repository: DescriptionRepository) {
+interface OtherInfoModel{
+    val uiEventObservable: Observable<Description>
+    fun searchArtistName(name: String)
+}
+
+class OtherInfoModelImpl(private var repository: DescriptionRepository) : OtherInfoModel{
     private lateinit var artistName: String
     private val onActionSubject = Subject<Description>()
-    val uiEventObservable: Observable<Description> = onActionSubject
-    private var repository = repository
+    override val uiEventObservable: Observable<Description> = onActionSubject
 
     private fun getArtistInfo() {
         Thread {
@@ -19,8 +22,8 @@ class OtherInfoModel(repository: DescriptionRepository) {
         }.start()
     }
 
-    fun setNameArtist(name: String) {
+    override fun searchArtistName(name: String) {
         artistName = name
-        getArtistInfo()//----------------------Mover
+        getArtistInfo()
     }
 }

@@ -3,14 +3,19 @@ package ayds.winchester.songinfo.moredetails.home.model.repository.local
 import android.content.Context
 import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
+import ayds.winchester.songinfo.moredetails.home.model.repository.local.sqldb.DataBase
 import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 
 private const val PREFIX = "[*]"
 
-class LocalRepository(otherInfoView : OtherInfoWindow) {
-
+interface LocalRepository {
+    fun updateArtistTerm(id : String)
+    fun getArtistDescription(artistName:String): Description?
+    fun getArtistDescriptionById(id:String): Description?
+    fun saveDescriptionInDataBase(artistDescription: Description)
+}
+internal class LocalRepositoryImpl(private var otherInfoView : OtherInfoWindow) : LocalRepository{
     private lateinit var dataBase: DataBase
-    private var otherInfoView : OtherInfoWindow = otherInfoView
     private lateinit var artistName: String
 
     init{
@@ -21,11 +26,11 @@ class LocalRepository(otherInfoView : OtherInfoWindow) {
         dataBase = DataBase(otherInfoView as Context)
     }
 
-    fun updateArtistTerm(id : String){
+    override fun updateArtistTerm(id : String){
         dataBase.updateArtistTerm(artistName, id)
     }
 
-     fun getArtistDescription(artistName:String): Description?{
+     override fun getArtistDescription(artistName:String): Description?{
          this.artistName = artistName
         val artistDescription = dataBase.getInfo(dataBase, artistName)
         if (artistDescription != null) {
@@ -35,16 +40,16 @@ class LocalRepository(otherInfoView : OtherInfoWindow) {
          return null
     }
 
-    fun getArtistDescriptionById(id:String): Description?{
+    override fun getArtistDescriptionById(id:String): Description?{
         var artistDescription = dataBase.getInfoById(dataBase, id)
-        if (artistDescription != null) {
+        return if (artistDescription != null) {
             artistDescription = PREFIX + "$artistDescription"
-            return ArtistDescription(id, artistDescription)
+            ArtistDescription(id, artistDescription)
         }else
-            return null
+            null
     }
 
-    fun saveDescriptionInDataBase(artistDescription: Description){
+    override fun saveDescriptionInDataBase(artistDescription: Description){
         dataBase.saveArtist(artistName, artistDescription.description,artistDescription.id)
     }
 }

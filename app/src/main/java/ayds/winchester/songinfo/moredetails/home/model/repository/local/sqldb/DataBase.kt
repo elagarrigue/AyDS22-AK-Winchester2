@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.home.model.repository.local
+package ayds.winchester.songinfo.moredetails.home.model.repository.local.sqldb
 
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
@@ -9,19 +9,6 @@ import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescriptio
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 import java.util.ArrayList
 
-private const val ID = "id"
-private const val PAGE_ID = "pageId"
-private const val ARTIST = "artist"
-private const val ARTISTS = "artists"
-private const val INFO = "info"
-private const val SOURCE = "source"
-private const val SELECTION = "artist  = ?"
-private const val SELECTION_BY_ID = "pageId  = ?"
-private const val SORT_ORDER = "artist DESC"
-private const val DICTIONARY_DB = "dictionary.db"
-private const val DATABASE_VERSION = 1
-private const val CREATE_QUERY =
-    "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer, pageId string)"
 
 class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null, DATABASE_VERSION) {
     private val dataBaseColumns = arrayOf(

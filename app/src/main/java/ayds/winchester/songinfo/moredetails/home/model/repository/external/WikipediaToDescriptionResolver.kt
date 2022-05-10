@@ -10,7 +10,6 @@ import java.util.*
 private const val SNIPPET = "snippet"
 private const val SEARCH = "search"
 private const val PAGE_ID = "pageid"
-private const val QUERY = "query"
 
 class WikipediaToDescriptionResolver {
 
