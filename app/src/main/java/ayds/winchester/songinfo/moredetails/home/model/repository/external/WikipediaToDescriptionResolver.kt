@@ -2,16 +2,17 @@ package ayds.winchester.songinfo.moredetails.home.model.repository.external
 
 import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
+import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import java.lang.StringBuilder
-import java.util.*
+import retrofit2.Response
 
 private const val SNIPPET = "snippet"
 private const val SEARCH = "search"
 private const val PAGE_ID = "pageid"
+private const val QUERY = "query"
 
-class WikipediaToDescriptionResolver {
+internal class WikipediaToDescriptionResolver {
 
     private lateinit var queryWikipediaSearch : JsonObject
     private lateinit var artistName : String
@@ -21,11 +22,17 @@ class WikipediaToDescriptionResolver {
         return getArtistDescription(snippet)
     }
 
-    fun getDescriptionFromExternalData(queryWikipediaSearch : JsonObject, artistName: String): Description {
-        this.queryWikipediaSearch = queryWikipediaSearch
+    fun getDescriptionFromExternalData(queryWikipediaSearch : Response<String>, artistName: String): Description {
+
+        val gson = Gson()
+        val jObj = gson.fromJson(queryWikipediaSearch.body(), JsonObject::class.java)
+
+        this.queryWikipediaSearch = jObj[QUERY].asJsonObject
         this.artistName = artistName
+
         val artistDescription = makeDescription()
-        val pageId = getPageId(queryWikipediaSearch).asString
+        val pageId = getPageId(this.queryWikipediaSearch).asString
+
         return ArtistDescription(pageId,artistDescription)
     }
 
@@ -34,22 +41,7 @@ class WikipediaToDescriptionResolver {
     }
 
     private fun getArtistDescription(snippet: JsonElement) : String{
-        var artistDescription = snippet.asString.replace("\\n", "\n")
-        artistDescription = textToHtml(artistDescription, artistName)
-        return artistDescription
-    }
-
-    private fun textToHtml(text: String, term: String): String {
-        val builder = StringBuilder()
-        builder.append("<html><div width=400>")
-        builder.append("<font face=\"arial\">")
-        val textWithBold = text
-            .replace("'", " ")
-            .replace("\n", "<br>")
-            .replace("(?i)" + term.toRegex(), "<b>" + term.uppercase(Locale.getDefault()) + "</b>")
-        builder.append(textWithBold)
-        builder.append("</font></div></html>")
-        return builder.toString()
+        return snippet.asString.replace("\\n", "\n")
     }
 
     private fun getPageId(json: JsonObject) : JsonElement {
