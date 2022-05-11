@@ -10,7 +10,7 @@ interface OtherInfoController {
     fun setOtherInfoWindow(view : OtherInfoWindow)
 }
 
-class OtherInfoControllerImpl(private var otherInfoModel: OtherInfoModel) : OtherInfoController {
+internal class OtherInfoControllerImpl(private var otherInfoModel: OtherInfoModel) : OtherInfoController {
    private lateinit var otherInfoWindow: OtherInfoWindow
 
    private fun searchArtistDescription(name : String){

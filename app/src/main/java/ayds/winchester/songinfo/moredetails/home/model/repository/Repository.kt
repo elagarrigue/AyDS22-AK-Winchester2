@@ -19,15 +19,8 @@ internal class DescriptionRepositoryImpl(private val localRepository: LocalRepos
             else -> try {
                 artistDescription = externalRepository.getArtistDescription(name)
                 artistDescription.let {
-                    when{
-                        it.isSavedDescription() -> {
-                            localRepository.updateArtistTerm(it.id)
-                        }
-                        else -> {
-                            localRepository.saveDescriptionInDataBase(artistDescription!!)
-                        }
+                        localRepository.saveDescriptionInDataBase(artistDescription!!)
                     }
-                }
                 } catch (e: Exception) {
                     artistDescription = null
                 }

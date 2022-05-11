@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import android.os.Bundle
 import ayds.winchester.songinfo.R
-import android.content.Intent
-import android.net.Uri
 import com.squareup.picasso.Picasso
 import android.text.Html
 import android.view.View
@@ -16,6 +14,8 @@ import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModelInjector
 import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
+import ayds.winchester.songinfo.utils.UtilsInjector
+import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 
 private const val ARTIST_NAME = "artistName"
 private const val URL_ARTICLE = "https://en.wikipedia.org/?curid="
@@ -28,6 +28,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
     val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     private lateinit var otherInfoModel : OtherInfoModel
+    private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,24 +65,18 @@ class OtherInfoWindow : AppCompatActivity() {
         viewFullArticleButton = findViewById(R.id.openUrlButton)
     }
 
-    private fun showViewFullArticleButton(pageId: String){
+    private fun setViewFullArticleButtonOnClick(pageId: String){
         val urlString = URL_ARTICLE+pageId
         viewFullArticleButton.setOnClickListener {
-            startViewFullArticleButton(urlString)
+            navigationUtils.openExternalUrl(this, urlString)
         }
-    }
-
-    private fun startViewFullArticleButton(urlString : String){
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(urlString)
-        startActivity(intent)
     }
 
     private fun showUI(description: Description){
         runOnUiThread {
             showImage()
             showDescription(description.description)
-            showViewFullArticleButton(description.id)
+            setViewFullArticleButtonOnClick(description.id)
         }
     }
 

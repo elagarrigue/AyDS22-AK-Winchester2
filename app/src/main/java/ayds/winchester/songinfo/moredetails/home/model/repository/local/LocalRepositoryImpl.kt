@@ -32,20 +32,16 @@ internal class LocalRepositoryImpl(private var otherInfoView : OtherInfoWindow) 
      override fun getArtistDescription(artistName:String): Description?{
          this.artistName = artistName
         val artistDescription = dataBase.getInfo(dataBase, artistName)
-        if (artistDescription != null) {
-            artistDescription.description = PREFIX + artistDescription.description
-            return artistDescription
-        }
-         return null
+
+         return artistDescription
+
     }
 
     override fun getArtistDescriptionById(id:String): Description?{
         val artistDescription = dataBase.getInfoById(dataBase, id)
-        if (artistDescription != null) {
-            artistDescription.description = PREFIX + artistDescription.description
-            return artistDescription
-        }
-        return null
+
+        return artistDescription
+
     }
 
     override fun saveDescriptionInDataBase(artistDescription: Description){

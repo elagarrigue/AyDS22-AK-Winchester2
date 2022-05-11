@@ -12,7 +12,7 @@ interface ExternalRepository{
     fun getArtistDescription(artistName: String): Description
 }
 
-class ExternalRepositoryImpl (private var wikipediaAPI : WikipediaAPI, private var wikipediaToDescriptionResolver : WikipediaToDescriptionResolver) : ExternalRepository{
+internal class ExternalRepositoryImpl (private var wikipediaAPI : WikipediaAPI, private var wikipediaToDescriptionResolver : WikipediaToDescriptionResolver) : ExternalRepository{
 
     private lateinit var queryWikipediaSearch : JsonObject
     private lateinit var artistName : String

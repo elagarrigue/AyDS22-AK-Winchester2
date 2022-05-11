@@ -13,7 +13,7 @@ object WikipediaInjector {
     private val wikipediaAPI = wikipediaAPIRetrofit.create(WikipediaAPI::class.java)
     private val wikipediaToDescriptionResolver: WikipediaToDescriptionResolver = WikipediaToDescriptionResolver()
 
-    val wikipediaService: ExternalRepositoryImpl = ExternalRepositoryImpl(
+    val wikipediaService: ExternalRepository = ExternalRepositoryImpl(
         wikipediaAPI, wikipediaToDescriptionResolver
     )
 }

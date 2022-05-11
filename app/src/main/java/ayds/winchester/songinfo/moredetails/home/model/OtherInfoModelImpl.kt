@@ -11,19 +11,14 @@ interface OtherInfoModel{
 }
 
 class OtherInfoModelImpl(private var repository: DescriptionRepository) : OtherInfoModel{
-    private lateinit var artistName: String
     private val onActionSubject = Subject<Description>()
     override val uiEventObservable: Observable<Description> = onActionSubject
 
-    private fun getArtistInfo() {
+    override fun searchArtistName(artistName : String) {
         Thread {
             val description = repository.getDescription(artistName)
             onActionSubject.notify(description)
         }.start()
     }
 
-    override fun searchArtistName(name: String) {
-        artistName = name
-        getArtistInfo()
-    }
 }
