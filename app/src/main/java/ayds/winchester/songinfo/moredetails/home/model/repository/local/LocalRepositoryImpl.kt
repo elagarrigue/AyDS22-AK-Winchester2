@@ -5,8 +5,6 @@ import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 import ayds.winchester.songinfo.moredetails.home.model.repository.local.sqldb.DataBase
 import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 
-private const val PREFIX = "[*]"
-
 interface LocalRepository {
     fun updateArtistTerm(id : String)
     fun getArtistDescription(artistName:String): Description?

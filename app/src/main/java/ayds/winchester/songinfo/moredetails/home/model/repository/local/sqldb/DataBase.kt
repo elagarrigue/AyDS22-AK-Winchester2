@@ -9,7 +9,7 @@ import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescriptio
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
 
 
-class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null, DATABASE_VERSION) {
+internal class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null, DATABASE_VERSION) {
     private val dataBaseColumns = arrayOf(
         ID,
         ARTIST,

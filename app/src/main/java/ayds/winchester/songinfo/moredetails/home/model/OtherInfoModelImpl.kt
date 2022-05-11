@@ -10,7 +10,7 @@ interface OtherInfoModel{
     fun searchArtistName(name: String)
 }
 
-class OtherInfoModelImpl(private var repository: DescriptionRepository) : OtherInfoModel{
+internal class OtherInfoModelImpl(private var repository: DescriptionRepository) : OtherInfoModel{
     private val onActionSubject = Subject<Description>()
     override val uiEventObservable: Observable<Description> = onActionSubject
 

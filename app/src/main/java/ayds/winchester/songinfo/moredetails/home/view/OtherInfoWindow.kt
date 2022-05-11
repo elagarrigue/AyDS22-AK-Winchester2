@@ -29,6 +29,7 @@ class OtherInfoWindow : AppCompatActivity() {
     val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
     private lateinit var otherInfoModel : OtherInfoModel
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
+    private val artistDescriptionHelper : ArtistDescriptionHelper = ArtistDescriptionHelperImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +76,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun showUI(description: Description){
         runOnUiThread {
             showImage()
-            showDescription(description.description)
+            showDescription(description)
             setViewFullArticleButtonOnClick(description.id)
         }
     }
@@ -85,8 +86,8 @@ class OtherInfoWindow : AppCompatActivity() {
         Picasso.get().load(imageUrl).into(wikipediaImage)
     }
 
-    private fun showDescription(text: String){
-        descriptionPane.text = Html.fromHtml(text)
+    private fun showDescription(description: Description){
+        descriptionPane.text = Html.fromHtml(artistDescriptionHelper.getTextArtistDescription(description,getArtistName()))
     }
 
     companion object {

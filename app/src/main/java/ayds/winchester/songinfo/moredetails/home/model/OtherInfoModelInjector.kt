@@ -10,7 +10,7 @@ object OtherInfoModelInjector {
 
     private lateinit var otherInfoModel: OtherInfoModelImpl
 
-    fun getOtherInfoModel(): OtherInfoModelImpl = otherInfoModel
+    fun getOtherInfoModel(): OtherInfoModel = otherInfoModel
 
     fun initOtherInfoModel (otherInfoWindow: OtherInfoWindow){
 
