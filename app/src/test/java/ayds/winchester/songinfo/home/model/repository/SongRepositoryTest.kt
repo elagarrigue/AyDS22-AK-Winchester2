@@ -3,7 +3,7 @@ package ayds.winchester.songinfo.home.model.repository
 import ayds.winchester.songinfo.home.model.entities.SpotifySong
 import ayds.winchester.songinfo.home.model.entities.EmptySong
 import ayds.winchester.songinfo.home.model.repository.external.spotify.SpotifyTrackService
-import ayds.winchester.songinfo.home.model.repository.local.spotify.SpotifyLocalStorage
+import ayds.winchester.songinfo.home.model.repository.local.spotify.LocalRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -13,7 +13,7 @@ import java.lang.Exception
 
 class SongRepositoryTest {
 
-    private val spotifyLocalStorage: SpotifyLocalStorage = mockk(relaxUnitFun = true)
+    private val spotifyLocalStorage: LocalRepository = mockk(relaxUnitFun = true)
     private val spotifyTrackService: SpotifyTrackService = mockk(relaxUnitFun = true)
 
     private val songRepository: SongRepository by lazy {

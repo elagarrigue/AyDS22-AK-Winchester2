@@ -2,7 +2,6 @@ package ayds.winchester.songinfo.moredetails.home.controller
 
 import ayds.observer.Observer
 import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModel
-import ayds.winchester.songinfo.moredetails.home.view.MoreDetailsUiEvent
 import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
 import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindowEvent
 
@@ -19,7 +18,6 @@ internal class OtherInfoControllerImpl(private var otherInfoModel: OtherInfoMode
 
     override fun setOtherInfoWindow(view : OtherInfoWindow){
         otherInfoWindow = view
-        otherInfoWindow.uiEventObservable.subscribe(observer)
         otherInfoWindow.uiEventObservableFullArticle.subscribe(observerFullArticle)
     }
 
@@ -27,14 +25,11 @@ internal class OtherInfoControllerImpl(private var otherInfoModel: OtherInfoMode
         otherInfoWindow.openExternalLink(otherInfoWindow.uiState.id)
     }
 
-    private val observer: Observer<MoreDetailsUiEvent> =
-        Observer { artistName -> searchArtistDescription()    }
-
     private val observerFullArticle: Observer<OtherInfoWindowEvent> =
         Observer { value ->
         when (value) {
-            OtherInfoWindowEvent.fullArticle -> openArticleUrl()
+            OtherInfoWindowEvent.FullArticle -> openArticleUrl()
+            OtherInfoWindowEvent.SearchDescription -> searchArtistDescription()
         }
     }
-
 }

@@ -26,10 +26,8 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var wikipediaImage: ImageView
     private lateinit var pageId: String
     private lateinit var viewFullArticleButton : Button
-    private val onActionSubject = Subject<MoreDetailsUiEvent>()
-    private val onActionSubjectFullArticle = Subject<OtherInfoWindowEvent>()
-    val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
-    val uiEventObservableFullArticle: Observable<OtherInfoWindowEvent> = onActionSubjectFullArticle
+    private val onActionSubject = Subject<OtherInfoWindowEvent>()
+    val uiEventObservableFullArticle: Observable<OtherInfoWindowEvent> = onActionSubject
     private lateinit var otherInfoModel : OtherInfoModel
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
     private val artistDescriptionHelper : ArtistDescriptionHelper = ArtistDescriptionHelperImpl()
@@ -74,7 +72,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun notifySearchDescriptionAction() {
-       onActionSubject.notify(MoreDetailsUiEventImpl(uiState.artistName))
+       onActionSubject.notify(OtherInfoWindowEvent.SearchDescription)
     }
 
     private fun initViewProperties(){
@@ -84,7 +82,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun notifyFullArticleAction() {
-        onActionSubjectFullArticle.notify(OtherInfoWindowEvent.fullArticle)
+        onActionSubject.notify(OtherInfoWindowEvent.FullArticle)
     }
 
     private fun setViewFullArticleButtonOnClick(){
