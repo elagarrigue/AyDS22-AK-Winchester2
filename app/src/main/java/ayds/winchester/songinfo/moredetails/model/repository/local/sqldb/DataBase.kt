@@ -1,12 +1,12 @@
-package ayds.winchester.songinfo.moredetails.home.model.repository.local.sqldb
+package ayds.winchester.songinfo.moredetails.model.repository.local.sqldb
 
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import ayds.winchester.songinfo.moredetails.home.model.entities.ArtistDescription
-import ayds.winchester.songinfo.moredetails.home.model.entities.Description
+import ayds.winchester.songinfo.moredetails.model.entities.ArtistDescription
+import ayds.winchester.songinfo.moredetails.model.entities.Description
 
 
 internal class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY_DB, null, DATABASE_VERSION) {

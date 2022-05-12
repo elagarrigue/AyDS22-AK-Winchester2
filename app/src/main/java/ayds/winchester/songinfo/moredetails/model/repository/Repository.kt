@@ -1,9 +1,9 @@
-package ayds.winchester.songinfo.moredetails.home.model.repository
+package ayds.winchester.songinfo.moredetails.model.repository
 
-import ayds.winchester.songinfo.moredetails.home.model.entities.Description
-import ayds.winchester.songinfo.moredetails.home.model.entities.EmptyDescription
-import ayds.winchester.songinfo.moredetails.home.model.repository.external.ExternalRepository
-import ayds.winchester.songinfo.moredetails.home.model.repository.local.LocalRepository
+import ayds.winchester.songinfo.moredetails.model.entities.Description
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyDescription
+import ayds.winchester.songinfo.moredetails.model.repository.external.ExternalRepository
+import ayds.winchester.songinfo.moredetails.model.repository.local.LocalRepository
 
 interface DescriptionRepository {
     fun getDescription(name: String): Description

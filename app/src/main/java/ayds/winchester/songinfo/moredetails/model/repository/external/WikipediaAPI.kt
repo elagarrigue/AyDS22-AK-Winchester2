@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.home.model.repository.external
+package ayds.winchester.songinfo.moredetails.model.repository.external
 
 import retrofit2.Call
 import retrofit2.http.GET

@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.home.model.entities
+package ayds.winchester.songinfo.moredetails.model.entities
 
 interface Description {
     val id: String

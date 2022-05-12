@@ -1,8 +1,7 @@
-package ayds.winchester.songinfo.moredetails.home.view
+package ayds.winchester.songinfo.moredetails.view
 
-import ayds.winchester.songinfo.moredetails.home.controller.OtherInfoControllerInjector
-import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModelInjector
-
+import ayds.winchester.songinfo.moredetails.controller.OtherInfoControllerInjector
+import ayds.winchester.songinfo.moredetails.model.OtherInfoModelInjector
 
 object OtherInfoWindowInjector {
 

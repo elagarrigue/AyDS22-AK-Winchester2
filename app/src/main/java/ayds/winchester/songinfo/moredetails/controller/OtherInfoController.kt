@@ -1,9 +1,9 @@
-package ayds.winchester.songinfo.moredetails.home.controller
+package ayds.winchester.songinfo.moredetails.controller
 
 import ayds.observer.Observer
-import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModel
-import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
-import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindowEvent
+import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
+import ayds.winchester.songinfo.moredetails.view.OtherInfoWindow
+import ayds.winchester.songinfo.moredetails.view.OtherInfoWindowEvent
 
 interface OtherInfoController {
     fun setOtherInfoWindow(view : OtherInfoWindow)

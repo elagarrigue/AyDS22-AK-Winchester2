@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.home.view
+package ayds.winchester.songinfo.moredetails.view
 
 sealed class OtherInfoWindowEvent {
     object FullArticle : OtherInfoWindowEvent()

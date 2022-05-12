@@ -1,9 +1,9 @@
-package ayds.winchester.songinfo.moredetails.home.model.repository.local
+package ayds.winchester.songinfo.moredetails.model.repository.local
 
 import android.content.Context
-import ayds.winchester.songinfo.moredetails.home.model.entities.Description
-import ayds.winchester.songinfo.moredetails.home.model.repository.local.sqldb.DataBase
-import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
+import ayds.winchester.songinfo.moredetails.model.entities.Description
+import ayds.winchester.songinfo.moredetails.model.repository.local.sqldb.DataBase
+import ayds.winchester.songinfo.moredetails.view.OtherInfoWindow
 
 interface LocalRepository {
     fun updateArtistTerm(id : String)

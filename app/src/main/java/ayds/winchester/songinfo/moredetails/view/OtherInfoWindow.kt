@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.home.view
+package ayds.winchester.songinfo.moredetails.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
@@ -11,11 +11,11 @@ import android.widget.Button
 import android.widget.ImageView
 import ayds.observer.Observable
 import ayds.observer.Subject
-import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModelInjector
-import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModel
-import ayds.winchester.songinfo.moredetails.home.model.entities.Description
-import ayds.winchester.songinfo.moredetails.home.view.OtherInfoUIState.Companion.URL_ARTICLE
-import ayds.winchester.songinfo.moredetails.home.view.OtherInfoUIState.Companion.URL_IMAGE
+import ayds.winchester.songinfo.moredetails.model.OtherInfoModelInjector
+import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
+import ayds.winchester.songinfo.moredetails.model.entities.Description
+import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_ARTICLE
+import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 

@@ -1,4 +1,4 @@
-package ayds.winchester.songinfo.moredetails.home.model.repository.local.sqldb
+package ayds.winchester.songinfo.moredetails.model.repository.local.sqldb
 
 const val ID = "id"
 const val PAGE_ID = "pageId"

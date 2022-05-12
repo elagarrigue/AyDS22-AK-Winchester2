@@ -1,10 +1,10 @@
-package ayds.winchester.songinfo.moredetails.home.model
+package ayds.winchester.songinfo.moredetails.model
 
-import ayds.winchester.songinfo.moredetails.home.model.repository.DescriptionRepository
-import ayds.winchester.songinfo.moredetails.home.model.repository.DescriptionRepositoryImpl
-import ayds.winchester.songinfo.moredetails.home.model.repository.external.WikipediaInjector
-import ayds.winchester.songinfo.moredetails.home.model.repository.local.LocalRepositoryImpl
-import ayds.winchester.songinfo.moredetails.home.view.OtherInfoWindow
+import ayds.winchester.songinfo.moredetails.model.repository.DescriptionRepository
+import ayds.winchester.songinfo.moredetails.model.repository.DescriptionRepositoryImpl
+import ayds.winchester.songinfo.moredetails.model.repository.external.WikipediaInjector
+import ayds.winchester.songinfo.moredetails.model.repository.local.LocalRepositoryImpl
+import ayds.winchester.songinfo.moredetails.view.OtherInfoWindow
 
 object OtherInfoModelInjector {
 

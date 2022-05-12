@@ -1,9 +1,9 @@
-package ayds.winchester.songinfo.moredetails.home.model
+package ayds.winchester.songinfo.moredetails.model
 
 import ayds.observer.Observable
 import ayds.observer.Subject
-import ayds.winchester.songinfo.moredetails.home.model.entities.Description
-import ayds.winchester.songinfo.moredetails.home.model.repository.DescriptionRepository
+import ayds.winchester.songinfo.moredetails.model.entities.Description
+import ayds.winchester.songinfo.moredetails.model.repository.DescriptionRepository
 
 interface OtherInfoModel{
     val uiEventObservable: Observable<Description>
@@ -20,5 +20,4 @@ internal class OtherInfoModelImpl(private var repository: DescriptionRepository)
             onActionSubject.notify(description)
         }.start()
     }
-
 }

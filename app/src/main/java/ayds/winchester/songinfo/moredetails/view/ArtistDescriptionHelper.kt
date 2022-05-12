@@ -1,6 +1,6 @@
-package ayds.winchester.songinfo.moredetails.home.view
+package ayds.winchester.songinfo.moredetails.view
 
-import ayds.winchester.songinfo.moredetails.home.model.entities.Description
+import ayds.winchester.songinfo.moredetails.model.entities.Description
 import java.lang.StringBuilder
 import java.util.*
 
