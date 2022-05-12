@@ -24,9 +24,12 @@ private const val URL_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/8/
 class OtherInfoWindow : AppCompatActivity() {
     private lateinit var descriptionPane: TextView
     private lateinit var wikipediaImage: ImageView
+    private lateinit var pageId: String
     private lateinit var viewFullArticleButton : Button
     private val onActionSubject = Subject<MoreDetailsUiEvent>()
+    private val onActionSubjectFullArticle = Subject<OtherInfoWindowEvent>()
     val uiEventObservable: Observable<MoreDetailsUiEvent> = onActionSubject
+    val uiEventObservableFullArticle: Observable<OtherInfoWindowEvent> = onActionSubjectFullArticle
     private lateinit var otherInfoModel : OtherInfoModel
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
     private val artistDescriptionHelper : ArtistDescriptionHelper = ArtistDescriptionHelperImpl()
@@ -66,18 +69,28 @@ class OtherInfoWindow : AppCompatActivity() {
         viewFullArticleButton = findViewById(R.id.openUrlButton)
     }
 
-    private fun setViewFullArticleButtonOnClick(pageId: String){
-        val urlString = URL_ARTICLE+pageId
+    private fun notifyFullArticleAction() {
+        onActionSubjectFullArticle.notify(OtherInfoWindowEvent.fullArticle)
+    }
+
+    private fun setViewFullArticleButtonOnClick(){
+
         viewFullArticleButton.setOnClickListener {
-            navigationUtils.openExternalUrl(this, urlString)
+           notifyFullArticleAction()
         }
+    }
+
+    fun openExternalLink(url: String) {
+        val urlString = URL_ARTICLE+pageId
+        navigationUtils.openExternalUrl(this, urlString)
     }
 
     private fun showUI(description: Description){
         runOnUiThread {
             showImage()
             showDescription(description)
-            setViewFullArticleButtonOnClick(description.id)
+            pageId = description.id
+            setViewFullArticleButtonOnClick()
         }
     }
 
