@@ -14,12 +14,12 @@ import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModelInjector
 import ayds.winchester.songinfo.moredetails.home.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.home.model.entities.Description
+import ayds.winchester.songinfo.moredetails.home.view.OtherInfoUIState.Companion.URL_ARTICLE
+import ayds.winchester.songinfo.moredetails.home.view.OtherInfoUIState.Companion.URL_IMAGE
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 
 private const val ARTIST_NAME = "artistName"
-private const val URL_ARTICLE = "https://en.wikipedia.org/?curid="
-private const val URL_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
 
 class OtherInfoWindow : AppCompatActivity() {
     private lateinit var descriptionPane: TextView
@@ -33,16 +33,16 @@ class OtherInfoWindow : AppCompatActivity() {
     private lateinit var otherInfoModel : OtherInfoModel
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
     private val artistDescriptionHelper : ArtistDescriptionHelper = ArtistDescriptionHelperImpl()
+    var uiState: OtherInfoUIState = OtherInfoUIState()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_other_info)
+        updateStateArtistName()
         initModule()
         initViewProperties()
         notifySearchDescriptionAction()
         initObservers()
-
     }
 
     private fun initModule(){
@@ -52,15 +52,29 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun initObservers() {
         otherInfoModel.uiEventObservable
-            .subscribe { value -> showUI(value) }
+            .subscribe { value -> updateDescriptionInfo(value) }
     }
 
-    private fun getArtistName(): String {
-        return intent.getStringExtra(ARTIST_NAME)!!
+    private fun updateDescriptionInfo(description: Description) {
+        updateArtistDescription(description)
+        showUI(description)
+    }
+
+    private fun updateArtistDescription(description: Description){
+        uiState = uiState.copy(
+            description = artistDescriptionHelper.getTextArtistDescription(description, uiState.artistName),
+            id = description.id
+        )
+    }
+
+    private fun updateStateArtistName() {
+        uiState = uiState.copy(
+            artistName = intent.getStringExtra(ARTIST_NAME)!!,
+        )
     }
 
     private fun notifySearchDescriptionAction() {
-       onActionSubject.notify(MoreDetailsUiEventImpl(getArtistName()))
+       onActionSubject.notify(MoreDetailsUiEventImpl(uiState.artistName))
     }
 
     private fun initViewProperties(){
@@ -74,14 +88,13 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun setViewFullArticleButtonOnClick(){
-
         viewFullArticleButton.setOnClickListener {
            notifyFullArticleAction()
         }
     }
 
-    fun openExternalLink(url: String) {
-        val urlString = URL_ARTICLE+pageId
+    fun openExternalLink(id: String) {
+        val urlString = URL_ARTICLE+id
         navigationUtils.openExternalUrl(this, urlString)
     }
 
@@ -89,7 +102,7 @@ class OtherInfoWindow : AppCompatActivity() {
         runOnUiThread {
             showImage()
             showDescription(description)
-            pageId = description.id
+            pageId = uiState.id
             setViewFullArticleButtonOnClick()
         }
     }
@@ -100,7 +113,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun showDescription(description: Description){
-        descriptionPane.text = Html.fromHtml(artistDescriptionHelper.getTextArtistDescription(description,getArtistName()))
+        descriptionPane.text = Html.fromHtml(artistDescriptionHelper.getTextArtistDescription(description,uiState.artistName))
     }
 
     companion object {
