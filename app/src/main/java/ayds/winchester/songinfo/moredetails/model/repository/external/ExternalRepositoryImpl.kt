@@ -1,8 +1,6 @@
 package ayds.winchester.songinfo.moredetails.model.repository.external
 
 import ayds.winchester.songinfo.moredetails.model.entities.Description
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 import retrofit2.Response
 import java.io.IOException
 
