@@ -13,13 +13,13 @@ import ayds.observer.Observable
 import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModelInjector
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
+import ayds.winchester.songinfo.moredetails.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.model.entities.Description
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyDescription
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_ARTICLE
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
-
-private const val ARTIST_NAME = "artistName"
 
 class OtherInfoWindow : AppCompatActivity() {
     private lateinit var descriptionPane: TextView
@@ -53,15 +53,29 @@ class OtherInfoWindow : AppCompatActivity() {
             .subscribe { value -> updateDescriptionInfo(value) }
     }
 
+    private fun updateUiState(description: Description) {
+        when (description) {
+            is ArtistDescription -> updateArtistDescription(description)
+            EmptyDescription -> updateArtistDescriptionNoResult()
+        }
+    }
+
     private fun updateDescriptionInfo(description: Description) {
-        updateArtistDescription(description)
+        updateUiState(description)
         showUI(description)
     }
 
     private fun updateArtistDescription(description: Description){
         uiState = uiState.copy(
             description = artistDescriptionHelper.getTextArtistDescription(description, uiState.artistName),
-            id = description.id
+            id = description.id,
+            actionsEnabled = true
+        )
+    }
+
+    private fun updateArtistDescriptionNoResult(){
+        uiState = uiState.copy(
+            actionsEnabled = false
         )
     }
 
@@ -101,8 +115,13 @@ class OtherInfoWindow : AppCompatActivity() {
             showImage()
             showDescription(description)
             pageId = uiState.id
+            enableActions()
             setViewFullArticleButtonOnClick()
         }
+    }
+
+    private fun enableActions() {
+        viewFullArticleButton.isEnabled = uiState.actionsEnabled
     }
 
     private fun showImage(){
@@ -115,6 +134,6 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     companion object {
-        const val ARTIST_NAME_EXTRA = ARTIST_NAME
+        const val ARTIST_NAME = "artistName"
     }
 }
