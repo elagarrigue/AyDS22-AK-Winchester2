@@ -67,7 +67,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun updateStateArtistName() {
         uiState = uiState.copy(
-            artistName = intent.getStringExtra(ARTIST_NAME)!!,
+            artistName = intent.getStringExtra(ARTIST_NAME) ?: "",
         )
     }
 
