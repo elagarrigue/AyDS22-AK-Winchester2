@@ -125,8 +125,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun showImage(){
-        val imageUrl = URL_IMAGE
-        Picasso.get().load(imageUrl).into(wikipediaImage)
+        Picasso.get().load(URL_IMAGE).into(wikipediaImage)
     }
 
     private fun showDescription(description: Description){
