@@ -20,6 +20,6 @@ internal class ExternalRepositoryImpl (private var wikipediaAPI : WikipediaAPI, 
         } catch (e1: IOException) {
             e1.printStackTrace()
         }
-        return wikipediaToDescriptionResolver.getDescriptionFromExternalData(queryWikipediaSearch, artistName)
+        return wikipediaToDescriptionResolver.getDescriptionFromExternalData(queryWikipediaSearch)
     }
 }

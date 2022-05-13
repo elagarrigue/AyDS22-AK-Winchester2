@@ -23,7 +23,7 @@ private const val SPACE=" "
 private const val QUOTE="'"
 private const val ITALIC="'"
 
-internal class ArtistDescriptionHelperImpl() : ArtistDescriptionHelper {
+internal class ArtistDescriptionHelperImpl : ArtistDescriptionHelper {
 
     override fun getTextArtistDescription (description: Description, artistName: String) : String {
         val descriptionText = if(description.isLocallyStored) PREFIX + description.description else description.description
