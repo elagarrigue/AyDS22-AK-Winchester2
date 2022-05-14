@@ -2,6 +2,7 @@ package ayds.winchester.otherInfo.model.repository
 
 
 import ayds.winchester.songinfo.moredetails.model.entities.ArtistDescription
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyDescription
 import ayds.winchester.songinfo.moredetails.model.repository.DescriptionRepositoryImpl
 import ayds.winchester.songinfo.moredetails.model.repository.external.ExternalRepository
 import ayds.winchester.songinfo.moredetails.model.repository.local.LocalRepository
@@ -43,40 +44,15 @@ class DescriptionRepositoryTest {
         Assert.assertFalse(description.isLocallyStored)
         verify { localRepository.saveDescriptionInDataBase(description) }
     }
-/*
+
     @Test
-    fun `given existing song by different term should get the song and update it`() {
-        val song = SpotifySong("id", "name", "artist", "album", "date", "url", "image",
-            DatePrecision.YEAR,false)
-        every { spotifyLocalStorage.getSongByTerm("term") } returns null
-        every { spotifyTrackService.getSong("term") } returns song
-        every { spotifyLocalStorage.getSongById("id") } returns song
+    fun `given non existing description should return empty description`() {
+        every { localRepository.getArtistDescription("artist") } returns null
+        every { externalRepository.getArtistDescription("artist") } returns EmptyDescription
 
-        val result = songRepository.getSongByTerm("term")
+        val result = descriptionRepository.getDescription("artist")
 
-        Assert.assertEquals(song, result)
-        Assert.assertFalse(song.isLocallyStored)
-        verify { spotifyLocalStorage.updateSongTerm("term", "id") }
+        Assert.assertEquals(EmptyDescription, result)
     }
-
-    @Test
-    fun `given non existing song by term should return empty song`() {
-        every { spotifyLocalStorage.getSongByTerm("term") } returns null
-        every { spotifyTrackService.getSong("term") } returns null
-
-        val result = songRepository.getSongByTerm("term")
-
-        Assert.assertEquals(EmptySong, result)
-    }
-
-    @Test
-    fun `given service exception should return empty song`() {
-        every { spotifyLocalStorage.getSongByTerm("term") } returns null
-        every { spotifyTrackService.getSong("term") } throws mockk<Exception>()
-
-        val result = songRepository.getSongByTerm("term")
-
-        Assert.assertEquals(EmptySong, result)
-    }*/
 
 }
