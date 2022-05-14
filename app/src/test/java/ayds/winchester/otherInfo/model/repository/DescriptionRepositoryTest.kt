@@ -1,6 +1,5 @@
 package ayds.winchester.otherInfo.model.repository
 
-
 import ayds.winchester.songinfo.moredetails.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyDescription
 import ayds.winchester.songinfo.moredetails.model.repository.DescriptionRepositoryImpl
@@ -55,4 +54,13 @@ class DescriptionRepositoryTest {
         Assert.assertEquals(EmptyDescription, result)
     }
 
+    @Test
+    fun `given service exception should return empty description`() {
+        every { localRepository.getArtistDescription("artist") } returns null
+        every { externalRepository.getArtistDescription("artist") } throws mockk<Exception>()
+
+        val result = descriptionRepository.getDescription("artist")
+
+        Assert.assertEquals(EmptyDescription, result)
+    }
 }
