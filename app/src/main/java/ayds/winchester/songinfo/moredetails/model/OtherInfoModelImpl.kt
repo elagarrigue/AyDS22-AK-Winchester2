@@ -14,9 +14,9 @@ internal class OtherInfoModelImpl(private var repository: DescriptionRepository)
     private val onActionSubject = Subject<Description>()
     override val uiEventObservable: Observable<Description> = onActionSubject
 
-    override fun searchArtistName(artistName : String) {
+    override fun searchArtistName(name : String) {
         Thread {
-            val description = repository.getDescription(artistName)
+            val description = repository.getDescription(name)
             onActionSubject.notify(description)
         }.start()
     }

@@ -21,17 +21,23 @@ import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 
-class OtherInfoWindow : AppCompatActivity() {
+interface OtherInfoWindow {
+    var uiState: OtherInfoUIState
+    val uiEventObservableFullArticle : Observable<OtherInfoWindowEvent>
+    fun openExternalLink(id: String)
+}
+
+internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private lateinit var descriptionPane: TextView
     private lateinit var wikipediaImage: ImageView
     private lateinit var pageId: String
     private lateinit var viewFullArticleButton : Button
     private val onActionSubject = Subject<OtherInfoWindowEvent>()
-    val uiEventObservableFullArticle: Observable<OtherInfoWindowEvent> = onActionSubject
     private lateinit var otherInfoModel : OtherInfoModel
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
     private val artistDescriptionHelper : ArtistDescriptionHelper = ArtistDescriptionHelperImpl()
-    var uiState: OtherInfoUIState = OtherInfoUIState()
+    override var uiState = OtherInfoUIState()
+    override val uiEventObservableFullArticle = onActionSubject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,7 +111,7 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    fun openExternalLink(id: String) {
+    override fun openExternalLink(id: String) {
         val urlString = URL_ARTICLE+id
         navigationUtils.openExternalUrl(this, urlString)
     }
