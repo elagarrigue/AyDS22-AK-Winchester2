@@ -13,7 +13,7 @@ object SpotifyTrackInjector {
         .addConverterFactory(ScalarsConverterFactory.create())
         .build()
     private val spotifyTrackAPI = spotifyAPIRetrofit.create(SpotifyTrackAPI::class.java)
-    private val spotifyToSongResolver: SpotifyToSongResolver = JsonToSongResolver()
+    private val spotifyToSongResolver: SpotifyToSongResolver = JsonToSongResolver(SongPrecisionDateHelperImpl())
 
 
     val spotifyTrackService: SpotifyTrackService = SpotifyTrackServiceImpl(

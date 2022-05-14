@@ -14,24 +14,20 @@ private const val QUERY = "query"
 
 internal class WikipediaToDescriptionResolver {
 
-    private lateinit var queryWikipediaSearch : JsonObject
-    private lateinit var artistName : String
-
-    private fun makeDescription(): String {
+    private fun makeDescription(queryWikipediaSearch: JsonObject): String {
         val snippet = getSnippet(queryWikipediaSearch)
         return getArtistDescription(snippet)
     }
 
-    fun getDescriptionFromExternalData(queryWikipediaSearch : Response<String>, artistName: String): Description {
+    fun getDescriptionFromExternalData(queryWikipediaSearch : Response<String>): Description {
 
         val gson = Gson()
         val jObj = gson.fromJson(queryWikipediaSearch.body(), JsonObject::class.java)
 
-        this.queryWikipediaSearch = jObj[QUERY].asJsonObject
-        this.artistName = artistName
+        val query = jObj[QUERY].asJsonObject
 
-        val artistDescription = makeDescription()
-        val pageId = getPageId(this.queryWikipediaSearch).asString
+        val artistDescription = makeDescription(query)
+        val pageId = getPageId(query).asString
 
         return ArtistDescription(pageId,artistDescription)
     }

@@ -29,7 +29,7 @@ internal class LocalRepositoryImpl(private var otherInfoView : OtherInfoWindow) 
 
      override fun getArtistDescription(artistName:String): Description?{
          this.artistName = artistName
-        val artistDescription = dataBase.getInfo(dataBase, artistName)
+         val artistDescription = dataBase.getInfo(dataBase, artistName)
 
          return artistDescription
 

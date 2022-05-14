@@ -13,25 +13,31 @@ import ayds.observer.Observable
 import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModelInjector
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
+import ayds.winchester.songinfo.moredetails.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.model.entities.Description
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyDescription
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_ARTICLE
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 
-private const val ARTIST_NAME = "artistName"
+interface OtherInfoWindow {
+    var uiState: OtherInfoUIState
+    val uiEventObservableFullArticle : Observable<OtherInfoWindowEvent>
+    fun openExternalLink(id: String)
+}
 
-class OtherInfoWindow : AppCompatActivity() {
+internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private lateinit var descriptionPane: TextView
     private lateinit var wikipediaImage: ImageView
     private lateinit var pageId: String
     private lateinit var viewFullArticleButton : Button
     private val onActionSubject = Subject<OtherInfoWindowEvent>()
-    val uiEventObservableFullArticle: Observable<OtherInfoWindowEvent> = onActionSubject
     private lateinit var otherInfoModel : OtherInfoModel
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
     private val artistDescriptionHelper : ArtistDescriptionHelper = ArtistDescriptionHelperImpl()
-    var uiState: OtherInfoUIState = OtherInfoUIState()
+    override var uiState = OtherInfoUIState()
+    override val uiEventObservableFullArticle = onActionSubject
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,21 +59,35 @@ class OtherInfoWindow : AppCompatActivity() {
             .subscribe { value -> updateDescriptionInfo(value) }
     }
 
+    private fun updateUiState(description: Description) {
+        when (description) {
+            is ArtistDescription -> updateArtistDescription(description)
+            EmptyDescription -> updateArtistDescriptionNoResult()
+        }
+    }
+
     private fun updateDescriptionInfo(description: Description) {
-        updateArtistDescription(description)
+        updateUiState(description)
         showUI(description)
     }
 
     private fun updateArtistDescription(description: Description){
         uiState = uiState.copy(
             description = artistDescriptionHelper.getTextArtistDescription(description, uiState.artistName),
-            id = description.id
+            id = description.id,
+            actionsEnabled = true
+        )
+    }
+
+    private fun updateArtistDescriptionNoResult(){
+        uiState = uiState.copy(
+            actionsEnabled = false
         )
     }
 
     private fun updateStateArtistName() {
         uiState = uiState.copy(
-            artistName = intent.getStringExtra(ARTIST_NAME)!!,
+            artistName = intent.getStringExtra(ARTIST_NAME) ?: "",
         )
     }
 
@@ -91,7 +111,7 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    fun openExternalLink(id: String) {
+    override fun openExternalLink(id: String) {
         val urlString = URL_ARTICLE+id
         navigationUtils.openExternalUrl(this, urlString)
     }
@@ -101,13 +121,17 @@ class OtherInfoWindow : AppCompatActivity() {
             showImage()
             showDescription(description)
             pageId = uiState.id
+            enableActions()
             setViewFullArticleButtonOnClick()
         }
     }
 
+    private fun enableActions() {
+        viewFullArticleButton.isEnabled = uiState.actionsEnabled
+    }
+
     private fun showImage(){
-        val imageUrl = URL_IMAGE
-        Picasso.get().load(imageUrl).into(wikipediaImage)
+        Picasso.get().load(URL_IMAGE).into(wikipediaImage)
     }
 
     private fun showDescription(description: Description){
@@ -115,6 +139,6 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     companion object {
-        const val ARTIST_NAME_EXTRA = ARTIST_NAME
+        const val ARTIST_NAME = "artistName"
     }
 }
