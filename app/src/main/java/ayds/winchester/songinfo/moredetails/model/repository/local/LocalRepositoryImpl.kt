@@ -8,7 +8,6 @@ import ayds.winchester.songinfo.moredetails.view.OtherInfoWindow
 interface LocalRepository {
     fun updateArtistTerm(id : String)
     fun getArtistDescription(artistName:String): Description?
-    fun getArtistDescriptionById(id:String): Description?
     fun saveDescriptionInDataBase(artistDescription: Description)
 }
 internal class LocalRepositoryImpl(private var otherInfoView : OtherInfoWindow) : LocalRepository{
@@ -29,17 +28,7 @@ internal class LocalRepositoryImpl(private var otherInfoView : OtherInfoWindow) 
 
      override fun getArtistDescription(artistName:String): Description?{
          this.artistName = artistName
-         val artistDescription = dataBase.getInfo(dataBase, artistName)
-
-         return artistDescription
-
-    }
-
-    override fun getArtistDescriptionById(id:String): Description?{
-        val artistDescription = dataBase.getInfoById(dataBase, id)
-
-        return artistDescription
-
+         return dataBase.getInfo(dataBase, artistName)
     }
 
     override fun saveDescriptionInDataBase(artistDescription: Description){

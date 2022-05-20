@@ -28,8 +28,6 @@ internal class DescriptionRepositoryImpl(private val localRepository: LocalRepos
         return artistDescription ?: EmptyDescription
     }
 
-    private fun Description.isSavedDescription() = localRepository.getArtistDescriptionById(id) != null
-
     private fun markDescriptionAsLocal(description: Description) {
         description.isLocallyStored = true
     }
