@@ -1,6 +1,3 @@
-[submodule "libs/wikipedia"]
-	path = libs/wikipedia
-	url = https://github.com/SeleneGonzalo/winchester2-submodule.git
 [submodule "libs/wikipediaData"]
 	path = libs/wikipediaData
 	url = https://github.com/TomasFelp/wikipedia-module.git
