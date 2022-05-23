@@ -11,7 +11,7 @@ interface DescriptionRepository {
     fun getDescription(name: String): Description
 }
 
-internal class DescriptionRepositoryImpl(private val localRepository: LocalRepository, private val externalRepository : ayds.winchester2.wikipedia.ExternalRepository): DescriptionRepository {
+internal class DescriptionRepositoryImpl(private val localRepository: LocalRepository, private val externalRepository : ExternalRepository): DescriptionRepository {
 
     override fun getDescription(name: String): Description {
         var artistDescription = localRepository.getArtistDescription(name)
