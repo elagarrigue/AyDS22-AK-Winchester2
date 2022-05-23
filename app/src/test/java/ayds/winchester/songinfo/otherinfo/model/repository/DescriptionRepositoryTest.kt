@@ -3,7 +3,7 @@ package ayds.winchester.songinfo.otherinfo.model.repository
 import ayds.winchester.songinfo.moredetails.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyDescription
 import ayds.winchester.songinfo.moredetails.model.repository.DescriptionRepositoryImpl
-import ayds.winchester.songinfo.moredetails.model.repository.external.ExternalRepository
+import ayds.winchester2.wikipedia.ExternalRepository
 import ayds.winchester.songinfo.moredetails.model.repository.local.LocalRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -14,7 +14,7 @@ import java.lang.Exception
 
 class DescriptionRepositoryTest {
     private val localRepository: LocalRepository = mockk(relaxUnitFun = true)
-    private val externalRepository: ExternalRepository = mockk(relaxUnitFun = true)
+    private val externalRepository: ayds.winchester2.wikipedia.ExternalRepository = mockk(relaxUnitFun = true)
 
     private val descriptionRepository: DescriptionRepositoryImpl by lazy {
         DescriptionRepositoryImpl(localRepository, externalRepository)
