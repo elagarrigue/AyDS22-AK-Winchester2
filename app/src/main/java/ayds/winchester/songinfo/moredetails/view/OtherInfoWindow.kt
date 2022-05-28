@@ -16,7 +16,6 @@ import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.CardArtistDescription
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
-import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_ARTICLE
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
@@ -24,11 +23,14 @@ import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 interface OtherInfoWindow {
     var uiState: OtherInfoUIState
     val uiEventObservableFullArticle : Observable<OtherInfoWindowEvent>
-    fun openExternalLink(id: String)
+    fun openExternalLink(url: String)
 }
+
+private const val SOURCE="source: "
 
 internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private lateinit var descriptionPane: TextView
+    private lateinit var sourcePane: TextView
     private lateinit var wikipediaImage: ImageView
     private lateinit var pageId: String
     private lateinit var viewFullArticleButton : Button
@@ -38,6 +40,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private val artistDescriptionHelper : ArtistDescriptionHelper = ArtistDescriptionHelperImpl()
     override var uiState = OtherInfoUIState()
     override val uiEventObservableFullArticle = onActionSubject
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +100,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
     private fun initViewProperties(){
         descriptionPane = findViewById(R.id.textPaneArtistDescription)
+        sourcePane = findViewById(R.id.sourceText)
         wikipediaImage = findViewById<View>(R.id.imageView) as ImageView
         viewFullArticleButton = findViewById(R.id.openUrlButton)
     }
@@ -111,8 +115,8 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         }
     }
 
-    override fun openExternalLink(urlString: String) {
-       navigationUtils.openExternalUrl(this, urlString)
+    override fun openExternalLink(url: String) {
+       navigationUtils.openExternalUrl(this, url)
     }
 
     private fun showUI(description: Card){
@@ -135,6 +139,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
     private fun showDescription(description: Card){
         descriptionPane.text = Html.fromHtml(artistDescriptionHelper.getTextArtistDescription(description,uiState.artistName))
+        sourcePane.text= SOURCE+description.source
     }
 
     companion object {

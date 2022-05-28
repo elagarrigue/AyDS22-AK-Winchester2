@@ -3,7 +3,6 @@ package ayds.winchester.songinfo.moredetails.model
 import ayds.observer.Observable
 import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.model.entities.Card
-import ayds.winchester.songinfo.moredetails.model.entities.Description
 import ayds.winchester.songinfo.moredetails.model.repository.DescriptionRepository
 
 interface OtherInfoModel{

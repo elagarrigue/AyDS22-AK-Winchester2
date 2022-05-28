@@ -18,11 +18,11 @@ internal class DescriptionRepositoryImpl(private val localRepository: LocalRepos
         var cardDescription : CardArtistDescription? = null
         when {
             artistDescription != null -> {markDescriptionAsLocal(artistDescription)
-            cardDescription = CardArtistDescription(artistDescription.description,"https://en.wikipedia.org/?curid="+artistDescription.id,"","")
+            cardDescription = CardArtistDescription(artistDescription.description,"https://en.wikipedia.org/?curid="+artistDescription.id,"Wikipedia","")
             }
             else -> try {
                     val description = externalRepository.getArtistDescription(name)
-                    cardDescription = CardArtistDescription(description.description,"https://en.wikipedia.org/?curid="+description.id,"","")
+                    cardDescription = CardArtistDescription(description.description,"https://en.wikipedia.org/?curid="+description.id,"Wikipedia","")
 
                 artistDescription.let {
                         localRepository.saveDescriptionInDataBase(artistDescription!!)
