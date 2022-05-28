@@ -22,7 +22,7 @@ internal class OtherInfoControllerImpl(private var otherInfoModel: OtherInfoMode
     }
 
     private fun openArticleUrl() {
-        otherInfoWindow.openExternalLink(otherInfoWindow.uiState.id)
+        otherInfoWindow.openExternalLink(otherInfoWindow.uiState.WikipediaUrl)
     }
 
     private val observerFullArticle: Observer<OtherInfoWindowEvent> =

@@ -3,7 +3,7 @@ package ayds.winchester.songinfo.moredetails.view
 data class OtherInfoUIState(
     val artistName : String = "",
     val description : String = "",
-    val id : String = "",
+    val WikipediaUrl : String = "",
     val actionsEnabled: Boolean = false,
 ) {
 

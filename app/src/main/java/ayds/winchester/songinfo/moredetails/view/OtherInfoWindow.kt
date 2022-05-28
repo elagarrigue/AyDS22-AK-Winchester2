@@ -13,9 +13,9 @@ import ayds.observer.Observable
 import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModelInjector
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
-import ayds.winchester.songinfo.moredetails.model.entities.ArtistDescription
-import ayds.winchester.songinfo.moredetails.model.entities.Description
-import ayds.winchester.songinfo.moredetails.model.entities.EmptyDescription
+import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.CardArtistDescription
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_ARTICLE
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE
 import ayds.winchester.songinfo.utils.UtilsInjector
@@ -59,22 +59,22 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
             .subscribe { value -> updateDescriptionInfo(value) }
     }
 
-    private fun updateUiState(description: Description) {
+    private fun updateUiState(description: Card) {
         when (description) {
-            is ArtistDescription -> updateArtistDescription(description)
-            EmptyDescription -> updateArtistDescriptionNoResult()
+            is CardArtistDescription -> updateArtistDescription(description)
+            EmptyCard -> updateArtistDescriptionNoResult()
         }
     }
 
-    private fun updateDescriptionInfo(description: Description) {
-        updateUiState(description)
-        showUI(description)
+    private fun updateDescriptionInfo(card: Card) {
+        updateUiState(card)
+        showUI(card)
     }
 
-    private fun updateArtistDescription(description: Description){
+    private fun updateArtistDescription(description: Card){
         uiState = uiState.copy(
             description = artistDescriptionHelper.getTextArtistDescription(description, uiState.artistName),
-            id = description.id,
+            WikipediaUrl = description.infoUrl,
             actionsEnabled = true
         )
     }
@@ -111,16 +111,15 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         }
     }
 
-    override fun openExternalLink(id: String) {
-        val urlString = URL_ARTICLE+id
-        navigationUtils.openExternalUrl(this, urlString)
+    override fun openExternalLink(urlString: String) {
+       navigationUtils.openExternalUrl(this, urlString)
     }
 
-    private fun showUI(description: Description){
+    private fun showUI(description: Card){
         runOnUiThread {
             showImage()
             showDescription(description)
-            pageId = uiState.id
+            pageId = uiState.WikipediaUrl
             enableActions()
             setViewFullArticleButtonOnClick()
         }
@@ -134,7 +133,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         Picasso.get().load(URL_IMAGE).into(wikipediaImage)
     }
 
-    private fun showDescription(description: Description){
+    private fun showDescription(description: Card){
         descriptionPane.text = Html.fromHtml(artistDescriptionHelper.getTextArtistDescription(description,uiState.artistName))
     }
 
