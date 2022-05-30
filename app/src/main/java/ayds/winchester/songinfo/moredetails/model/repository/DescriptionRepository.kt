@@ -22,12 +22,16 @@ internal class DescriptionRepositoryImpl(private val localRepository: LocalRepos
             cardDescription = CardArtistDescription(artistDescription.description,"https://en.wikipedia.org/?curid="+artistDescription.id,"Wikipedia","")
             }
             else -> try {
-                    val description = externalRepository.getArtistDescription(name)
+                    /*val description = externalRepository.getArtistDescription(name)
                     cardDescription = CardArtistDescription(description.description,"https://en.wikipedia.org/?curid="+description.id,"Wikipedia","")
 
                 artistDescription.let {
                         localRepository.saveDescriptionInDataBase(artistDescription!!)
-                    }
+                    }*/
+                val description = lastFMService.getArtist(name)
+                if (description != null) {
+                    cardDescription = CardArtistDescription(description.artistInfo,description.artistURL,"LastFM","")
+                };
                 } catch (e: Exception) {
                     artistDescription = null
                 }
