@@ -6,37 +6,28 @@ import ayds.winchester.songinfo.moredetails.model.entities.Description
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester2.wikipedia.ExternalRepository
 import ayds.winchester.songinfo.moredetails.model.repository.local.LocalRepository
-import ayds.lisboa2.lastFM.LastFMInjector
+import ayds.winchester.songinfo.moredetails.model.repository.external.BrokerServiceImpl
 
 interface DescriptionRepository {
     fun getDescription(name: String): Card
 }
 
 internal class DescriptionRepositoryImpl(private val localRepository: LocalRepository, private val externalRepository : ExternalRepository): DescriptionRepository {
-    private val lastFMService = LastFMInjector.lastFMService
-    override fun getDescription(name: String): Card {
+    override fun getDescription(name: String): List<Card> {
         var artistDescription = localRepository.getArtistDescription(name)
         var cardDescription : CardArtistDescription? = null
+        var broker = BrokerServiceImpl()
+        var cards : List<Card> = mutableListOf()
         when {
             artistDescription != null -> {markDescriptionAsLocal(artistDescription)
             cardDescription = CardArtistDescription(artistDescription.description,"https://en.wikipedia.org/?curid="+artistDescription.id,"Wikipedia","")
             }
-            else -> try {
-                    /*val description = externalRepository.getArtistDescription(name)
-                    cardDescription = CardArtistDescription(description.description,"https://en.wikipedia.org/?curid="+description.id,"Wikipedia","")
-
-                artistDescription.let {
-                        localRepository.saveDescriptionInDataBase(artistDescription!!)
-                    }*/
-                val description = lastFMService.getArtist(name)
-                if (description != null) {
-                    cardDescription = CardArtistDescription(description.artistInfo,description.artistURL,"LastFM","")
-                };
-                } catch (e: Exception) {
-                    artistDescription = null
-                }
+            /*artistDescription.let {
+                    localRepository.saveDescriptionInDataBase(artistDescription!!)
+                }*/
         }
-        return cardDescription ?: EmptyCard
+        cards = broker.getInfo(name)
+        return cards
     }
 
     private fun markDescriptionAsLocal(description: Description) {
