@@ -14,24 +14,23 @@ interface DescriptionRepository {
 
 internal class DescriptionRepositoryImpl(private val localRepository: LocalRepository, private val externalRepository : ExternalRepository): DescriptionRepository {
     override fun getDescription(name: String): List<Card> {
-        var artistDescription = localRepository.getArtistDescription(name)
-        var cardDescription : CardArtistDescription? = null
+        var cards = localRepository.getArtistDescription(name)
         var broker = BrokerServiceImpl()
-        var cards : List<Card> = mutableListOf()
+
         when {
-            artistDescription != null -> {markDescriptionAsLocal(artistDescription)
-            cardDescription = CardArtistDescription(artistDescription.description,"https://en.wikipedia.org/?curid="+artistDescription.id,"Wikipedia","")
+            cards.isNotEmpty() -> {markDescriptionAsLocal(cards)}
+            else -> {
+                cards = broker.getInfo(name)
+                localRepository.saveDescriptionInDataBase(cards)
+                println("---------------------------------")
             }
-            /*artistDescription.let {
-                    localRepository.saveDescriptionInDataBase(artistDescription!!)
-                }*/
         }
-        cards = broker.getInfo(name)
         return cards
     }
 
-    private fun markDescriptionAsLocal(description: Description) {
-        description.isLocallyStored = true
+    private fun markDescriptionAsLocal(cards : List<Card>) {
+        for(i in cards.indices)
+            cards[i].isLocallyStored = true
     }
 }
 
