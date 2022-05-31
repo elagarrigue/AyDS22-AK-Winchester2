@@ -4,7 +4,7 @@ import ayds.winchester.songinfo.moredetails.model.entities.ArtistDescription
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyDescription
 import ayds.winchester.songinfo.moredetails.model.repository.DescriptionRepositoryImpl
 import ayds.winchester2.wikipedia.ExternalRepository
-import ayds.winchester2.wikipedia.Description
+import ayds.winchester2.wikipedia.WikipediaArticle
 import ayds.winchester.songinfo.moredetails.model.repository.local.LocalRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -13,7 +13,7 @@ import org.junit.Assert
 import org.junit.Test
 import java.lang.Exception
 
-class DescriptionRepositoryTest {
+class WikipediaArticleRepositoryTest {
     private val localRepository: LocalRepository = mockk(relaxUnitFun = true)
     private val externalRepository: ExternalRepository = mockk(relaxUnitFun = true)
 
@@ -34,7 +34,7 @@ class DescriptionRepositoryTest {
 
     @Test
     fun `given non existing description should get the description and store it`() {
-        val description = Description("id", "description")
+        val description = WikipediaArticle("id", "description")
         every { localRepository.getArtistDescription("artist") } returns null
         every { externalRepository.getArtistDescription("artist") } returns description
 

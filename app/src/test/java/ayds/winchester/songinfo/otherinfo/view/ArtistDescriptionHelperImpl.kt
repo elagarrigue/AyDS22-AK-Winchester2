@@ -7,7 +7,7 @@ import ayds.winchester.songinfo.moredetails.view.ArtistDescriptionHelperImpl
 import org.junit.Assert
 import org.junit.Test
 
-class ArtistDescriptionHelperImplTest {
+class ArtistWikipediaArticleHelperImplTest {
 
     private val artistDescriptionHelper = ArtistDescriptionHelperImpl()
 

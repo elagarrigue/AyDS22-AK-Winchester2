@@ -9,7 +9,7 @@ import ayds.winchester.songinfo.moredetails.model.repository.local.LocalReposito
 import ayds.winchester.songinfo.moredetails.model.repository.external.BrokerServiceImpl
 
 interface DescriptionRepository {
-    fun getDescription(name: String): Card
+    fun getDescription(name: String): List<Card>
 }
 
 internal class DescriptionRepositoryImpl(private val localRepository: LocalRepository, private val externalRepository : ExternalRepository): DescriptionRepository {

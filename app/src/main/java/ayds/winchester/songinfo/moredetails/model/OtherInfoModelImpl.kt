@@ -17,7 +17,7 @@ internal class OtherInfoModelImpl(private var repository: DescriptionRepository)
     override fun searchArtistName(name : String) {
         Thread {
             val description = repository.getDescription(name)
-            onActionSubject.notify(description)
+            onActionSubject.notify(description.last())
         }.start()
     }
 }

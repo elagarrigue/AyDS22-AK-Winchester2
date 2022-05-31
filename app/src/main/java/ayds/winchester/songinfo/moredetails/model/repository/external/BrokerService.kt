@@ -19,16 +19,16 @@ internal class BrokerServiceImpl : BrokerService{
             cardDescriptionWikipedia = CardArtistDescription(descriptionWikipedia.description,"https://en.wikipedia.org/?curid="+descriptionWikipedia.id,"Wikipedia","")
             cardList.add(cardDescriptionWikipedia)
             if (descriptionLastFM != null) {
-                cardDescriptionLastFM = CardArtistDescription(
-                    descriptionLastFM.artistInfo,
-                    descriptionLastFM.artistURL,
+                    cardDescriptionLastFM = CardArtistDescription(
+                    descriptionLastFM.description,
+                    descriptionLastFM.infoURL,
                     "LastFM",
                     ""
                 )
                 cardList.add(cardDescriptionLastFM)
             };
         } catch (e: Exception) {
-            artistDescription = null
+
         }
         return cardList
     }
