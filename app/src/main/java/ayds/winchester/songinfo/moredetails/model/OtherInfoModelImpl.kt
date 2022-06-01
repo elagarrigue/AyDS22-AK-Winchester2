@@ -6,18 +6,18 @@ import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.repository.DescriptionRepository
 
 interface OtherInfoModel{
-    val uiEventObservable: Observable<Card>
+    val uiEventObservable: Observable<List<Card>>
     fun searchArtistName(name: String)
 }
 
 internal class OtherInfoModelImpl(private var repository: DescriptionRepository) : OtherInfoModel{
-    private val onActionSubject = Subject<Card>()
-    override val uiEventObservable: Observable<Card> = onActionSubject
+    private val onActionSubject = Subject<List<Card>>()
+    override val uiEventObservable: Observable<List<Card>> = onActionSubject
 
     override fun searchArtistName(name : String) {
         Thread {
-            val description = repository.getDescription(name)
-            onActionSubject.notify(description.last())
+            val cards = repository.getDescription(name)
+            onActionSubject.notify(cards)
         }.start()
     }
 }

@@ -12,7 +12,7 @@ interface DescriptionRepository {
     fun getDescription(name: String): List<Card>
 }
 
-internal class DescriptionRepositoryImpl(private val localRepository: LocalRepository, private val externalRepository : ExternalRepository): DescriptionRepository {
+internal class DescriptionRepositoryImpl(private val localRepository: LocalRepository): DescriptionRepository {
     override fun getDescription(name: String): List<Card> {
         var cards = localRepository.getArtistDescription(name)
         var broker = BrokerServiceImpl()

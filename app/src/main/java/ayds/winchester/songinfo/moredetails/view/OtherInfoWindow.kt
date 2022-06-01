@@ -16,7 +16,11 @@ import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.CardArtistDescription
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
+import ayds.winchester.songinfo.moredetails.model.entities.Source
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE
+import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_LASTFM
+import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_TIMES
+import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_WIKIPEDIA
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 
@@ -29,11 +33,14 @@ interface OtherInfoWindow {
 private const val SOURCE="source: "
 
 internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
-    private lateinit var descriptionPane: TextView
-    private lateinit var sourcePane: TextView
-    private lateinit var wikipediaImage: ImageView
+
+    private var descriptionsTexts : MutableList<TextView> = mutableListOf()
+    private var descriptionsImages : MutableList<ImageView> = mutableListOf()
+    private var descriptionsSources : MutableList<TextView> = mutableListOf()
+    private var descriptionsButtons : MutableList<Button> = mutableListOf()
+
     private lateinit var pageId: String
-    private lateinit var viewFullArticleButton : Button
+
     private val onActionSubject = Subject<OtherInfoWindowEvent>()
     private lateinit var otherInfoModel : OtherInfoModel
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
@@ -62,16 +69,18 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
             .subscribe { value -> updateDescriptionInfo(value) }
     }
 
-    private fun updateUiState(description: Card) {
-        when (description) {
-            is CardArtistDescription -> updateArtistDescription(description)
-            EmptyCard -> updateArtistDescriptionNoResult()
+    private fun updateUiState(cards: List<Card>) {
+        for(i in cards.indices) {
+            when (cards[i]) {
+                is CardArtistDescription -> updateArtistDescription(cards[i])
+                EmptyCard -> updateArtistDescriptionNoResult()
+            }
         }
     }
 
-    private fun updateDescriptionInfo(card: Card) {
-        updateUiState(card)
-        showUI(card)
+    private fun updateDescriptionInfo(cards: List<Card>) {
+        updateUiState(cards)
+        showUI(cards)
     }
 
     private fun updateArtistDescription(description: Card){
@@ -99,47 +108,81 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun initViewProperties(){
-        descriptionPane = findViewById(R.id.textPaneArtistDescription)
-        sourcePane = findViewById(R.id.sourceText)
-        wikipediaImage = findViewById<View>(R.id.imageView) as ImageView
-        viewFullArticleButton = findViewById(R.id.openUrlButton)
+
+        descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription))
+        descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription2))
+        //descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription))
+
+        descriptionsSources.add(findViewById(R.id.sourceText))
+        descriptionsSources.add(findViewById(R.id.sourceText2))
+        //descriptionsSources.add(findViewById(R.id.sourceText3))
+
+        descriptionsImages.add(findViewById<View>(R.id.imageView) as ImageView)
+        descriptionsImages.add(findViewById<View>(R.id.imageView2) as ImageView)
+        //descriptionsImages.add(findViewById<View>(R.id.imageView3) as ImageView)
+
+        descriptionsButtons.add(findViewById(R.id.openUrlButton))
+        descriptionsButtons.add(findViewById(R.id.openUrlButton2))
+        //descriptionsButtons.add(findViewById(R.id.openUrlButton3))
+
     }
 
     private fun notifyFullArticleAction() {
         onActionSubject.notify(OtherInfoWindowEvent.FullArticle)
     }
 
-    private fun setViewFullArticleButtonOnClick(){
-        viewFullArticleButton.setOnClickListener {
-           notifyFullArticleAction()
+    private fun setViewFullArticleButtonOnClick(cards: List<Card>){
+
+        for(i in cards.indices){
+            descriptionsButtons[i].setOnClickListener {
+                notifyFullArticleAction()
+            }
         }
+
+
     }
 
     override fun openExternalLink(url: String) {
        navigationUtils.openExternalUrl(this, url)
     }
 
-    private fun showUI(description: Card){
+    private fun showUI(cards: List<Card>){
         runOnUiThread {
-            showImage()
-            showDescription(description)
+            showImage(cards)
+            showDescription(cards)
             pageId = uiState.WikipediaUrl
-            enableActions()
-            setViewFullArticleButtonOnClick()
+            enableActions(cards)
+            setViewFullArticleButtonOnClick(cards)
         }
     }
 
-    private fun enableActions() {
-        viewFullArticleButton.isEnabled = uiState.actionsEnabled
+    private fun enableActions(cards: List<Card>) {
+        for(i in cards.indices) {
+            descriptionsButtons[i].isEnabled = uiState.actionsEnabled
+        }
     }
 
-    private fun showImage(){
-        Picasso.get().load(URL_IMAGE).into(wikipediaImage)
+    private fun showImage(cards: List<Card>){
+        var imageUrl = URL_IMAGE
+        for(i in cards.indices) {
+
+            when(cards[i].source){
+                Source.WIKIPEDIA->imageUrl = URL_IMAGE_WIKIPEDIA
+                Source.LASTFM->imageUrl = URL_IMAGE_LASTFM
+                Source.LASTFM->imageUrl = URL_IMAGE_TIMES
+            }
+            //
+            Picasso.get().load(imageUrl).into(descriptionsImages[i])
+        }
     }
 
-    private fun showDescription(description: Card){
-        descriptionPane.text = Html.fromHtml(artistDescriptionHelper.getTextArtistDescription(description,uiState.artistName))
-        sourcePane.text= SOURCE+description.source
+    private fun showDescription(cards: List<Card>){
+
+        for(i in cards.indices){
+            descriptionsTexts[i].text=Html.fromHtml(artistDescriptionHelper.getTextArtistDescription(cards[i],uiState.artistName))
+            descriptionsSources[i].text=SOURCE+cards[i].source
+        }
+
     }
 
     companion object {
