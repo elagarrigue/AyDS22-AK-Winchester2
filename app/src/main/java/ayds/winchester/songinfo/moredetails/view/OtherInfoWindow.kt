@@ -17,7 +17,6 @@ import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.CardArtistDescription
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.entities.Source
-import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_LASTFM
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_TIMES
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_WIKIPEDIA
@@ -163,7 +162,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun showImage(cards: List<Card>){
-        var imageUrl = URL_IMAGE
+        var imageUrl = URL_IMAGE_WIKIPEDIA
         for(i in cards.indices) {
 
             when(cards[i].source){
