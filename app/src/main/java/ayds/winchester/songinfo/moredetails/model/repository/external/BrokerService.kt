@@ -6,11 +6,11 @@ import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 interface BrokerService{
     fun getInfo (name : String) :  List<Card>
 }
-internal class BrokerServiceImpl : BrokerService{
-    
-    private val proxyWikipedia = ProxyWikipediaImpl()
-    private val proxyLastFM = ProxyLastFMImpl()
-    
+internal class BrokerServiceImpl(
+    private val proxyWikipedia : ProxyWikipedia,
+    private val proxyLastFM : ProxyLastFM
+) : BrokerService {
+
     override fun getInfo (name : String) : List<Card>{
         var emptyCardCount = 0
         
