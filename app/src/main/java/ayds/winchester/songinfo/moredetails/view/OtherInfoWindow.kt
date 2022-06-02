@@ -9,6 +9,7 @@ import android.text.Html
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import ayds.observer.Observable
 import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModelInjector
@@ -156,8 +157,14 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun enableActions(cards: List<Card>) {
+        var cont = 0
         for(i in cards.indices) {
             descriptionsButtons[i].isEnabled = uiState.actionsEnabled
+            cont++
+        }
+
+        for(i in cont until descriptionsButtons.size){
+            descriptionsButtons[i].isVisible = false
         }
     }
 
