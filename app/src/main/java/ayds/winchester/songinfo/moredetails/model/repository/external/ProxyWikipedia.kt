@@ -7,8 +7,6 @@ import ayds.winchester.songinfo.moredetails.model.entities.Source
 import ayds.winchester2.wikipedia.WikipediaArticle
 import ayds.winchester2.wikipedia.WikipediaInjector
 
-private const val URL = "https://en.wikipedia.org/?curid="
-
 interface ProxyWikipedia{
     fun getInfo(name: String) : Card
 }
@@ -25,11 +23,10 @@ internal class ProxyWikipediaImpl : ProxyWikipedia {
 
             cardDescriptionWikipedia = CardArtistDescription(
                 descriptionWikipedia.description,
-                URL + descriptionWikipedia.id,
+                descriptionWikipedia.source,
                 Source.WIKIPEDIA,
-                ""
+                descriptionWikipedia.sourceLogo
             )
-
 
         } catch (e: Exception) {
             cardDescriptionWikipedia = null
