@@ -17,7 +17,7 @@ internal class BrokerServiceImpl(
         
         var cardList : MutableList<Card> = mutableListOf()
 
-        cardList.add(proxyNewYorkTimes.getInfo(name))
+        cardList.add(proxyLastFM.getInfo(name))
 
         if(cardList.last()==EmptyCard)
             emptyCardCount++
@@ -26,8 +26,8 @@ internal class BrokerServiceImpl(
         
         if(cardList.last()==EmptyCard)
             emptyCardCount++
-        
-        cardList.add(proxyLastFM.getInfo(name))
+
+        cardList.add(proxyNewYorkTimes.getInfo(name))
 
         if(cardList.last()==EmptyCard)
             emptyCardCount++

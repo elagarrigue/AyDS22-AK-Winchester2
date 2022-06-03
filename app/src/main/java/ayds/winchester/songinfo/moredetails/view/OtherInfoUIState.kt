@@ -4,9 +4,8 @@ data class OtherInfoUIState(
     val artistName : String = "",
     val description : String = "",
     val WikipediaUrl : String = "",
-    val actionsEnabled: Boolean = false,
 ) {
-
+    val actionsEnabled: Array<Boolean> = arrayOf(true, true, true)
     companion object {
         const val URL_IMAGE_WIKIPEDIA = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
         const val URL_IMAGE_LASTFM = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Lastfm_logo.svg/320px-Lastfm_logo.svg.png"

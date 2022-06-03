@@ -72,8 +72,8 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private fun updateUiState(cards: List<Card>) {
         for(i in cards.indices) {
             when (cards[i]) {
-                is CardArtistDescription -> updateArtistDescription(cards[i])
-                EmptyCard -> updateArtistDescriptionNoResult()
+                is CardArtistDescription -> updateArtistDescription(cards[i],i)
+                EmptyCard -> updateArtistDescriptionNoResult(i)
             }
         }
     }
@@ -83,18 +83,16 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         showUI(cards)
     }
 
-    private fun updateArtistDescription(description: Card){
+    private fun updateArtistDescription(description: Card, numberCard : Int){
         uiState = uiState.copy(
             description = artistDescriptionHelper.getTextArtistDescription(description, uiState.artistName),
-            WikipediaUrl = description.infoUrl,
-            actionsEnabled = true
+            WikipediaUrl = description.infoUrl
         )
+        uiState.actionsEnabled[numberCard] = false
     }
 
-    private fun updateArtistDescriptionNoResult(){
-        uiState = uiState.copy(
-            actionsEnabled = false
-        )
+    private fun updateArtistDescriptionNoResult(numberCard : Int){
+        uiState.actionsEnabled[numberCard] = false
     }
 
     private fun updateStateArtistName() {
@@ -111,7 +109,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
         descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription))
         descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription2))
-        descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription))
+        descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription3))
 
         descriptionsSources.add(findViewById(R.id.sourceText))
         descriptionsSources.add(findViewById(R.id.sourceText2))
@@ -159,7 +157,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private fun enableActions(cards: List<Card>) {
         var cont = 0
         for(i in cards.indices) {
-            descriptionsButtons[i].isEnabled = uiState.actionsEnabled
+            descriptionsButtons[i].isEnabled = uiState.actionsEnabled[i]
             cont++
         }
 
