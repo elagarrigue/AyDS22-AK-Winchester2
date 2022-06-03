@@ -19,7 +19,7 @@ data class CardArtistDescription (
 object EmptyCard: Card {
     override val description = "Description not found"
     override val infoUrl = ""
-    override val source: Source = Source.WIKIPEDIA
+    override val source: Source = Source.NOSOURCE
     override val sourceLogoUrl= ""
     override var isLocallyStored = false
 }

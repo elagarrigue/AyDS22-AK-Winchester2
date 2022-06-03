@@ -19,6 +19,7 @@ import ayds.winchester.songinfo.moredetails.model.entities.CardArtistDescription
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.entities.Source
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_LASTFM
+import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_NOT_FOUND
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_TIMES
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_WIKIPEDIA
 import ayds.winchester.songinfo.utils.UtilsInjector
@@ -48,6 +49,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     override var uiState = OtherInfoUIState()
     override val uiEventObservableFullArticle = onActionSubject
 
+    val actionsEnabled: MutableList<Boolean> = mutableListOf(false, false, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,11 +90,11 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
             description = artistDescriptionHelper.getTextArtistDescription(description, uiState.artistName),
             WikipediaUrl = description.infoUrl
         )
-        uiState.actionsEnabled[numberCard] = false
+        actionsEnabled[numberCard] = true
     }
 
     private fun updateArtistDescriptionNoResult(numberCard : Int){
-        uiState.actionsEnabled[numberCard] = false
+        actionsEnabled[numberCard] = false
     }
 
     private fun updateStateArtistName() {
@@ -107,19 +109,19 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
     private fun initViewProperties(){
 
-        descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription))
+        descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription1))
         descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription2))
         descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription3))
 
-        descriptionsSources.add(findViewById(R.id.sourceText))
+        descriptionsSources.add(findViewById(R.id.sourceText1))
         descriptionsSources.add(findViewById(R.id.sourceText2))
         descriptionsSources.add(findViewById(R.id.sourceText3))
 
-        descriptionsImages.add(findViewById<View>(R.id.imageView) as ImageView)
+        descriptionsImages.add(findViewById<View>(R.id.imageView1) as ImageView)
         descriptionsImages.add(findViewById<View>(R.id.imageView2) as ImageView)
         descriptionsImages.add(findViewById<View>(R.id.imageView3) as ImageView)
 
-        descriptionsButtons.add(findViewById(R.id.openUrlButton))
+        descriptionsButtons.add(findViewById(R.id.openUrlButton1))
         descriptionsButtons.add(findViewById(R.id.openUrlButton2))
         descriptionsButtons.add(findViewById(R.id.openUrlButton3))
 
@@ -136,8 +138,6 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
                 notifyFullArticleAction()
             }
         }
-
-
     }
 
     override fun openExternalLink(url: String) {
@@ -157,7 +157,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private fun enableActions(cards: List<Card>) {
         var cont = 0
         for(i in cards.indices) {
-            descriptionsButtons[i].isEnabled = uiState.actionsEnabled[i]
+            descriptionsButtons[i].isEnabled = actionsEnabled[i]
             cont++
         }
 
@@ -167,15 +167,15 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun showImage(cards: List<Card>){
-        var imageUrl = URL_IMAGE_WIKIPEDIA
-        for(i in cards.indices) {
+        var imageUrl = URL_IMAGE_NOT_FOUND
 
+        for(i in cards.indices) {
             when(cards[i].source){
                 Source.WIKIPEDIA->imageUrl = URL_IMAGE_WIKIPEDIA
                 Source.LASTFM->imageUrl = URL_IMAGE_LASTFM
                 Source.NEWYORKTIMES->imageUrl = URL_IMAGE_TIMES
+                Source.NOSOURCE->imageUrl= URL_IMAGE_NOT_FOUND
             }
-            //
             Picasso.get().load(imageUrl).into(descriptionsImages[i])
         }
     }
