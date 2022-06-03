@@ -4,6 +4,7 @@ object BrokerInjector {
 
     private val proxyWikipedia = ProxyWikipediaImpl()
     private val proxyLastFM = ProxyLastFMImpl()
+    private val proxyTimes = ProxyTimesImpl()
 
-    internal val broker = BrokerServiceImpl(proxyWikipedia,proxyLastFM)
+    internal val broker = BrokerServiceImpl(proxyWikipedia,proxyLastFM,proxyTimes)
 }

@@ -8,13 +8,19 @@ interface BrokerService{
 }
 internal class BrokerServiceImpl(
     private val proxyWikipedia : ProxyWikipedia,
-    private val proxyLastFM : ProxyLastFM
+    private val proxyLastFM : ProxyLastFM,
+    private val proxyNewYorkTimes : ProxyTimes
 ) : BrokerService {
 
     override fun getInfo (name : String) : List<Card>{
         var emptyCardCount = 0
         
         var cardList : MutableList<Card> = mutableListOf()
+
+        cardList.add(proxyNewYorkTimes.getInfo(name))
+
+        if(cardList.last()==EmptyCard)
+            emptyCardCount++
         
         cardList.add(proxyWikipedia.getInfo(name))
         

@@ -111,19 +111,19 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
         descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription))
         descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription2))
-        //descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription))
+        descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription))
 
         descriptionsSources.add(findViewById(R.id.sourceText))
         descriptionsSources.add(findViewById(R.id.sourceText2))
-        //descriptionsSources.add(findViewById(R.id.sourceText3))
+        descriptionsSources.add(findViewById(R.id.sourceText3))
 
         descriptionsImages.add(findViewById<View>(R.id.imageView) as ImageView)
         descriptionsImages.add(findViewById<View>(R.id.imageView2) as ImageView)
-        //descriptionsImages.add(findViewById<View>(R.id.imageView3) as ImageView)
+        descriptionsImages.add(findViewById<View>(R.id.imageView3) as ImageView)
 
         descriptionsButtons.add(findViewById(R.id.openUrlButton))
         descriptionsButtons.add(findViewById(R.id.openUrlButton2))
-        //descriptionsButtons.add(findViewById(R.id.openUrlButton3))
+        descriptionsButtons.add(findViewById(R.id.openUrlButton3))
 
     }
 
@@ -175,7 +175,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
             when(cards[i].source){
                 Source.WIKIPEDIA->imageUrl = URL_IMAGE_WIKIPEDIA
                 Source.LASTFM->imageUrl = URL_IMAGE_LASTFM
-                Source.LASTFM->imageUrl = URL_IMAGE_TIMES
+                Source.NEWYORKTIMES->imageUrl = URL_IMAGE_TIMES
             }
             //
             Picasso.get().load(imageUrl).into(descriptionsImages[i])
