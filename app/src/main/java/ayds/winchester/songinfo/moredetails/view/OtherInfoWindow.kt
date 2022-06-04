@@ -77,17 +77,9 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         }
     }
 
-   private fun showUINoResults(){
-        descriptionsTexts[0].text = "No results"
-        Picasso.get().load(URL_IMAGE_NOT_FOUND).into(descriptionsImages[0])
-    }
     private fun updateDescriptionInfo(cards: List<Card>) {
-        if (cards.isEmpty()){
-           showUINoResults()
-        }else {
-            updateUiState(cards)
-            showUI(cards)
-        }
+        updateUiState(cards)
+        showUI(cards)
     }
 
     private fun updateArtistDescription(description: Card, numberCard : Int){
@@ -156,10 +148,27 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
     private fun showUI(cards: List<Card>){
         runOnUiThread {
-            showImage(cards)
-            showDescription(cards)
-            enableActions(cards)
-            setViewFullArticleButtonOnClick(cards)
+            if (!cards.isEmpty()) {
+                showImage(cards)
+                showDescription(cards)
+                enableActions(cards)
+                setViewFullArticleButtonOnClick(cards)
+            }else{
+                showUINoResults()
+                disabledButtons()
+            }
+        }
+    }
+
+    private fun showUINoResults(){
+        descriptionsTexts[0].text = "No results"
+        Picasso.get().load(URL_IMAGE_NOT_FOUND).into(descriptionsImages[0])
+    }
+
+    private fun disabledButtons(){
+        for(i in descriptionsButtons.indices){
+            descriptionsButtons[i].isEnabled=false
+            descriptionsButtons[i].isVisible=false
         }
     }
 
