@@ -77,9 +77,17 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         }
     }
 
+   private fun showUINoResults(){
+        descriptionsTexts[0].text = "No results"
+        Picasso.get().load(URL_IMAGE_NOT_FOUND).into(descriptionsImages[0])
+    }
     private fun updateDescriptionInfo(cards: List<Card>) {
-        updateUiState(cards)
-        showUI(cards)
+        if (cards.isEmpty()){
+           showUINoResults()
+        }else {
+            updateUiState(cards)
+            showUI(cards)
+        }
     }
 
     private fun updateArtistDescription(description: Card, numberCard : Int){
@@ -135,7 +143,6 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun setViewFullArticleButtonOnClick(cards: List<Card>){
-
         for(i in cards.indices){
             descriptionsButtons[i].setOnClickListener {
                 notifyFullArticleAction(cards[i].source)
