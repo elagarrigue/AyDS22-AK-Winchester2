@@ -12,7 +12,6 @@ interface ProxyLastFM {
     fun getInfo (name : String) : Card
 }
 
-
 internal class ProxyLastFMImpl : ProxyLastFM {
 
     override fun getInfo (name : String) : Card {
@@ -28,7 +27,6 @@ internal class ProxyLastFMImpl : ProxyLastFM {
                 Source.LASTFM,
                 LASTFM_LOGO
             )
-
 
         } catch (e: Exception) {
             cardDescriptionLastFM = null

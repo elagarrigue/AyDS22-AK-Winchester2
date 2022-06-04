@@ -31,10 +31,10 @@ internal class BrokerServiceImpl(
 
         if(cardList.last()==EmptyCard)
             emptyCardCount++
-        
+
         if(emptyCardCount==cardList.size)
             cardList= mutableListOf()
-        
+
         return cardList
     }
 }

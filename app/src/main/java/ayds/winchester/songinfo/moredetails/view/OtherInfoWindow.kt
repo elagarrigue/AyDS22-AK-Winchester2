@@ -1,6 +1,5 @@
 package ayds.winchester.songinfo.moredetails.view
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import android.os.Bundle
@@ -32,7 +31,8 @@ interface OtherInfoWindow {
     fun openExternalLink(url: String)
 }
 
-private const val SOURCE="source: "
+private const val SOURCE = "source: "
+private const val NO_RESULTS = "No results"
 
 internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
@@ -123,7 +123,6 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         descriptionsButtons.add(findViewById(R.id.openUrlButton1))
         descriptionsButtons.add(findViewById(R.id.openUrlButton2))
         descriptionsButtons.add(findViewById(R.id.openUrlButton3))
-
     }
 
     private fun notifyFullArticleAction(source : Source) {
@@ -148,7 +147,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
     private fun showUI(cards: List<Card>){
         runOnUiThread {
-            if (!cards.isEmpty()) {
+            if (cards.isNotEmpty()) {
                 showImage(cards)
                 showDescription(cards)
                 enableActions(cards)
@@ -161,7 +160,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun showUINoResults(){
-        descriptionsTexts[0].text = "No results"
+        descriptionsTexts[0].text = NO_RESULTS
         Picasso.get().load(URL_IMAGE_NOT_FOUND).into(descriptionsImages[0])
     }
 
