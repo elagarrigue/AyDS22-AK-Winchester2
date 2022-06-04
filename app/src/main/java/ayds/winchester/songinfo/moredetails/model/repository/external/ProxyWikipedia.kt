@@ -14,7 +14,7 @@ interface ProxyWikipedia{
 internal class ProxyWikipediaImpl : ProxyWikipedia {
 
     override fun getInfo (name : String) : Card {
-        var cardDescriptionWikipedia: CardArtistDescription? = null
+        var cardDescriptionWikipedia: CardArtistDescription?
         val descriptionWikipedia: WikipediaArticle
 
         try {

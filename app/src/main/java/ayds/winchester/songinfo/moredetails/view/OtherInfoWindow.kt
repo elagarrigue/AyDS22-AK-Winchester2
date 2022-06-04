@@ -1,5 +1,6 @@
 package ayds.winchester.songinfo.moredetails.view
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import android.os.Bundle
@@ -40,16 +41,12 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private var descriptionsSources : MutableList<TextView> = mutableListOf()
     private var descriptionsButtons : MutableList<Button> = mutableListOf()
 
-    private lateinit var pageId: String
-
     private val onActionSubject = Subject<OtherInfoWindowEvent>()
     private lateinit var otherInfoModel : OtherInfoModel
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
     private val artistDescriptionHelper : ArtistDescriptionHelper = ArtistDescriptionHelperImpl()
     override var uiState = OtherInfoUIState()
     override val uiEventObservableFullArticle = onActionSubject
-
-    val actionsEnabled: MutableList<Boolean> = mutableListOf(false, false, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,15 +83,17 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun updateArtistDescription(description: Card, numberCard : Int){
-        uiState = uiState.copy(
-            description = artistDescriptionHelper.getTextArtistDescription(description, uiState.artistName),
-            WikipediaUrl = description.infoUrl
-        )
-        actionsEnabled[numberCard] = true
+        uiState.description = artistDescriptionHelper.getTextArtistDescription(description, uiState.artistName)
+        uiState.actionsEnabled[numberCard] = true
+        when(description.source){
+            Source.WIKIPEDIA -> uiState.urlWikipedia = description.infoUrl
+            Source.NEWYORKTIMES -> uiState.urlNYTimes = description.infoUrl
+            Source.LASTFM -> uiState.urlLastFM = description.infoUrl
+        }
     }
 
     private fun updateArtistDescriptionNoResult(numberCard : Int){
-        actionsEnabled[numberCard] = false
+        uiState.actionsEnabled[numberCard] = false
     }
 
     private fun updateStateArtistName() {
@@ -127,15 +126,19 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
     }
 
-    private fun notifyFullArticleAction() {
-        onActionSubject.notify(OtherInfoWindowEvent.FullArticle)
+    private fun notifyFullArticleAction(source : Source) {
+        when (source){
+            Source.WIKIPEDIA -> onActionSubject.notify(OtherInfoWindowEvent.FullArticleWikipedia)
+            Source.LASTFM -> onActionSubject.notify(OtherInfoWindowEvent.FullArticleLastFM)
+            Source.NEWYORKTIMES -> onActionSubject.notify(OtherInfoWindowEvent.FullArticleNYTimes)
+        }
     }
 
     private fun setViewFullArticleButtonOnClick(cards: List<Card>){
 
         for(i in cards.indices){
             descriptionsButtons[i].setOnClickListener {
-                notifyFullArticleAction()
+                notifyFullArticleAction(cards[i].source)
             }
         }
     }
@@ -148,7 +151,6 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         runOnUiThread {
             showImage(cards)
             showDescription(cards)
-            pageId = uiState.WikipediaUrl
             enableActions(cards)
             setViewFullArticleButtonOnClick(cards)
         }
@@ -157,7 +159,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private fun enableActions(cards: List<Card>) {
         var cont = 0
         for(i in cards.indices) {
-            descriptionsButtons[i].isEnabled = actionsEnabled[i]
+            descriptionsButtons[i].isEnabled = uiState.actionsEnabled[i]
             cont++
         }
 
@@ -167,26 +169,24 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun showImage(cards: List<Card>){
-        var imageUrl = URL_IMAGE_NOT_FOUND
+        var imageUrl : String
 
         for(i in cards.indices) {
-            when(cards[i].source){
-                Source.WIKIPEDIA->imageUrl = URL_IMAGE_WIKIPEDIA
-                Source.LASTFM->imageUrl = URL_IMAGE_LASTFM
-                Source.NEWYORKTIMES->imageUrl = URL_IMAGE_TIMES
-                Source.NOSOURCE->imageUrl= URL_IMAGE_NOT_FOUND
+            imageUrl = when(cards[i].source){
+                Source.WIKIPEDIA-> URL_IMAGE_WIKIPEDIA
+                Source.LASTFM-> URL_IMAGE_LASTFM
+                Source.NEWYORKTIMES-> URL_IMAGE_TIMES
+                Source.NOSOURCE-> URL_IMAGE_NOT_FOUND
             }
             Picasso.get().load(imageUrl).into(descriptionsImages[i])
         }
     }
 
     private fun showDescription(cards: List<Card>){
-
         for(i in cards.indices){
             descriptionsTexts[i].text=Html.fromHtml(artistDescriptionHelper.getTextArtistDescription(cards[i],uiState.artistName))
             descriptionsSources[i].text=SOURCE+cards[i].source
         }
-
     }
 
     companion object {

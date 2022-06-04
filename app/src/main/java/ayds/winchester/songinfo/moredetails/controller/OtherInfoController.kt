@@ -21,14 +21,16 @@ internal class OtherInfoControllerImpl(private var otherInfoModel: OtherInfoMode
         otherInfoWindow.uiEventObservableFullArticle.subscribe(observerFullArticle)
     }
 
-    private fun openArticleUrl() {
-        otherInfoWindow.openExternalLink(otherInfoWindow.uiState.WikipediaUrl)
+    private fun openArticleUrl(url : String) {
+        otherInfoWindow.openExternalLink(url)
     }
 
     private val observerFullArticle: Observer<OtherInfoWindowEvent> =
         Observer { value ->
         when (value) {
-            OtherInfoWindowEvent.FullArticle -> openArticleUrl()
+            OtherInfoWindowEvent.FullArticleWikipedia -> openArticleUrl(otherInfoWindow.uiState.urlWikipedia)
+            OtherInfoWindowEvent.FullArticleLastFM -> openArticleUrl(otherInfoWindow.uiState.urlLastFM)
+            OtherInfoWindowEvent.FullArticleNYTimes -> openArticleUrl(otherInfoWindow.uiState.urlNYTimes)
             OtherInfoWindowEvent.SearchDescription -> searchArtistDescription()
         }
     }

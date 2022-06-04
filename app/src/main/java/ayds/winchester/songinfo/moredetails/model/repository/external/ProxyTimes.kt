@@ -15,7 +15,7 @@ interface ProxyTimes {
 internal class ProxyTimesImpl : ProxyTimes {
 
     override fun getInfo (name : String) : Card {
-        var cardDescriptionNewYorkTimes: CardArtistDescription? = null
+        var cardDescriptionNewYorkTimes: CardArtistDescription?
         val descriptionNewYorkTimes: NYArticle
 
         try {

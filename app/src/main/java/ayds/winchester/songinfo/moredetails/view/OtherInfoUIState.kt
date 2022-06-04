@@ -1,9 +1,12 @@
 package ayds.winchester.songinfo.moredetails.view
 
 data class OtherInfoUIState(
-    val artistName : String = "",
-    val description : String = "",
-    val WikipediaUrl : String = "",
+    var artistName : String = "",
+    var description : String = "",
+    var actionsEnabled: MutableList<Boolean> = mutableListOf(false, false, false),
+    var urlWikipedia : String = "",
+    var urlNYTimes : String = "",
+    var urlLastFM : String = "",
 ) {
 
     companion object {

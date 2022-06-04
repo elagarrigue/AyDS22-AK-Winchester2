@@ -16,11 +16,10 @@ interface ProxyLastFM {
 internal class ProxyLastFMImpl : ProxyLastFM {
 
     override fun getInfo (name : String) : Card {
-        var cardDescriptionLastFM: CardArtistDescription? = null
+        var cardDescriptionLastFM: CardArtistDescription?
         val descriptionLastFM: LastFMArtist
 
         try {
-
             descriptionLastFM = lastFMService.getArtist(name)!!
 
             cardDescriptionLastFM = CardArtistDescription(
