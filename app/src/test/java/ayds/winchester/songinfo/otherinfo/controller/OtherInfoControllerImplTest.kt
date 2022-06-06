@@ -36,7 +36,7 @@ class OtherInfoControllerImplTest {
     fun `on search event should search artist description`() {
         every { otherInfoWindow.uiState } returns OtherInfoUIState(artistName = "artist")
 
-        onActionSubject.notify(OtherInfoWindowEvent.SearchDescription)
+        onActionSubject.notify(OtherInfoWindowEvent.SearchCard)
 
         verify { otherInfoModel.searchArtistName("artist") }
     }

@@ -15,7 +15,7 @@ import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModelInjector
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.model.entities.Card
-import ayds.winchester.songinfo.moredetails.model.entities.CardArtistDescription
+import ayds.winchester.songinfo.moredetails.model.entities.CardDescription
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.entities.Source
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_LASTFM
@@ -44,7 +44,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private val onActionSubject = Subject<OtherInfoWindowEvent>()
     private lateinit var otherInfoModel : OtherInfoModel
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
-    private val artistDescriptionHelper : ArtistDescriptionHelper = ArtistDescriptionHelperImpl()
+    private val cardDescriptionHelper : CardDescriptionHelper = CardDescriptionHelperImpl()
     override var uiState = OtherInfoUIState()
     override val uiEventObservableFullArticle = onActionSubject
 
@@ -65,34 +65,29 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
     private fun initObservers() {
         otherInfoModel.uiEventObservable
-            .subscribe { value -> updateDescriptionInfo(value) }
+            .subscribe { value -> updateCards(value) }
     }
 
     private fun updateUiState(cards: List<Card>) {
         for(i in cards.indices) {
             when (cards[i]) {
-                is CardArtistDescription -> updateArtistDescription(cards[i],i)
-                EmptyCard -> updateArtistDescriptionNoResult(i)
+                is CardDescription -> updateCards(cards[i],i)
+                EmptyCard -> updateCardNoResult(i)
             }
         }
     }
 
-    private fun updateDescriptionInfo(cards: List<Card>) {
+    private fun updateCards(cards: List<Card>) {
         updateUiState(cards)
         showUI(cards)
     }
 
-    private fun updateArtistDescription(description: Card, numberCard : Int){
-        uiState.description = artistDescriptionHelper.getTextArtistDescription(description, uiState.artistName)
+    private fun updateCards(card: Card, numberCard : Int){
         uiState.actionsEnabled[numberCard] = true
-        when(description.source){
-            Source.WIKIPEDIA -> uiState.urlWikipedia = description.infoUrl
-            Source.NEWYORKTIMES -> uiState.urlNYTimes = description.infoUrl
-            Source.LASTFM -> uiState.urlLastFM = description.infoUrl
-        }
+        uiState.cardList.add(card)
     }
 
-    private fun updateArtistDescriptionNoResult(numberCard : Int){
+    private fun updateCardNoResult(numberCard : Int){
         uiState.actionsEnabled[numberCard] = false
     }
 
@@ -103,7 +98,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun notifySearchDescriptionAction() {
-       onActionSubject.notify(OtherInfoWindowEvent.SearchDescription)
+       onActionSubject.notify(OtherInfoWindowEvent.SearchCard)
     }
 
     private fun initViewProperties(){
@@ -126,11 +121,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun notifyFullArticleAction(source : Source) {
-        when (source){
-            Source.WIKIPEDIA -> onActionSubject.notify(OtherInfoWindowEvent.FullArticleWikipedia)
-            Source.LASTFM -> onActionSubject.notify(OtherInfoWindowEvent.FullArticleLastFM)
-            Source.NEWYORKTIMES -> onActionSubject.notify(OtherInfoWindowEvent.FullArticleNYTimes)
-        }
+        onActionSubject.notify(OtherInfoWindowEvent.FullPage(source))
     }
 
     private fun setViewFullArticleButtonOnClick(cards: List<Card>){
@@ -199,7 +190,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 
     private fun showDescription(cards: List<Card>){
         for(i in cards.indices){
-            descriptionsTexts[i].text=Html.fromHtml(artistDescriptionHelper.getTextArtistDescription(cards[i],uiState.artistName))
+            descriptionsTexts[i].text=Html.fromHtml(cardDescriptionHelper.getTextCard(cards[i],uiState.artistName))
             descriptionsSources[i].text=SOURCE+cards[i].source
         }
     }

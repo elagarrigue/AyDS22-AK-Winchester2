@@ -12,7 +12,7 @@ interface OtherInfoController {
 internal class OtherInfoControllerImpl(private var otherInfoModel: OtherInfoModel) : OtherInfoController {
    private lateinit var otherInfoWindow: OtherInfoWindow
 
-   private fun searchArtistDescription(){
+   private fun searchArtistCards(){
         otherInfoModel.searchArtistName(otherInfoWindow.uiState.artistName)
    }
 
@@ -28,10 +28,8 @@ internal class OtherInfoControllerImpl(private var otherInfoModel: OtherInfoMode
     private val observerFullArticle: Observer<OtherInfoWindowEvent> =
         Observer { value ->
         when (value) {
-            OtherInfoWindowEvent.FullArticleWikipedia -> openArticleUrl(otherInfoWindow.uiState.urlWikipedia)
-            OtherInfoWindowEvent.FullArticleLastFM -> openArticleUrl(otherInfoWindow.uiState.urlLastFM)
-            OtherInfoWindowEvent.FullArticleNYTimes -> openArticleUrl(otherInfoWindow.uiState.urlNYTimes)
-            OtherInfoWindowEvent.SearchDescription -> searchArtistDescription()
+            is OtherInfoWindowEvent.FullPage -> openArticleUrl(otherInfoWindow.uiState.getURL(value.source))
+            OtherInfoWindowEvent.SearchCard -> searchArtistCards()
         }
     }
 }

@@ -1,12 +1,13 @@
 package ayds.winchester.songinfo.moredetails.view
 
+import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.Source
+
+
 data class OtherInfoUIState(
     var artistName : String = "",
-    var description : String = "",
     var actionsEnabled: MutableList<Boolean> = mutableListOf(false, false, false),
-    var urlWikipedia : String = "",
-    var urlNYTimes : String = "",
-    var urlLastFM : String = "",
+    val cardList: MutableList<Card> = mutableListOf()
 ) {
 
     companion object {
@@ -15,5 +16,9 @@ data class OtherInfoUIState(
         const val URL_IMAGE_TIMES = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
         const val URL_IMAGE_NOT_FOUND = "https://alfabetajuega.com/hero/2018/10/167687.alfabetajuega-problemas-tecnicos.jpg"
 
+    }
+
+    fun getURL (source: Source) : String{
+        return cardList.filter { it.source == source }.last().infoUrl
     }
 }

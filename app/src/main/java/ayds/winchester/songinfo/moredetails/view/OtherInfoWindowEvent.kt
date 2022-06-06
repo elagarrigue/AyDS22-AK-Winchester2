@@ -1,8 +1,9 @@
 package ayds.winchester.songinfo.moredetails.view
 
-sealed class OtherInfoWindowEvent {
-    object FullArticleWikipedia : OtherInfoWindowEvent()
-    object FullArticleLastFM : OtherInfoWindowEvent()
-    object FullArticleNYTimes : OtherInfoWindowEvent()
-    object SearchDescription : OtherInfoWindowEvent()
+import ayds.winchester.songinfo.moredetails.model.entities.Source
+
+sealed class OtherInfoWindowEvent() {
+    class FullPage (val source : Source) : OtherInfoWindowEvent()
+    object SearchCard : OtherInfoWindowEvent()
 }
+
