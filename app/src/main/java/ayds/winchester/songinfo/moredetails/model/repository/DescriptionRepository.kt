@@ -17,7 +17,7 @@ internal class DescriptionRepositoryImpl(private val localRepository: LocalRepos
             cards.isNotEmpty() -> {markDescriptionAsLocal(cards)}
             else -> {
                 cards = broker.getInfo(name)
-                localRepository.saveDescriptionInDataBase(cards)
+                localRepository.saveDescriptionInDataBase(cards.filter { it !is EmptyCard })
             }
         }
         return cards
