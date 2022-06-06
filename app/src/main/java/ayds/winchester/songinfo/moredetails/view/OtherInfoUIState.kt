@@ -18,7 +18,16 @@ data class OtherInfoUIState(
 
     }
 
-    fun getURL (source: Source) : String{
+    fun getInfoURL (source: Source) : String{
         return cardList.filter { it.source == source }.last().infoUrl
+    }
+
+    fun getImageURL (source: Source) : String{
+        return when(source){
+            Source.WIKIPEDIA-> URL_IMAGE_WIKIPEDIA
+            Source.LASTFM-> URL_IMAGE_LASTFM
+            Source.NEWYORKTIMES-> URL_IMAGE_TIMES
+            Source.NOSOURCE-> URL_IMAGE_NOT_FOUND
+        }
     }
 }

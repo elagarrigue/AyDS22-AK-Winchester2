@@ -28,7 +28,7 @@ internal class OtherInfoControllerImpl(private var otherInfoModel: OtherInfoMode
     private val observerFullArticle: Observer<OtherInfoWindowEvent> =
         Observer { value ->
         when (value) {
-            is OtherInfoWindowEvent.FullPage -> openArticleUrl(otherInfoWindow.uiState.getURL(value.source))
+            is OtherInfoWindowEvent.FullPage -> openArticleUrl(otherInfoWindow.uiState.getInfoURL(value.source))
             OtherInfoWindowEvent.SearchCard -> searchArtistCards()
         }
     }

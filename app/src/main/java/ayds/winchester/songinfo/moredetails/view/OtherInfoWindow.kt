@@ -184,16 +184,8 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun showImage(cards: List<Card>){
-        var imageUrl : String
-
         for(i in cards.indices) {
-            imageUrl = when(cards[i].source){
-                Source.WIKIPEDIA-> URL_IMAGE_WIKIPEDIA
-                Source.LASTFM-> URL_IMAGE_LASTFM
-                Source.NEWYORKTIMES-> URL_IMAGE_TIMES
-                Source.NOSOURCE-> URL_IMAGE_NOT_FOUND
-            }
-            Picasso.get().load(imageUrl).into(descriptionsImages[i])
+            Picasso.get().load(uiState.getImageURL(cards[i].source)).into(descriptionsImages[i])
         }
     }
 
