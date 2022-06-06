@@ -7,9 +7,9 @@ interface BrokerService{
     fun getInfo (name : String) :  List<Card>
 }
 internal class BrokerServiceImpl(
-    private val proxyWikipedia : ProxyWikipedia,
-    private val proxyLastFM : ProxyLastFM,
-    private val proxyNewYorkTimes : ProxyTimes
+    private val proxyWikipedia : Proxy,
+    private val proxyLastFM : Proxy,
+    private val proxyNewYorkTimes : Proxy
 ) : BrokerService {
 
     override fun getInfo (name : String) : List<Card>{
