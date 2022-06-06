@@ -163,13 +163,22 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun enableActions(cards: List<Card>) {
-        var cont = 0
+        var count = enableButtons(cards)
+
+        hiddenButtons(count)
+    }
+
+    private fun enableButtons (cards: List<Card>) : Int{
+        var count = 0
         for(i in cards.indices) {
             descriptionsButtons[i].isEnabled = uiState.actionsEnabled[i]
-            cont++
+            count++
         }
+        return count
+    }
 
-        for(i in cont until descriptionsButtons.size){
+    private fun hiddenButtons (count : Int){
+        for(i in count until descriptionsButtons.size){
             descriptionsButtons[i].isVisible = false
         }
     }
