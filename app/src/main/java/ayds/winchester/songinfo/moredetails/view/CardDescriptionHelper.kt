@@ -4,8 +4,8 @@ import ayds.winchester.songinfo.moredetails.model.entities.Card
 import java.lang.StringBuilder
 import java.util.*
 
-interface ArtistDescriptionHelper {
-    fun getTextArtistDescription(description: Card, artistName: String): String
+interface CardDescriptionHelper {
+    fun getTextCard(description: Card, artistName: String): String
 }
 
 private const val PREFIX="[*] "
@@ -23,9 +23,9 @@ private const val SPACE=" "
 private const val QUOTE="'"
 private const val ITALIC="'"
 
-internal class ArtistDescriptionHelperImpl : ArtistDescriptionHelper {
+internal class CardDescriptionHelperImpl : CardDescriptionHelper {
 
-    override fun getTextArtistDescription (description: Card, artistName: String) : String {
+    override fun getTextCard (description: Card, artistName: String) : String {
         val descriptionText = if(description.isLocallyStored) PREFIX + description.description else description.description
         return textToHtml(descriptionText, artistName)
     }

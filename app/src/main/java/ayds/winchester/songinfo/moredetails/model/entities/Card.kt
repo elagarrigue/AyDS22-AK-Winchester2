@@ -8,7 +8,7 @@ interface Card{
     var isLocallyStored: Boolean
 }
 
-data class CardArtistDescription (
+data class CardDescription (
     override val description: String,
     override val infoUrl: String,
     override val source: Source,

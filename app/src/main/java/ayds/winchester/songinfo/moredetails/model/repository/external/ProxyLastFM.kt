@@ -4,7 +4,7 @@ import ayds.lisboa2.lastFM.LASTFM_LOGO
 import ayds.lisboa2.lastFM.LastFMArtist
 import ayds.lisboa2.lastFM.LastFMInjector.lastFMService
 import ayds.winchester.songinfo.moredetails.model.entities.Card
-import ayds.winchester.songinfo.moredetails.model.entities.CardArtistDescription
+import ayds.winchester.songinfo.moredetails.model.entities.CardDescription
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.entities.Source
 
@@ -15,13 +15,13 @@ interface ProxyLastFM {
 internal class ProxyLastFMImpl : ProxyLastFM {
 
     override fun getInfo (name : String) : Card {
-        var cardDescriptionLastFM: CardArtistDescription?
+        var cardDescriptionLastFM: CardDescription?
         val descriptionLastFM: LastFMArtist
 
         try {
             descriptionLastFM = lastFMService.getArtist(name)!!
 
-            cardDescriptionLastFM = CardArtistDescription(
+            cardDescriptionLastFM = CardDescription(
                 descriptionLastFM.description,
                 descriptionLastFM.infoURL,
                 Source.LASTFM,

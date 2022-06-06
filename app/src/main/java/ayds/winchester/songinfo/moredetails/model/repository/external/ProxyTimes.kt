@@ -1,7 +1,7 @@
 package ayds.winchester.songinfo.moredetails.model.repository.external
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
-import ayds.winchester.songinfo.moredetails.model.entities.CardArtistDescription
+import ayds.winchester.songinfo.moredetails.model.entities.CardDescription
 import ayds.ak1.newyorktimes.article.external.NYArticle
 import ayds.ak1.newyorktimes.article.external.NYInjector.nyInfoService
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
@@ -15,14 +15,14 @@ interface ProxyTimes {
 internal class ProxyTimesImpl : ProxyTimes {
 
     override fun getInfo (name : String) : Card {
-        var cardDescriptionNewYorkTimes: CardArtistDescription?
+        var cardDescriptionNewYorkTimes: CardDescription?
         val descriptionNewYorkTimes: NYArticle
 
         try {
 
             descriptionNewYorkTimes = nyInfoService.getArtistInfo(name)!!
 
-            cardDescriptionNewYorkTimes = CardArtistDescription(
+            cardDescriptionNewYorkTimes = CardDescription(
                 descriptionNewYorkTimes.description,
                 descriptionNewYorkTimes.infoURL,
                 Source.NEWYORKTIMES,

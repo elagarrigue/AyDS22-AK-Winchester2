@@ -70,7 +70,7 @@ internal class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY
                 )
                 val source = Source.values()[getInt((getColumnIndexOrThrow(SOURCE)))]
 
-                cards.add(CardArtistDescription(info, urlPage, source, ""))
+                cards.add(CardDescription(info, urlPage, source, ""))
             }
         }
         return cards
