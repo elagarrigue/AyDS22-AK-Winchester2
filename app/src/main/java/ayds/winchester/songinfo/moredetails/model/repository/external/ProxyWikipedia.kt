@@ -7,18 +7,13 @@ import ayds.winchester.songinfo.moredetails.model.entities.Source
 import ayds.winchester2.wikipedia.WikipediaArticle
 import ayds.winchester2.wikipedia.WikipediaInjector
 
-interface ProxyWikipedia{
-    fun getInfo(name: String) : Card
-}
-
-internal class ProxyWikipediaImpl : ProxyWikipedia {
+internal class ProxyWikipediaImpl : Proxy {
 
     override fun getInfo (name : String) : Card {
         var cardWikipedia: CardDescription?
         val descriptionWikipedia: WikipediaArticle
 
         try {
-
             descriptionWikipedia = WikipediaInjector.wikipediaService.getArtistDescription(name)
 
             cardWikipedia = CardDescription(

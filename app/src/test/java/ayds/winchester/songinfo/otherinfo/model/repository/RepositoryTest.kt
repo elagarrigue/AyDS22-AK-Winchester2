@@ -12,7 +12,7 @@ import io.mockk.verify
 import org.junit.Assert
 import org.junit.Test
 
-class WikipediaArticleRepositoryTest {
+class RepositoryTest {
     private val localRepository: LocalRepository = mockk(relaxUnitFun = true)
     private val broker : BrokerService = mockk(relaxUnitFun = true)
 
@@ -21,7 +21,7 @@ class WikipediaArticleRepositoryTest {
     }
 
     @Test
-    fun `given existing description should return description and mark it as local`() {
+    fun `given existing cards should return cards and mark it as local`() {
         var cards: MutableList<Card> = mutableListOf()
         val card : Card = CardDescription("", "1", Source.WIKIPEDIA, "" )
         cards.add(card)
@@ -34,7 +34,7 @@ class WikipediaArticleRepositoryTest {
     }
 
     @Test
-    fun `given non existing description should get the description and store it`() {
+    fun `given non existing cards should get the description and store it`() {
         var cards: MutableList<Card> = mutableListOf()
         val card : Card = CardDescription("", "1", Source.WIKIPEDIA, "" )
         cards.add(card)

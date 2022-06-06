@@ -7,11 +7,7 @@ import ayds.ak1.newyorktimes.article.external.URL_NYTIMES_LOGO
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.entities.Source
 
-interface ProxyTimes {
-    fun getInfo (name : String) : Card
-}
-
-internal class ProxyTimesImpl : ProxyTimes {
+internal class ProxyTimesImpl : Proxy {
 
     override fun getInfo (name : String) : Card {
         var cardNewYorkTimes: CardDescription? = null

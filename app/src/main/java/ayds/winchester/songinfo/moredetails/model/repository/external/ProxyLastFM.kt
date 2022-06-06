@@ -7,11 +7,7 @@ import ayds.winchester.songinfo.moredetails.model.entities.CardDescription
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.entities.Source
 
-interface ProxyLastFM {
-    fun getInfo (name : String) : Card
-}
-
-internal class ProxyLastFMImpl : ProxyLastFM {
+internal class ProxyLastFMImpl : Proxy {
     override fun getInfo (name : String) : Card {
         var cardDescriptionLastFM: CardDescription? = null
 
