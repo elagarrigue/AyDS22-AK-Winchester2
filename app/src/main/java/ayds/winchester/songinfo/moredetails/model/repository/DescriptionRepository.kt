@@ -1,6 +1,7 @@
 package ayds.winchester.songinfo.moredetails.model.repository
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.repository.external.BrokerService
 import ayds.winchester.songinfo.moredetails.model.repository.local.LocalRepository
 

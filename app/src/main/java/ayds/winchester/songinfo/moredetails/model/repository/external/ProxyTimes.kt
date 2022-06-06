@@ -2,8 +2,8 @@ package ayds.winchester.songinfo.moredetails.model.repository.external
 
 import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.CardDescription
-import ayds.ak1.newyorktimes.article.external.NYArticle
 import ayds.ak1.newyorktimes.article.external.NYInjector.nyInfoService
+import ayds.ak1.newyorktimes.article.external.URL_NYTIMES_LOGO
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.entities.Source
 
@@ -11,29 +11,22 @@ interface ProxyTimes {
     fun getInfo (name : String) : Card
 }
 
-
 internal class ProxyTimesImpl : ProxyTimes {
 
     override fun getInfo (name : String) : Card {
-        var cardDescriptionNewYorkTimes: CardDescription?
-        val descriptionNewYorkTimes: NYArticle
+        var cardNewYorkTimes: CardDescription? = null
 
         try {
+            nyInfoService.getArtistInfo(name)?.let {
+                cardNewYorkTimes = CardDescription(
+                    it.description,
+                    it.infoURL,
+                    Source.NEWYORKTIMES,
+                    URL_NYTIMES_LOGO
+                )
+            }
+        } catch (e: Exception) {}
 
-            descriptionNewYorkTimes = nyInfoService.getArtistInfo(name)!!
-
-            cardDescriptionNewYorkTimes = CardDescription(
-                descriptionNewYorkTimes.description,
-                descriptionNewYorkTimes.infoURL,
-                Source.NEWYORKTIMES,
-                descriptionNewYorkTimes.logoURL
-            )
-
-        } catch (e: Exception) {
-            cardDescriptionNewYorkTimes = null
-        }
-
-        return cardDescriptionNewYorkTimes ?: EmptyCard
+        return cardNewYorkTimes ?: EmptyCard
     }
-
 }

@@ -14,14 +14,14 @@ interface ProxyWikipedia{
 internal class ProxyWikipediaImpl : ProxyWikipedia {
 
     override fun getInfo (name : String) : Card {
-        var cardDescriptionWikipedia: CardDescription?
+        var cardWikipedia: CardDescription?
         val descriptionWikipedia: WikipediaArticle
 
         try {
 
             descriptionWikipedia = WikipediaInjector.wikipediaService.getArtistDescription(name)
 
-            cardDescriptionWikipedia = CardDescription(
+            cardWikipedia = CardDescription(
                 descriptionWikipedia.description,
                 descriptionWikipedia.source,
                 Source.WIKIPEDIA,
@@ -29,10 +29,10 @@ internal class ProxyWikipediaImpl : ProxyWikipedia {
             )
 
         } catch (e: Exception) {
-            cardDescriptionWikipedia = null
+            cardWikipedia = null
         }
 
-        return cardDescriptionWikipedia ?: EmptyCard
+        return cardWikipedia ?: EmptyCard
     }
 
 }
