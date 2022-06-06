@@ -5,11 +5,11 @@ import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 import ayds.winchester.songinfo.moredetails.model.repository.external.BrokerService
 import ayds.winchester.songinfo.moredetails.model.repository.local.LocalRepository
 
-interface DescriptionRepository {
+interface CardRepository {
     fun getDescription(name: String): List<Card>
 }
 
-internal class DescriptionRepositoryImpl(private val localRepository: LocalRepository, private val broker: BrokerService): DescriptionRepository {
+internal class CardRepositoryImpl(private val localRepository: LocalRepository, private val broker: BrokerService): CardRepository {
 
     override fun getDescription(name: String): List<Card> {
         var cards = localRepository.getArtistDescription(name)
