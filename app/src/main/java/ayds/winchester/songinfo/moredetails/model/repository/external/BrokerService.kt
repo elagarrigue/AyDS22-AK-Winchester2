@@ -13,28 +13,15 @@ internal class BrokerServiceImpl(
 ) : BrokerService {
 
     override fun getInfo (name : String) : List<Card>{
-        var emptyCardCount = 0
-        
-        var cardList : MutableList<Card> = mutableListOf()
+val cardList: MutableList<Card> = mutableListOf()
 
         cardList.add(proxyLastFM.getInfo(name))
-
-        if(cardList.last()==EmptyCard)
-            emptyCardCount++
-        
         cardList.add(proxyWikipedia.getInfo(name))
-        
-        if(cardList.last()==EmptyCard)
-            emptyCardCount++
-
         cardList.add(proxyNewYorkTimes.getInfo(name))
 
-        if(cardList.last()==EmptyCard)
-            emptyCardCount++
-
-        if(emptyCardCount==cardList.size)
-            cardList= mutableListOf()
-
-        return cardList
+        return if (cardList.all { it is EmptyCard })
+            listOf()
+        else
+            cardList
     }
 }
