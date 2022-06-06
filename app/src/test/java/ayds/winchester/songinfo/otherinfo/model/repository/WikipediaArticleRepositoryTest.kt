@@ -1,67 +1,60 @@
 package ayds.winchester.songinfo.otherinfo.model.repository
 
-import ayds.winchester.songinfo.moredetails.model.entities.ArtistDescription
-import ayds.winchester.songinfo.moredetails.model.entities.EmptyDescription
+import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.CardDescription
+import ayds.winchester.songinfo.moredetails.model.entities.Source
 import ayds.winchester.songinfo.moredetails.model.repository.CardRepositoryImpl
-import ayds.winchester2.wikipedia.ExternalRepository
-import ayds.winchester2.wikipedia.WikipediaArticle
+import ayds.winchester.songinfo.moredetails.model.repository.external.BrokerService
 import ayds.winchester.songinfo.moredetails.model.repository.local.LocalRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert
 import org.junit.Test
-import java.lang.Exception
 
 class WikipediaArticleRepositoryTest {
     private val localRepository: LocalRepository = mockk(relaxUnitFun = true)
-    private val externalRepository: ExternalRepository = mockk(relaxUnitFun = true)
+    private val broker : BrokerService = mockk(relaxUnitFun = true)
 
     private val descriptionRepository: CardRepositoryImpl by lazy {
-        CardRepositoryImpl(localRepository, externalRepository)
+        CardRepositoryImpl(localRepository, broker)
     }
 
     @Test
     fun `given existing description should return description and mark it as local`() {
-        val description = ArtistDescription("id", "description")
-        every { localRepository.getArtistDescription("artist") } returns description
+        var cards: MutableList<Card> = mutableListOf()
+        val card : Card = CardDescription("", "1", Source.WIKIPEDIA, "" )
+        cards.add(card)
+        every { localRepository.getArtistDescription("artist") } returns cards
 
-        val result = descriptionRepository.getDescription("artist")
+        val result = descriptionRepository.getCards("artist")
 
-        Assert.assertEquals(description, result)
-        Assert.assertTrue(description.isLocallyStored)
+        Assert.assertEquals(cards, result)
+        Assert.assertTrue(cards.last().isLocallyStored)
     }
 
     @Test
     fun `given non existing description should get the description and store it`() {
-        val description = WikipediaArticle("id", "description")
-        every { localRepository.getArtistDescription("artist") } returns null
-        every { externalRepository.getArtistDescription("artist") } returns description
+        var cards: MutableList<Card> = mutableListOf()
+        val card : Card = CardDescription("", "1", Source.WIKIPEDIA, "" )
+        cards.add(card)
+        every { localRepository.getArtistDescription("artist") } returns emptyList()
+        every { broker.getInfo("artist") } returns cards
 
-        val result = descriptionRepository.getDescription("artist")
+        val result = descriptionRepository.getCards("artist")
 
-        Assert.assertEquals(description, result)
-        Assert.assertFalse(description.isLocallyStored)
-        verify { localRepository.saveDescriptionInDataBase(ArtistDescription(description.id,description.description)) }
+        Assert.assertEquals(cards, result)
+        Assert.assertFalse(cards.last().isLocallyStored)
+        verify { localRepository.saveDescriptionInDataBase(cards) }
     }
 
     @Test
-    fun `given non existing description should return empty description`() {
-        every { localRepository.getArtistDescription("artist") } returns null
-        every { externalRepository.getArtistDescription("artist") } throws mockk<Exception>()
+    fun `given non existing description should return empty list`() {
+        every { localRepository.getArtistDescription("artist") } returns emptyList()
+        every { broker.getInfo("artist") } returns emptyList()
 
-        val result = descriptionRepository.getDescription("artist")
+        val result = descriptionRepository.getCards("artist")
 
-        Assert.assertEquals(EmptyDescription, result)
-    }
-
-    @Test
-    fun `given service exception should return empty description`() {
-        every { localRepository.getArtistDescription("artist") } returns null
-        every { externalRepository.getArtistDescription("artist") } throws mockk<Exception>()
-
-        val result = descriptionRepository.getDescription("artist")
-
-        Assert.assertEquals(EmptyDescription, result)
+        Assert.assertEquals(emptyList<Card>(), result)
     }
 }

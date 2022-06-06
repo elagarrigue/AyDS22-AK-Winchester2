@@ -16,7 +16,7 @@ internal class OtherInfoModelImpl(private var repository: CardRepository) : Othe
 
     override fun searchArtistName(name : String) {
         Thread {
-            val cards = repository.getDescription(name)
+            val cards = repository.getCards(name)
             onActionSubject.notify(cards)
         }.start()
     }

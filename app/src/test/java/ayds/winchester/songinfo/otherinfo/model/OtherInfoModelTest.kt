@@ -2,7 +2,7 @@ package ayds.winchester.songinfo.otherinfo.model
 
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModelImpl
-import ayds.winchester.songinfo.moredetails.model.entities.Description
+import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.repository.CardRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -16,17 +16,17 @@ class OtherInfoModelTest {
         OtherInfoModelImpl(repository)
     }
 
-    @Test
-    fun `on search description it should notify the result`() {
-        val description: Description = mockk()
-        every { repository.getDescription("artist") } returns description
-        val descriptionTester: (Description) -> Unit = mockk(relaxed = true)
-        otherInfoModel.uiEventObservable.subscribe() {
-            descriptionTester(it)
-        }
+     @Test
+     fun `on search cards it should notify the result`() {
+         val cards: List<Card> = mockk()
+         every { repository.getCards("artist") } returns cards
+         val descriptionTester: (List<Card>) -> Unit = mockk(relaxed = true)
+         otherInfoModel.uiEventObservable.subscribe() {
+             descriptionTester(it)
+         }
 
-        otherInfoModel.searchArtistName("artist")
+         otherInfoModel.searchArtistName("artist")
 
-        verify { descriptionTester(description) }
-    }
+         verify { descriptionTester(cards) }
+     }
 }
