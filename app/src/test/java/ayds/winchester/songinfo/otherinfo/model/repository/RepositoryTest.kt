@@ -30,7 +30,7 @@ class RepositoryTest {
         val result = descriptionRepository.getCards("artist")
 
         Assert.assertEquals(cards, result)
-        Assert.assertTrue(cards.last().isLocallyStored)
+        Assert.assertTrue(cards.all { it.isLocallyStored })
     }
 
     @Test
