@@ -23,21 +23,21 @@ import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 
 interface OtherInfoWindow {
     var uiState: OtherInfoUIState
-    val uiEventObservableFullArticle : Observable<OtherInfoWindowEvent>
+    val uiEventObservableFullArticle: Observable<OtherInfoWindowEvent>
     fun openExternalLink(url: String)
 }
 
-internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
+internal class OtherInfoWindowImpl : AppCompatActivity(), OtherInfoWindow {
 
-    private var descriptionsTexts : MutableList<TextView> = mutableListOf()
-    private var descriptionsImages : MutableList<ImageView> = mutableListOf()
-    private var descriptionsSources : MutableList<TextView> = mutableListOf()
-    private var descriptionsButtons : MutableList<Button> = mutableListOf()
+    private var descriptionsTexts: MutableList<TextView> = mutableListOf()
+    private var descriptionsImages: MutableList<ImageView> = mutableListOf()
+    private var descriptionsSources: MutableList<TextView> = mutableListOf()
+    private var descriptionsButtons: MutableList<Button> = mutableListOf()
 
     private val onActionSubject = Subject<OtherInfoWindowEvent>()
-    private lateinit var otherInfoModel : OtherInfoModel
+    private lateinit var otherInfoModel: OtherInfoModel
     private val navigationUtils: NavigationUtils = UtilsInjector.navigationUtils
-    private val cardDescriptionHelper : CardDescriptionHelper = CardDescriptionHelperImpl()
+    private val cardDescriptionHelper: CardDescriptionHelper = CardDescriptionHelperImpl()
     override var uiState = OtherInfoUIState()
     override val uiEventObservableFullArticle = onActionSubject
 
@@ -51,7 +51,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         initObservers()
     }
 
-    private fun initModule(){
+    private fun initModule() {
         OtherInfoWindowInjector.init(this)
         otherInfoModel = OtherInfoModelInjector.getOtherInfoModel()
     }
@@ -62,7 +62,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun updateUiState(cards: List<Card>) {
-        for(i in cards.indices) {
+        for (i in cards.indices) {
             when (cards[i]) {
                 is CardDescription -> updateCards(cards[i])
                 EmptyCard -> updateCardNoResult(cards[i])
@@ -76,14 +76,26 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         showUI(cards)
     }
 
-    private fun updateCards(card: Card){
-        val cardUI = CardUI(card.description, card.infoUrl, card.source, card.sourceLogoUrl, card.isLocallyStored)
+    private fun updateCards(card: Card) {
+        val cardUI = CardUI(
+            card.description,
+            card.infoUrl,
+            card.source,
+            card.sourceLogoUrl,
+            card.isLocallyStored
+        )
         cardUI.isEnabled = true
         uiState.cardList.add(cardUI)
     }
 
-    private fun updateCardNoResult(card: Card){
-        val cardUI = CardUI(card.description, card.infoUrl, card.source, card.sourceLogoUrl, card.isLocallyStored)
+    private fun updateCardNoResult(card: Card) {
+        val cardUI = CardUI(
+            card.description,
+            card.infoUrl,
+            card.source,
+            card.sourceLogoUrl,
+            card.isLocallyStored
+        )
         cardUI.isEnabled = false
         uiState.cardList.add(cardUI)
     }
@@ -95,10 +107,10 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     private fun notifySearchDescriptionAction() {
-       onActionSubject.notify(OtherInfoWindowEvent.SearchCard)
+        onActionSubject.notify(OtherInfoWindowEvent.SearchCard)
     }
 
-    private fun initViewProperties(){
+    private fun initViewProperties() {
 
         descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription1))
         descriptionsTexts.add(findViewById(R.id.textPaneArtistDescription2))
@@ -117,12 +129,12 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
         descriptionsButtons.add(findViewById(R.id.openUrlButton3))
     }
 
-    private fun notifyFullArticleAction(source : Source) {
+    private fun notifyFullArticleAction(source: Source) {
         onActionSubject.notify(OtherInfoWindowEvent.FullPage(source))
     }
 
-    private fun setViewFullArticleButtonOnClick(cards: List<Card>){
-        for(i in cards.indices){
+    private fun setViewFullArticleButtonOnClick(cards: List<Card>) {
+        for (i in cards.indices) {
             descriptionsButtons[i].setOnClickListener {
                 notifyFullArticleAction(cards[i].source)
             }
@@ -130,66 +142,67 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     }
 
     override fun openExternalLink(url: String) {
-       navigationUtils.openExternalUrl(this, url)
+        navigationUtils.openExternalUrl(this, url)
     }
 
-    private fun showUI(cards: List<Card>){
+    private fun showUI(cards: List<Card>) {
         runOnUiThread {
             if (cards.isNotEmpty()) {
                 showImage(cards)
                 showDescription(cards)
                 enableActions(cards)
                 setViewFullArticleButtonOnClick(cards)
-            }else{
+            } else {
                 showUINoResults()
                 disabledButtons()
             }
         }
     }
 
-    private fun showUINoResults(){
+    private fun showUINoResults() {
         descriptionsTexts[0].text = NO_RESULTS
         Picasso.get().load(URL_IMAGE_NOT_FOUND).into(descriptionsImages[0])
     }
 
-    private fun disabledButtons(){
-        for(i in descriptionsButtons.indices){
-            descriptionsButtons[i].isEnabled=false
-            descriptionsButtons[i].isVisible=false
+    private fun disabledButtons() {
+        for (i in descriptionsButtons.indices) {
+            descriptionsButtons[i].isEnabled = false
+            descriptionsButtons[i].isVisible = false
         }
     }
 
     private fun enableActions(cards: List<Card>) {
-        var count = enableButtons(cards)
+        val count = enableButtons(cards)
 
         hiddenButtons(count)
     }
 
-    private fun enableButtons (cards: List<Card>) : Int{
+    private fun enableButtons(cards: List<Card>): Int {
         var count = 0
-        for(i in cards.indices) {
+        for (i in cards.indices) {
             descriptionsButtons[i].isEnabled = uiState.cardList[i].isEnabled
             count++
         }
         return count
     }
 
-    private fun hiddenButtons (count : Int){
-        for(i in count until descriptionsButtons.size){
+    private fun hiddenButtons(count: Int) {
+        for (i in count until descriptionsButtons.size) {
             descriptionsButtons[i].isVisible = false
         }
     }
 
-    private fun showImage(cards: List<Card>){
-        for(i in cards.indices) {
+    private fun showImage(cards: List<Card>) {
+        for (i in cards.indices) {
             Picasso.get().load(uiState.getImageURL(cards[i].source)).into(descriptionsImages[i])
         }
     }
 
-    private fun showDescription(cards: List<Card>){
-        for(i in cards.indices){
-            descriptionsTexts[i].text=Html.fromHtml(cardDescriptionHelper.getTextCard(cards[i],uiState.artistName))
-            descriptionsSources[i].text=SOURCE+cards[i].source
+    private fun showDescription(cards: List<Card>) {
+        for (i in cards.indices) {
+            descriptionsTexts[i].text =
+                Html.fromHtml(cardDescriptionHelper.getTextCard(cards[i], uiState.artistName))
+            descriptionsSources[i].text = SOURCE + cards[i].source
         }
     }
 

@@ -6,8 +6,8 @@ import ayds.winchester2.wikipedia.WikipediaInjector.wikipediaService
 
 object ProxyInjector {
 
-    val proxyLastFM : Proxy = ProxyLastFMImpl(lastFMService)
-    val proxyTimes : Proxy = ProxyTimesImpl(nyInfoService)
-    val proxyWikipedia : Proxy = ProxyWikipediaImpl(wikipediaService)
+    val proxyLastFM: Proxy = ProxyLastFMImpl(lastFMService)
+    val proxyTimes: Proxy = ProxyTimesImpl(nyInfoService)
+    val proxyWikipedia: Proxy = ProxyWikipediaImpl(wikipediaService)
 
 }

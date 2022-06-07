@@ -9,7 +9,7 @@ import ayds.winchester2.wikipedia.WikipediaArticle
 
 internal class ProxyWikipediaImpl(private val wikipediaService: ExternalRepository) : Proxy {
 
-    override fun getInfo (name : String) : Card {
+    override fun getInfo(name: String): Card {
         var cardWikipedia: CardDescription?
         val descriptionWikipedia: WikipediaArticle
 

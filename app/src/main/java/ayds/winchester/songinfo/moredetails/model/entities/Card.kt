@@ -29,7 +29,7 @@ class CardUI(
     override val infoUrl: String,
     override val source: Source,
     override val sourceLogoUrl: String,
-    override var isLocallyStored: Boolean
+    override var isLocallyStored : Boolean = false
 ) : Card {
     var isEnabled: Boolean = false
 }

@@ -35,7 +35,7 @@ class RepositoryTest {
 
     @Test
     fun `given non existing cards should get the description and store it`() {
-        var cards: MutableList<Card> = mutableListOf()
+        val cards: MutableList<Card> = mutableListOf()
         val card : Card = CardDescription("", "1", Source.WIKIPEDIA, "" )
         cards.add(card)
         every { localRepository.getCards("artist") } returns emptyList()
@@ -44,7 +44,7 @@ class RepositoryTest {
         val result = descriptionRepository.getCards("artist")
 
         Assert.assertEquals(cards, result)
-        Assert.assertFalse(cards.last().isLocallyStored)
+        Assert.assertFalse(cards.all{ it.isLocallyStored})
         verify { localRepository.saveCards(cards) }
     }
 

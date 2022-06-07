@@ -12,11 +12,11 @@ object OtherInfoModelInjector {
 
     fun getOtherInfoModel(): OtherInfoModel = otherInfoModel
 
-    fun initOtherInfoModel (otherInfoWindow: OtherInfoWindow){
-        
+    fun initOtherInfoModel(otherInfoWindow: OtherInfoWindow) {
+
         val localRepository = LocalRepositoryImpl(otherInfoWindow)
         val repository: CardRepository =
-            CardRepositoryImpl(localRepository,BrokerInjector.broker)
+            CardRepositoryImpl(localRepository, BrokerInjector.broker)
 
         otherInfoModel = OtherInfoModelImpl(repository)
 

@@ -9,13 +9,18 @@ interface CardRepository {
     fun getCards(name: String): List<Card>
 }
 
-internal class CardRepositoryImpl(private val localRepository: LocalRepository, private val broker: BrokerService): CardRepository {
+internal class CardRepositoryImpl(
+    private val localRepository: LocalRepository,
+    private val broker: BrokerService
+) : CardRepository {
 
     override fun getCards(name: String): List<Card> {
         var cards = localRepository.getCards(name)
 
         when {
-            cards.isNotEmpty() -> {markDescriptionAsLocal(cards)}
+            cards.isNotEmpty() -> {
+                markDescriptionAsLocal(cards)
+            }
             else -> {
                 cards = broker.getInfo(name)
                 localRepository.saveCards(cards.filter { it !is EmptyCard })
@@ -24,7 +29,7 @@ internal class CardRepositoryImpl(private val localRepository: LocalRepository, 
         return cards
     }
 
-    private fun markDescriptionAsLocal(cards : List<Card>) {
+    private fun markDescriptionAsLocal(cards: List<Card>) {
         cards.forEach { it.isLocallyStored = true }
     }
 }
