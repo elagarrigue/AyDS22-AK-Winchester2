@@ -25,8 +25,7 @@ internal class CardRepositoryImpl(private val localRepository: LocalRepository, 
     }
 
     private fun markDescriptionAsLocal(cards : List<Card>) {
-        for(i in cards.indices)
-            cards[i].isLocallyStored = true
+        cards.forEach { it.isLocallyStored = true }
     }
 }
 
