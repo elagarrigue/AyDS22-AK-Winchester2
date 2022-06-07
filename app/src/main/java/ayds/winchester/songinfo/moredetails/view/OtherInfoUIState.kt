@@ -1,13 +1,12 @@
 package ayds.winchester.songinfo.moredetails.view
 
-import ayds.winchester.songinfo.moredetails.model.entities.Card
+import ayds.winchester.songinfo.moredetails.model.entities.CardUI
 import ayds.winchester.songinfo.moredetails.model.entities.Source
 
 
 data class OtherInfoUIState(
     var artistName: String = "",
-    var actionsEnabled: MutableList<Boolean> = mutableListOf(false, false, false),
-    val cardList: MutableList<Card> = mutableListOf()
+    val cardList: MutableList<CardUI> = mutableListOf()
 ) {
 
     companion object {

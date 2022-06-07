@@ -23,3 +23,13 @@ object EmptyCard: Card {
     override val sourceLogoUrl= ""
     override var isLocallyStored = false
 }
+
+class CardUI(
+    override val description: String,
+    override val infoUrl: String,
+    override val source: Source,
+    override val sourceLogoUrl: String,
+    override var isLocallyStored: Boolean
+) : Card {
+    var isEnabled: Boolean = false
+}

@@ -14,10 +14,7 @@ import ayds.observer.Observable
 import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModelInjector
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
-import ayds.winchester.songinfo.moredetails.model.entities.Card
-import ayds.winchester.songinfo.moredetails.model.entities.CardDescription
-import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
-import ayds.winchester.songinfo.moredetails.model.entities.Source
+import ayds.winchester.songinfo.moredetails.model.entities.*
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_LASTFM
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_NOT_FOUND
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_TIMES
@@ -71,24 +68,28 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private fun updateUiState(cards: List<Card>) {
         for(i in cards.indices) {
             when (cards[i]) {
-                is CardDescription -> updateCards(cards[i],i)
-                EmptyCard -> updateCardNoResult(i)
+                is CardDescription -> updateCards(cards[i])
+                EmptyCard -> updateCardNoResult(cards[i])
             }
         }
     }
 
     private fun updateCards(cards: List<Card>) {
+
         updateUiState(cards)
         showUI(cards)
     }
 
-    private fun updateCards(card: Card, numberCard : Int){
-        uiState.actionsEnabled[numberCard] = true
-        uiState.cardList.add(card)
+    private fun updateCards(card: Card){
+        val cardUI = CardUI(card.description, card.infoUrl, card.source, card.sourceLogoUrl, card.isLocallyStored)
+        cardUI.isEnabled = true
+        uiState.cardList.add(cardUI)
     }
 
-    private fun updateCardNoResult(numberCard : Int){
-        uiState.actionsEnabled[numberCard] = false
+    private fun updateCardNoResult(card: Card){
+        val cardUI = CardUI(card.description, card.infoUrl, card.source, card.sourceLogoUrl, card.isLocallyStored)
+        cardUI.isEnabled = false
+        uiState.cardList.add(cardUI)
     }
 
     private fun updateStateArtistName() {
@@ -171,7 +172,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
     private fun enableButtons (cards: List<Card>) : Int{
         var count = 0
         for(i in cards.indices) {
-            descriptionsButtons[i].isEnabled = uiState.actionsEnabled[i]
+            descriptionsButtons[i].isEnabled = uiState.cardList[i].isEnabled
             count++
         }
         return count
