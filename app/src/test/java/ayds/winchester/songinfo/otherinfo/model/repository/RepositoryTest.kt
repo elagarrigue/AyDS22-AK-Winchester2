@@ -25,7 +25,7 @@ class RepositoryTest {
         var cards: MutableList<Card> = mutableListOf()
         val card : Card = CardDescription("", "1", Source.WIKIPEDIA, "" )
         cards.add(card)
-        every { localRepository.getArtistDescription("artist") } returns cards
+        every { localRepository.getCards("artist") } returns cards
 
         val result = descriptionRepository.getCards("artist")
 
@@ -38,19 +38,19 @@ class RepositoryTest {
         var cards: MutableList<Card> = mutableListOf()
         val card : Card = CardDescription("", "1", Source.WIKIPEDIA, "" )
         cards.add(card)
-        every { localRepository.getArtistDescription("artist") } returns emptyList()
+        every { localRepository.getCards("artist") } returns emptyList()
         every { broker.getInfo("artist") } returns cards
 
         val result = descriptionRepository.getCards("artist")
 
         Assert.assertEquals(cards, result)
         Assert.assertFalse(cards.last().isLocallyStored)
-        verify { localRepository.saveDescriptionInDataBase(cards) }
+        verify { localRepository.saveCards(cards) }
     }
 
     @Test
     fun `given non existing description should return empty list`() {
-        every { localRepository.getArtistDescription("artist") } returns emptyList()
+        every { localRepository.getCards("artist") } returns emptyList()
         every { broker.getInfo("artist") } returns emptyList()
 
         val result = descriptionRepository.getCards("artist")

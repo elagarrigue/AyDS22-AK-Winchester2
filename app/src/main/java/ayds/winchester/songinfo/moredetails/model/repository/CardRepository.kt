@@ -12,13 +12,13 @@ interface CardRepository {
 internal class CardRepositoryImpl(private val localRepository: LocalRepository, private val broker: BrokerService): CardRepository {
 
     override fun getCards(name: String): List<Card> {
-        var cards = localRepository.getArtistDescription(name)
+        var cards = localRepository.getCards(name)
 
         when {
             cards.isNotEmpty() -> {markDescriptionAsLocal(cards)}
             else -> {
                 cards = broker.getInfo(name)
-                localRepository.saveDescriptionInDataBase(cards.filter { it !is EmptyCard })
+                localRepository.saveCards(cards.filter { it !is EmptyCard })
             }
         }
         return cards
