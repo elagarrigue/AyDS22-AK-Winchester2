@@ -3,13 +3,13 @@ package ayds.winchester.songinfo.moredetails.view
 import ayds.winchester.songinfo.moredetails.model.entities.CardUI
 import ayds.winchester.songinfo.moredetails.model.entities.Source
 
-
 data class OtherInfoUIState(
     var artistName: String = "",
     val cardList: MutableList<CardUI> = mutableListOf()
 ) {
-
     companion object {
+        const val SOURCE = "source: "
+        const val NO_RESULTS = "No results"
         const val URL_IMAGE_WIKIPEDIA =
             "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
         const val URL_IMAGE_LASTFM =
@@ -18,7 +18,6 @@ data class OtherInfoUIState(
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
         const val URL_IMAGE_NOT_FOUND =
             "https://alfabetajuega.com/hero/2018/10/167687.alfabetajuega-problemas-tecnicos.jpg"
-
     }
 
     fun getInfoURL(source: Source): String {

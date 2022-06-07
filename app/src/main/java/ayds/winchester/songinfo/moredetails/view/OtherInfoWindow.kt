@@ -15,10 +15,9 @@ import ayds.observer.Subject
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModelInjector
 import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.model.entities.*
-import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_LASTFM
+import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.NO_RESULTS
+import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.SOURCE
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_NOT_FOUND
-import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_TIMES
-import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_WIKIPEDIA
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 
@@ -27,9 +26,6 @@ interface OtherInfoWindow {
     val uiEventObservableFullArticle : Observable<OtherInfoWindowEvent>
     fun openExternalLink(url: String)
 }
-
-private const val SOURCE = "source: "
-private const val NO_RESULTS = "No results"
 
 internal class OtherInfoWindowImpl : AppCompatActivity(),OtherInfoWindow {
 

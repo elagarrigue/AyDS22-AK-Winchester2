@@ -34,8 +34,7 @@ internal class LocalRepositoryImpl(private var otherInfoView : OtherInfoWindow) 
 
     override fun saveCards(cards : List<Card>){
         for(i in cards.indices) {
-            if(cards[i] != EmptyCard)
-                dataBase.saveArtist(artistName, cards[i].description, cards[i].infoUrl, cards[i].source.ordinal)
+            dataBase.saveArtist(artistName, cards[i].description, cards[i].infoUrl, cards[i].source.ordinal)
         }
     }
 }
