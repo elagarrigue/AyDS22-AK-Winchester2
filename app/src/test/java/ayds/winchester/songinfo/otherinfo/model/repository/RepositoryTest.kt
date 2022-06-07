@@ -22,9 +22,9 @@ class RepositoryTest {
 
     @Test
     fun `given existing cards should return cards and mark it as local`() {
-        var cards: MutableList<Card> = mutableListOf()
-        val card : Card = CardDescription("", "1", Source.WIKIPEDIA, "" )
-        cards.add(card)
+        val cards = listOf(
+            CardDescription("", "1", Source.WIKIPEDIA, "" )
+        )
         every { localRepository.getArtistDescription("artist") } returns cards
 
         val result = descriptionRepository.getCards("artist")
