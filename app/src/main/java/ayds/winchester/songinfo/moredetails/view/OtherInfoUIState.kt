@@ -1,14 +1,20 @@
 package ayds.winchester.songinfo.moredetails.view
 
-data class OtherInfoUIState(
-    val artistName : String = "",
-    val description : String = "",
-    val id : String = "",
-    val actionsEnabled: Boolean = false,
-) {
+import ayds.winchester.songinfo.moredetails.model.entities.CardUI
+import ayds.winchester.songinfo.moredetails.model.entities.Source
 
+data class OtherInfoUIState(
+    var artistName: String = "",
+    val cardList: MutableList<CardUI> = mutableListOf()
+) {
     companion object {
-        const val URL_ARTICLE = "https://en.wikipedia.org/?curid="
-        const val URL_IMAGE = "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
+        const val SOURCE = "source: "
+        const val NO_RESULTS = "No results"
+
     }
+
+    fun getInfoURL(source: Source): String {
+        return cardList.filter { it.source == source }.last().infoUrl
+    }
+
 }

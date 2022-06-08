@@ -5,7 +5,7 @@ import ayds.winchester.songinfo.moredetails.model.OtherInfoModelInjector
 
 object OtherInfoWindowInjector {
 
-    fun init(otherInfoWindow:OtherInfoWindow){
+    fun init(otherInfoWindow: OtherInfoWindow) {
         OtherInfoModelInjector.initOtherInfoModel(otherInfoWindow)
         OtherInfoControllerInjector.initOtherInfoController(otherInfoWindow)
     }

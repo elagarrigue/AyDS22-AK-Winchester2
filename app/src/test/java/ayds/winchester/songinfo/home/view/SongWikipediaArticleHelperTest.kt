@@ -8,7 +8,7 @@ import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Test
 
-class SongDescriptionHelperTest {
+class SongWikipediaArticleHelperTest {
 
     private val songDescriptionHelper by lazy { SongDescriptionHelperImpl(DateTextImpl()) }
 
