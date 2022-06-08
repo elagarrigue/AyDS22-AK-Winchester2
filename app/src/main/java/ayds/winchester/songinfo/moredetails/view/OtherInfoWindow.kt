@@ -17,7 +17,6 @@ import ayds.winchester.songinfo.moredetails.model.OtherInfoModel
 import ayds.winchester.songinfo.moredetails.model.entities.*
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.NO_RESULTS
 import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.SOURCE
-import ayds.winchester.songinfo.moredetails.view.OtherInfoUIState.Companion.URL_IMAGE_NOT_FOUND
 import ayds.winchester.songinfo.utils.UtilsInjector
 import ayds.winchester.songinfo.utils.navigation.NavigationUtils
 
@@ -194,7 +193,7 @@ internal class OtherInfoWindowImpl : AppCompatActivity(), OtherInfoWindow {
 
     private fun showImage(cards: List<Card>) {
         for (i in cards.indices) {
-            Picasso.get().load(uiState.getImageURL(cards[i].source)).into(descriptionsImages[i])
+            Picasso.get().load(cards[i].sourceLogoUrl).into(descriptionsImages[i])
         }
     }
 

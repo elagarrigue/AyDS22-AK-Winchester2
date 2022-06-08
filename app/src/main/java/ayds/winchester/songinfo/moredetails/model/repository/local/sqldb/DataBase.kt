@@ -14,7 +14,8 @@ internal class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY
         ARTIST,
         INFO,
         URL_PAGE,
-        SOURCE
+        SOURCE,
+        URL_LOGO
     )
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -23,18 +24,19 @@ internal class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
-    fun saveArtist(artist: String, info: String, urlPage: String, source: Int) {
+    fun saveArtist(artist: String, info: String, urlPage: String, source: Int, sourceLogo: String) {
         val dataBase = this.writableDatabase
-        val values = createValueMap(artist,info,urlPage, source)
+        val values = createValueMap(artist, info, urlPage, source, sourceLogo)
         dataBase.insert(ARTISTS, null, values)
     }
 
-    private fun createValueMap (artist: String, info: String, urlPage : String, source : Int): ContentValues {
+    private fun createValueMap (artist: String, info: String, urlPage : String, source : Int, sourceLogo: String): ContentValues {
         val values = ContentValues()
         values.put(ARTIST, artist)
         values.put(INFO, info)
         values.put(SOURCE, source)
         values.put(URL_PAGE, urlPage)
+        values.put(URL_LOGO, sourceLogo)
         return values
     }
 
@@ -59,7 +61,7 @@ internal class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY
     }
 
     private fun createDescription(cursor: Cursor): List<Card> {
-        var cards : MutableList<Card> = mutableListOf()
+        val cards : MutableList<Card> = mutableListOf()
         with(cursor) {
             while (moveToNext()) {
                 val info = cursor.getString(
@@ -70,7 +72,11 @@ internal class DataBase(context: Context) : SQLiteOpenHelper(context, DICTIONARY
                 )
                 val source = Source.values()[getInt((getColumnIndexOrThrow(SOURCE)))]
 
-                cards.add(CardDescription(info, urlPage, source, ""))
+                val urlLogo = cursor.getString(
+                    cursor.getColumnIndexOrThrow(URL_LOGO)
+                )
+
+                cards.add(CardDescription(info, urlPage, source, urlLogo))
             }
         }
         return cards
