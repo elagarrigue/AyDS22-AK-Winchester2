@@ -39,19 +39,19 @@ class RepositoryTest {
         val card : Card = CardDescription("", "1", Source.WIKIPEDIA, "" )
         cards.add(card)
         every { localRepository.getCards("artist") } returns emptyList()
-        every { broker.getInfo("artist") } returns cards
+        every { broker.getCards("artist") } returns cards
 
         val result = descriptionRepository.getCards("artist")
 
         Assert.assertEquals(cards, result)
         Assert.assertFalse(cards.all{ it.isLocallyStored})
-        verify { localRepository.saveCards(cards) }
+        verify { localRepository.saveCards(cards,"artist") }
     }
 
     @Test
     fun `given non existing description should return empty list`() {
         every { localRepository.getCards("artist") } returns emptyList()
-        every { broker.getInfo("artist") } returns emptyList()
+        every { broker.getCards("artist") } returns emptyList()
 
         val result = descriptionRepository.getCards("artist")
 
