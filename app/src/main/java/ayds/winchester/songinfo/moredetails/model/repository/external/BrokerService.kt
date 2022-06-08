@@ -4,7 +4,7 @@ import ayds.winchester.songinfo.moredetails.model.entities.Card
 import ayds.winchester.songinfo.moredetails.model.entities.EmptyCard
 
 interface BrokerService {
-    fun getInfo(name: String): List<Card>
+    fun getCards(name: String): List<Card>
 }
 
 internal class BrokerServiceImpl(
@@ -13,7 +13,7 @@ internal class BrokerServiceImpl(
     private val proxyNewYorkTimes: Proxy
 ) : BrokerService {
 
-    override fun getInfo(name: String): List<Card> {
+    override fun getCards(name: String): List<Card> {
         val cardList: MutableList<Card> = mutableListOf()
 
         cardList.add(proxyWikipedia.getInfo(name))
