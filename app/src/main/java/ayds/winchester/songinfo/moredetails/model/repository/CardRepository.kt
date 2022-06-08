@@ -22,8 +22,8 @@ internal class CardRepositoryImpl(
                 markDescriptionAsLocal(cards)
             }
             else -> {
-                cards = broker.getInfo(name)
-                localRepository.saveCards(cards.filter { it !is EmptyCard })
+                cards = broker.getCards(name)
+                localRepository.saveCards(cards.filter { it !is EmptyCard },name)
             }
         }
         return cards
